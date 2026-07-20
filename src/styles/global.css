@@ -1,0 +1,170 @@
+/* ============================================
+   Fuentes self-hosted via @fontsource
+   ============================================ */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/plus-jakarta-sans/800.css';
+
+@import 'tailwindcss';
+
+/* ============================================
+   Tokens CSS del design system SBG Univalle
+   ============================================ */
+:root {
+  /* Brand */
+  --sbg-primary: #003087;
+  --sbg-primary-light: #1a4faf;
+  --sbg-accent: #ff9900;
+  --sbg-accent-hover: #e68a00;
+  --sbg-aws-dark: #232f3e;
+
+  /* Texto */
+  --sbg-text: #0d1117;
+  --sbg-text-muted: #57606a;
+  --sbg-text-subtle: #8c959f;
+
+  /* Fondos */
+  --sbg-bg: #ffffff;
+  --sbg-bg-subtle: #f8f9fa;
+  --sbg-bg-muted: #eef0f3;
+  --sbg-border: #d0d7de;
+
+  /* Semánticos */
+  --sbg-success: #1a7f37;
+  --sbg-warning: #bf8700;
+  --sbg-error: #cf222e;
+  --sbg-info: #0969da;
+}
+
+/* ============================================
+   Estilos base
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--sbg-text);
+  background-color: var(--sbg-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.2;
+}
+
+/* ============================================
+   Skip link de accesibilidad (WCAG 2.1 AA)
+   ============================================ */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--sbg-accent);
+  color: var(--sbg-aws-dark);
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  border-radius: 0 0 0.5rem 0.5rem;
+  text-decoration: none;
+  transition: top 0.2s ease;
+  white-space: nowrap;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--sbg-aws-dark);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Animaciones de scroll (IntersectionObserver)
+   ============================================ */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.5s ease-out;
+}
+
+[data-animate].animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respeta prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-animate] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  [data-animate].animate-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   Focus visible global (accesibilidad)
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--sbg-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   Utilidades de layout
+   ============================================ */
+.container-sbg {
+  width: 100%;
+  max-width: 80rem; /* 1280px = max-w-7xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-sbg {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-sbg {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}

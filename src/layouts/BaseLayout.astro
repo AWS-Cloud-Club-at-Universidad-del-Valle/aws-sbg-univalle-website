@@ -1,0 +1,197 @@
+---
+/**
+ * BaseLayout — Layout raíz de todas las páginas del sitio.
+ *
+ * Responsabilidades:
+ * - Inyectar head completo: charset, viewport, SEO, preloads de fuentes
+ * - Renderizar skip link como primer elemento interactivo del body
+ * - Proveer estructura: Navbar → main#main-content → slot → Footer
+ *
+ * @example
+ * <BaseLayout
+ *   title="Inicio"
+ *   description="Comunidad AWS en la Universidad del Valle"
+ * >
+ *   <HeroSection />
+ * </BaseLayout>
+ */
+
+import '@/styles/global.css';
+import { SITE_CONFIG } from '@/lib/constants';
+import { buildJsonLdOrganization } from '@/lib/utils';
+import Navbar from '@/components/layout/Navbar.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+interface Props {
+  /** Título de la página. Se concatena con el nombre del sitio. */
+  title: string;
+  /** Meta description. Entre 120–160 caracteres. */
+  description: string;
+  /** URL canónica absoluta. Por defecto: URL actual. */
+  canonical?: string;
+  /** URL imagen Open Graph. Por defecto: ogImage del SITE_CONFIG. */
+  ogImage?: string;
+  /** Tipo de contenido OG. Por defecto: 'website'. */
+  ogType?: 'website' | 'article' | 'event';
+  /** Si true, agrega noindex. Solo para páginas privadas. */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = SITE_CONFIG.ogImage,
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+const SITE_NAME = SITE_CONFIG.shortName;
+const SITE_URL = SITE_CONFIG.url;
+
+// Construir título completo: "Título | AWS SBG Univalle"
+// Si el título ya es el nombre del sitio, no duplicar.
+const fullTitle =
+  title === SITE_CONFIG.name || title === SITE_NAME
+    ? title
+    : `${title} | ${SITE_NAME}`;
+
+// URL canónica absoluta
+const canonicalURL = canonical ?? new URL(Astro.url.pathname, SITE_URL).href;
+
+// Imagen OG absoluta
+const ogImageURL = ogImage.startsWith('http') ? ogImage : `${SITE_URL}${ogImage}`;
+
+// JSON-LD Organization (solo en homepage por ahora)
+const jsonLd = buildJsonLdOrganization(SITE_CONFIG);
+const isHome = Astro.url.pathname === '/';
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primarios SEO -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="es_CO" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- Preloads de fuentes críticas (reduce CLS y FOUT) -->
+    <link
+      rel="preload"
+      href="/fonts/plus-jakarta-sans-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- JSON-LD Organization (solo en homepage) -->
+    {
+      isHome && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLd)}
+        />
+      )
+    }
+  </head>
+
+  <body class="min-h-screen bg-[var(--sbg-bg)] text-[var(--sbg-text)] antialiased">
+    <!--
+      Skip link: primer elemento interactivo del body.
+      Visible solo al recibir foco por teclado (Tab).
+      Cumple WCAG 2.1 AA criterio 2.4.1.
+    -->
+    <a href="#main-content" class="skip-link">
+      Ir al contenido principal
+    </a>
+
+    <!--
+      Navbar y Footer importados directamente.
+      Todas las páginas comparten el mismo layout.
+    -->
+    <Navbar />
+
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <!--
+      Script de animaciones de scroll — IntersectionObserver.
+      Vanilla JS, sin dependencias. Respeta prefers-reduced-motion.
+    -->
+    <script>
+      (function initScrollAnimations() {
+        // No animar si el usuario prefiere movimiento reducido
+        const reducedMotion = window.matchMedia(
+          '(prefers-reduced-motion: reduce)'
+        ).matches;
+
+        const elements = document.querySelectorAll('[data-animate]');
+
+        if (reducedMotion) {
+          elements.forEach(el => el.classList.add('animate-in'));
+          return;
+        }
+
+        if (!('IntersectionObserver' in window)) {
+          // Fallback: mostrar todo sin animación
+          elements.forEach(el => el.classList.add('animate-in'));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+                // Unobserve: la animación ocurre solo una vez
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px',
+          }
+        );
+
+        elements.forEach(el => observer.observe(el));
+      })();
+    </script>
+  </body>
+</html>

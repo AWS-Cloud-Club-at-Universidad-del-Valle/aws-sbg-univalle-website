@@ -1,0 +1,363 @@
+---
+/**
+ * Navbar — Barra de navegación principal del sitio.
+ *
+ * Desktop (≥ 1024px): logo + links horizontales, sticky, 72px de alto.
+ * Mobile (< 1024px): logo + botón hamburger, 64px de alto.
+ * El drawer mobile se controla por el script inline de este componente.
+ *
+ * Accesibilidad:
+ * - aria-expanded sincronizado con estado visual del drawer
+ * - Escape cierra el drawer y devuelve foco al botón
+ * - Todos los interactivos son navegables por teclado
+ * - Link activo marcado con aria-current="page"
+ */
+
+import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants';
+
+interface Props {
+  /** Clase CSS adicional para el elemento <header>. */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  class:list={[
+    'sticky top-0 z-40 w-full border-b border-[var(--sbg-border)]',
+    'bg-white/95 backdrop-blur-sm',
+    className,
+  ]}
+  role="banner"
+>
+  <div class="container-sbg">
+    <nav
+      aria-label="Navegación principal"
+      class="flex h-16 items-center justify-between lg:h-[72px]"
+    >
+      <!-- Logo -->
+      <a
+        href="/"
+        aria-label={`${SITE_CONFIG.shortName} — Página principal`}
+        class="flex items-center gap-2 text-[var(--sbg-primary)] focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2 focus-visible:rounded"
+      >
+        <!-- SVG inline del logo SBG — placeholder geométrico hasta tener el logo definitivo -->
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <rect width="32" height="32" rx="6" fill="#003087" />
+          <path
+            d="M8 22L12 10L16 18L20 13L24 22"
+            stroke="#FF9900"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span class="hidden font-display text-sm font-bold sm:block lg:text-base">
+          AWS SBG
+          <span class="hidden xl:inline"> Univalle</span>
+        </span>
+      </a>
+
+      <!-- Links desktop — visibles solo en ≥ 1024px -->
+      <ul
+        class="hidden items-center gap-1 lg:flex"
+        role="list"
+        aria-label="Links de navegación"
+      >
+        {
+          NAV_LINKS.map(({ href, label }) => {
+            const isActive =
+              href === '/'
+                ? currentPath === '/'
+                : currentPath.startsWith(href);
+            return (
+              <li>
+                <a
+                  href={href}
+                  aria-current={isActive ? 'page' : undefined}
+                  class:list={[
+                    'relative inline-flex items-center rounded-lg px-3 py-2',
+                    'text-sm font-medium transition-colors duration-150',
+                    'hover:bg-[var(--sbg-bg-subtle)] hover:text-[var(--sbg-primary)]',
+                    'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2',
+                    isActive
+                      ? 'text-[var(--sbg-primary)] font-semibold after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-[var(--sbg-accent)] after:rounded-full'
+                      : 'text-[var(--sbg-text-muted)]',
+                  ]}
+                >
+                  {label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+
+      <!-- CTA desktop -->
+      <a
+        href="/#cta"
+        class:list={[
+          'hidden lg:inline-flex items-center justify-center gap-2',
+          'rounded-lg bg-[var(--sbg-accent)] px-4 py-2',
+          'text-sm font-semibold text-[var(--sbg-aws-dark)]',
+          'transition-colors duration-150 hover:bg-[var(--sbg-accent-hover)]',
+          'focus-visible:outline-2 focus-visible:outline-[var(--sbg-aws-dark)] focus-visible:outline-offset-2',
+          'min-h-[44px]',
+        ]}
+      >
+        Únete al grupo
+      </a>
+
+      <!-- Botón hamburger — visible solo en < 1024px -->
+      <button
+        id="mobile-menu-toggle"
+        type="button"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Abrir menú de navegación"
+        class:list={[
+          'flex items-center justify-center rounded-lg lg:hidden',
+          'min-h-[44px] min-w-[44px] text-[var(--sbg-text)]',
+          'hover:bg-[var(--sbg-bg-subtle)] transition-colors duration-150',
+          'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2',
+        ]}
+      >
+        <!-- Icono hamburger (3 líneas) -->
+        <svg
+          id="icon-menu"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        <!-- Icono X (cerrar) — oculto por defecto -->
+        <svg
+          id="icon-close"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+          class="hidden"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!--
+  Drawer mobile — fuera del <header> para ocupar pantalla completa.
+  Controlado por el script de abajo.
+  Oculto por defecto con translate-x-full.
+-->
+<div
+  id="mobile-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menú de navegación"
+  class:list={[
+    'fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw]',
+    'translate-x-full transform transition-transform duration-300 ease-out',
+    'bg-white shadow-xl lg:hidden',
+    'flex flex-col',
+  ]}
+>
+  <!-- Header del drawer -->
+  <div
+    class="flex items-center justify-between border-b border-[var(--sbg-border)] px-4 py-4"
+  >
+    <span class="font-display text-sm font-bold text-[var(--sbg-primary)]">
+      AWS SBG Univalle
+    </span>
+    <button
+      id="mobile-menu-close"
+      type="button"
+      aria-label="Cerrar menú de navegación"
+      class:list={[
+        'flex items-center justify-center rounded-lg',
+        'min-h-[44px] min-w-[44px] text-[var(--sbg-text-muted)]',
+        'hover:bg-[var(--sbg-bg-subtle)] transition-colors duration-150',
+        'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2',
+      ]}
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Links de navegación mobile -->
+  <nav aria-label="Menú de navegación móvil" class="flex-1 overflow-y-auto px-4 py-2">
+    <ul role="list" class="space-y-1">
+      {
+        NAV_LINKS.map(({ href, label }) => {
+          const isActive =
+            href === '/'
+              ? currentPath === '/'
+              : currentPath.startsWith(href);
+          return (
+            <li>
+              <a
+                href={href}
+                aria-current={isActive ? 'page' : undefined}
+                class:list={[
+                  'flex items-center rounded-lg px-3 py-3',
+                  'text-base font-medium transition-colors duration-150',
+                  'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2',
+                  isActive
+                    ? 'bg-[var(--sbg-bg-subtle)] text-[var(--sbg-primary)] font-semibold border-l-2 border-[var(--sbg-accent)]'
+                    : 'text-[var(--sbg-text)] hover:bg-[var(--sbg-bg-subtle)] hover:text-[var(--sbg-primary)]',
+                ]}
+              >
+                {label}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+
+  <!-- CTA mobile -->
+  <div class="border-t border-[var(--sbg-border)] p-4">
+    <a
+      href="/#cta"
+      class:list={[
+        'flex items-center justify-center w-full rounded-lg',
+        'bg-[var(--sbg-accent)] px-4 py-3',
+        'text-base font-semibold text-[var(--sbg-aws-dark)]',
+        'transition-colors duration-150 hover:bg-[var(--sbg-accent-hover)]',
+        'focus-visible:outline-2 focus-visible:outline-[var(--sbg-aws-dark)] focus-visible:outline-offset-2',
+        'min-h-[44px]',
+      ]}
+    >
+      Únete al grupo
+    </a>
+  </div>
+</div>
+
+<!-- Overlay oscuro detrás del drawer -->
+<div
+  id="mobile-menu-overlay"
+  aria-hidden="true"
+  class="fixed inset-0 z-40 bg-black/40 opacity-0 transition-opacity duration-300 lg:hidden pointer-events-none"
+>
+</div>
+
+<script is:inline>
+  /**
+   * Toggle del menú mobile.
+   * Algoritmo: toggleMobileMenu del design.md
+   * - Sincroniza aria-expanded con el estado visual
+   * - Bloquea scroll del body cuando el menú está abierto
+   * - Devuelve foco al botón hamburger al cerrar
+   * - Cierra con Escape
+   */
+  (function initMobileMenu() {
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const closeBtn = document.getElementById('mobile-menu-close');
+    const drawer = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const iconMenu = document.getElementById('icon-menu');
+    const iconClose = document.getElementById('icon-close');
+
+    if (!toggle || !closeBtn || !drawer || !overlay) return;
+
+    function openMenu() {
+      drawer.classList.remove('translate-x-full');
+      drawer.classList.add('translate-x-0');
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      overlay.classList.add('opacity-100');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Cerrar menú de navegación');
+      document.body.classList.add('overflow-hidden');
+      iconMenu?.classList.add('hidden');
+      iconClose?.classList.remove('hidden');
+
+      // Mover foco al primer elemento del drawer
+      const firstFocusable = drawer.querySelector('a, button');
+      if (firstFocusable instanceof HTMLElement) {
+        firstFocusable.focus();
+      }
+    }
+
+    function closeMenu() {
+      drawer.classList.add('translate-x-full');
+      drawer.classList.remove('translate-x-0');
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      overlay.classList.remove('opacity-100');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Abrir menú de navegación');
+      document.body.classList.remove('overflow-hidden');
+      iconMenu?.classList.remove('hidden');
+      iconClose?.classList.add('hidden');
+
+      // Devolver foco al botón hamburger
+      toggle.focus();
+    }
+
+    // Toggle al hacer clic en el hamburger
+    toggle.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    // Cerrar con el botón X del drawer
+    closeBtn.addEventListener('click', closeMenu);
+
+    // Cerrar al hacer clic en el overlay
+    overlay.addEventListener('click', closeMenu);
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+      }
+    });
+
+    // Cerrar automáticamente al hacer clic en un link del drawer
+    drawer.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Cerrar el menú si la pantalla se agranda a desktop
+    const mq = window.matchMedia('(min-width: 1024px)');
+    mq.addEventListener('change', (e) => {
+      if (e.matches) closeMenu();
+    });
+  })();
+</script>
