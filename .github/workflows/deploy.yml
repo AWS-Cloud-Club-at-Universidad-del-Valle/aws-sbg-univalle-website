@@ -121,7 +121,7 @@ jobs:
       # la versión correcta → se puede cachear por 1 año con total seguridad.
       # NO se usa --delete aquí para preservar assets de la versión anterior
       # mientras CloudFront aún puede servir el HTML de esa versión.
-      - name: ☁️ Sync hashed assets to S3 (cache: 1 year)
+      - name: "☁️ Sync hashed assets to S3 (cache: 1 year)"
         run: |
           echo "☁️ Sincronizando assets hasheados (_astro/) con caché de 1 año..."
           aws s3 sync dist/_astro/ "s3://${{ secrets.S3_BUCKET_NAME }}/_astro/" \
