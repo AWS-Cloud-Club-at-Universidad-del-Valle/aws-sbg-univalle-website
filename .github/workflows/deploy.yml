@@ -1,0 +1,175 @@
+# ============================================================
+# deploy.yml — Pipeline de Despliegue a Producción
+# AWS Student Builder Group — Universidad del Valle
+#
+# Propósito:
+#   Construye el sitio Astro y lo despliega automáticamente
+#   en Amazon S3 + CloudFront cada vez que se hace push a main.
+#
+# Autenticación:
+#   Usa OIDC (OpenID Connect) — sin access keys estáticas.
+#   GitHub solicita un token temporal a AWS vía sts:AssumeRoleWithWebIdentity.
+#
+# GitHub Secrets requeridos (Settings → Secrets → Actions):
+#   AWS_ROLE_ARN               — ARN del IAM Role para OIDC
+#   AWS_REGION                 — Región del bucket S3 (ej: us-east-1)
+#   S3_BUCKET_NAME             — Nombre del bucket S3
+#   CLOUDFRONT_DISTRIBUTION_ID — ID de la distribución CloudFront
+# ============================================================
+
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main # Solo se despliega en push a main
+
+# Cancelar runs anteriores si llega un nuevo push a main.
+# Evita despliegues desactualizados en caso de pushes rápidos.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & Deploy to AWS
+    runs-on: ubuntu-latest
+
+    # Permisos declarados a nivel de job (mínimo privilegio):
+    # - id-token:write  → necesario para solicitar el token OIDC a GitHub
+    # - contents:read   → necesario para hacer checkout del repositorio
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      # ── Paso 1: Obtener el código fuente ──────────────────────────────────
+      # Hace checkout completo del repositorio en el runner de GitHub Actions.
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Paso 2: Configurar Node.js ────────────────────────────────────────
+      # Lee la versión de Node.js desde .nvmrc para garantizar consistencia
+      # con el entorno de desarrollo local.
+      # cache: 'npm' guarda node_modules entre runs para acelerar el pipeline.
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # ── Paso 3: Instalar dependencias ─────────────────────────────────────
+      # npm ci instala exactamente las versiones de package-lock.json.
+      # Es más rápido y determinístico que npm install. Nunca modifica
+      # package-lock.json, garantizando builds reproducibles.
+      - name: 📦 Install dependencies
+        run: |
+          echo "📦 Instalando dependencias con npm ci..."
+          npm ci
+          echo "✅ Dependencias instaladas correctamente."
+
+      # ── Paso 4: Construir el sitio ────────────────────────────────────────
+      # Genera los archivos estáticos en /dist.
+      # Astro compila, optimiza imágenes y genera los assets con hash.
+      # Si este paso falla, el pipeline se detiene — nunca se despliega
+      # un build roto.
+      - name: 🔨 Build site
+        run: |
+          echo "🔨 Iniciando build de producción..."
+          npm run build
+          echo "✅ Build completado. Archivos generados en /dist."
+
+      # ── Paso 5: Verificar que dist/ existe y no está vacío ────────────────
+      # Precondición crítica: garantiza que no se suba contenido vacío a S3
+      # si el build falló silenciosamente o no generó archivos.
+      - name: 🔍 Verify dist directory
+        run: |
+          echo "🔍 Verificando directorio dist/..."
+
+          if [ ! -d "dist" ]; then
+            echo "❌ ERROR: El directorio dist/ no existe."
+            echo "   Asegúrate de que 'npm run build' genera el directorio dist/."
+            exit 1
+          fi
+
+          if [ -z "$(ls -A dist)" ]; then
+            echo "❌ ERROR: El directorio dist/ existe pero está vacío."
+            echo "   Revisa la configuración de build en astro.config.mjs."
+            exit 1
+          fi
+
+          FILE_COUNT=$(find dist -type f | wc -l)
+          echo "✅ dist/ existe y contiene $FILE_COUNT archivos. Listo para despliegue."
+
+      # ── Paso 6: Autenticarse con AWS via OIDC ─────────────────────────────
+      # GitHub solicita un JWT a su endpoint OIDC y AWS lo valida.
+      # AWS emite credenciales temporales (15–60 min) para el IAM Role.
+      # NUNCA se usan access keys estáticas — están prohibidas por el spec.
+      #
+      # role-session-name identifica esta ejecución en los logs de CloudTrail
+      # de AWS, facilitando auditorías de seguridad.
+      - name: 🔐 Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: GitHubActions-Deploy-${{ github.run_id }}
+
+      # ── Paso 7: Sincronizar assets hasheados con cache de 1 año ──────────
+      # Los archivos en dist/_astro/ tienen hash en su nombre (ej: main.a1b2c3.js).
+      # Como el nombre cambia con el contenido, el navegador siempre descarga
+      # la versión correcta → se puede cachear por 1 año con total seguridad.
+      # NO se usa --delete aquí para preservar assets de la versión anterior
+      # mientras CloudFront aún puede servir el HTML de esa versión.
+      - name: "☁️ Sync hashed assets to S3 (cache: 1 year)"
+        run: |
+          echo "☁️ Sincronizando assets hasheados (_astro/) con caché de 1 año..."
+          aws s3 sync dist/_astro/ "s3://${{ secrets.S3_BUCKET_NAME }}/_astro/" \
+            --cache-control "public, max-age=31536000, immutable" \
+            --no-progress
+          echo "✅ Assets hasheados sincronizados."
+
+      # ── Paso 8: Sincronizar HTML y archivos raíz (sin cache) ─────────────
+      # Los archivos HTML no tienen hash → deben servirse siempre frescos.
+      # --exclude "_astro/*" evita resubir lo ya sincronizado en el paso anterior.
+      # --delete elimina del bucket los archivos que ya no existen en dist/,
+      # manteniendo el bucket sincronizado exactamente con el build actual.
+      - name: 📄 Sync HTML and root files to S3 (no-cache)
+        run: |
+          echo "📄 Sincronizando HTML y archivos raíz sin caché..."
+          aws s3 sync dist/ "s3://${{ secrets.S3_BUCKET_NAME }}/" \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --exclude "_astro/*" \
+            --delete \
+            --no-progress
+          echo "✅ HTML y archivos raíz sincronizados. Archivos obsoletos eliminados."
+
+      # ── Paso 9: Invalidar caché de CloudFront ─────────────────────────────
+      # CloudFront cachea el contenido en sus edge locations globales.
+      # Sin invalidar, los usuarios recibirían la versión anterior hasta que
+      # el TTL expire (hasta 24h para HTML). La invalidación fuerza que
+      # todos los edge nodes descarguen el contenido nuevo de S3.
+      # El path "/*" invalida todos los archivos de la distribución.
+      - name: 🔄 Invalidate CloudFront cache
+        run: |
+          echo "🔄 Creando invalidación de CloudFront..."
+          INVALIDATION_ID=$(aws cloudfront create-invalidation \
+            --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/*" \
+            --query 'Invalidation.Id' \
+            --output text)
+          echo "✅ Invalidación creada: $INVALIDATION_ID"
+          echo "   CloudFront propagará el nuevo contenido en ~30 segundos."
+
+      # ── Paso 10: Resumen del despliegue ───────────────────────────────────
+      - name: 🎉 Deployment summary
+        run: |
+          echo ""
+          echo "=================================================="
+          echo "  🎉 DESPLIEGUE COMPLETADO EXITOSAMENTE"
+          echo "=================================================="
+          echo "  Rama:    main"
+          echo "  Commit:  ${{ github.sha }}"
+          echo "  Actor:   ${{ github.actor }}"
+          echo "  Sitio:   https://sbg.univalle.edu.co"
+          echo "=================================================="
