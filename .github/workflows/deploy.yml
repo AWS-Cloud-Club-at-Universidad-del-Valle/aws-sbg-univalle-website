@@ -108,7 +108,7 @@ jobs:
       # --------------------------------------------------------
       # Subir assets con hash
       # --------------------------------------------------------
-      - name: ☁️ Sync hashed assets to S3 (cache: 1 year)
+      - name: Sync hashed assets to S3 (cache: 1 year)
         run: |
           aws s3 sync dist/_astro/ "s3://${{ secrets.AWS_BUCKET_NAME }}/_astro/" \
             --cache-control "public, max-age=31536000, immutable" \
