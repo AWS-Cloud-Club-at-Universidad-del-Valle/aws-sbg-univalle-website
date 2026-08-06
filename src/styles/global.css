@@ -1,170 +1,261 @@
 /* ============================================
-   Fuentes self-hosted via @fontsource
+   Fuentes
+   Space Mono  → headings y labels técnicos
+   Nunito Sans → body y UI
    ============================================ */
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
-@import '@fontsource/plus-jakarta-sans/700.css';
-@import '@fontsource/plus-jakarta-sans/800.css';
+@import '@fontsource/space-mono/400.css';
+@import '@fontsource/space-mono/700.css';
+@import '@fontsource/nunito-sans/400.css';
+@import '@fontsource/nunito-sans/600.css';
+@import '@fontsource/nunito-sans/700.css';
+@import '@fontsource/nunito-sans/800.css';
+@import '@fontsource/nunito-sans/900.css';
 
 @import 'tailwindcss';
 
 /* ============================================
-   Tokens CSS del design system SBG Univalle
+   Design tokens — AWS + Universidad del Valle
+
+   Paleta oficial:
+   · Univalle : rojo #DC143C, blanco #FFFFFF
+   · AWS      : naranja #FF9900, azul marino #232F3E
+   · Fondo    : gris carbón cálido
    ============================================ */
 :root {
-  /* Brand */
-  --sbg-primary: #003087;
-  --sbg-primary-light: #1a4faf;
-  --sbg-accent: #ff9900;
-  --sbg-accent-hover: #e68a00;
-  --sbg-aws-dark: #232f3e;
+  /* Acentos neutros sin rojo - como en la imagen de referencia */
+  --sbg-accent:          #8b5cf6;  /* Morado como en la imagen */
+  --sbg-accent-light:    #a78bfa;  /* Morado claro */
+  --sbg-accent-hover:    #7c3aed;  /* Morado más oscuro */
+  --sbg-accent-subtle:   rgba(139, 92, 246, 0.12);
+  --sbg-accent-border:   rgba(167, 139, 250, 0.30);
 
-  /* Texto */
-  --sbg-text: #0d1117;
-  --sbg-text-muted: #57606a;
-  --sbg-text-subtle: #8c959f;
+  /* AWS colores */
+  --sbg-aws:             #232F3E;
+  --sbg-aws-mid:         #37475A;
+  --sbg-orange:          #FF9900;
+  --sbg-orange-subtle:   rgba(255, 153, 0, 0.12);
 
-  /* Fondos */
-  --sbg-bg: #ffffff;
-  --sbg-bg-subtle: #f8f9fa;
-  --sbg-bg-muted: #eef0f3;
-  --sbg-border: #d0d7de;
+  /* Azul para highlights */
+  --sbg-blue:            #2196F3;
+  --sbg-blue-subtle:     rgba(33, 150, 243, 0.10);
+
+  /* Fondos — gris carbón cálido */
+  --sbg-bg:              #1a1d23;
+  --sbg-bg-surface:      #21252e;
+  --sbg-bg-elevated:     #2a2f3a;
+  --sbg-bg-overlay:      #343a47;
+  --sbg-sidebar-bg:      #14171d;
+
+  /* Footer */
+  --sbg-footer-bg:       #11141a;
+
+  /* Bordes */
+  --sbg-border:          rgba(255, 255, 255, 0.06);
+  --sbg-border-accent:   rgba(255, 23, 68, 0.25);
+  --sbg-border-subtle:   rgba(255, 255, 255, 0.04);
+
+  /* Texto - colores como en la imagen de referencia */
+  --sbg-text:            #e5e7eb;  /* Gris claro blanquecino como en la imagen */
+  --sbg-text-muted:      #9ca3af;  /* Gris medio para texto secundario */
+  --sbg-text-subtle:     #6b7280;  /* Gris sutil para labels */
 
   /* Semánticos */
-  --sbg-success: #1a7f37;
-  --sbg-warning: #bf8700;
-  --sbg-error: #cf222e;
-  --sbg-info: #0969da;
+  --sbg-success: #4CAF50;
+  --sbg-error:   #DC143C;
+  --sbg-info:    #2196F3;
 }
 
 /* ============================================
-   Estilos base
+   Reset y base
    ============================================ */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Nunito Sans', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
   color: var(--sbg-text);
   background-color: var(--sbg-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
+  min-height: 100svh;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  line-height: 1.2;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #f9fafb;  /* Blanco suave como en la imagen */
 }
+
+/* Label técnico estilo "# comentario" */
+.code-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--sbg-text-subtle);
+  opacity: 1;  /* Sin opacidad adicional */
+  letter-spacing: 0.04em;
+}
+
+/* Layout con sidebar izquierdo */
+.layout-with-sidebar {
+  display: flex;
+  min-height: 100svh;
+}
+.sidebar-content {
+  margin-left: 220px;
+  flex: 1;
+  min-width: 0;
+}
+@media (max-width: 1023px) {
+  .sidebar-content {
+    margin-left: 0;
+  }
+}
+
+/* Spotlight cursor — se aplica vía JS */
+.spotlight-cursor {
+  cursor: none;
+}
+
+p { color: var(--sbg-text-muted); }
 
 /* ============================================
-   Skip link de accesibilidad (WCAG 2.1 AA)
+   Skip link (WCAG 2.1 AA)
    ============================================ */
 .skip-link {
   position: absolute;
   top: -100%;
   left: 1rem;
   z-index: 9999;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.25rem;
   background: var(--sbg-accent);
-  color: var(--sbg-aws-dark);
-  font-weight: 600;
-  font-family: 'Inter', sans-serif;
+  color: #0d0d0d;
+  font-weight: 700;
+  font-size: 0.875rem;
   border-radius: 0 0 0.5rem 0.5rem;
   text-decoration: none;
-  transition: top 0.2s ease;
+  transition: top 0.15s ease;
   white-space: nowrap;
 }
+.skip-link:focus { top: 0; outline: 2px solid #0d0d0d; outline-offset: 2px; }
 
-.skip-link:focus {
-  top: 0;
-  outline: 2px solid var(--sbg-aws-dark);
-  outline-offset: 2px;
+/* ============================================
+   Focus global
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--sbg-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
 /* ============================================
-   Animaciones de scroll (IntersectionObserver)
+   IntersectionObserver scroll animations
    ============================================ */
 [data-animate] {
   opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.5s ease-out,
-    transform 0.5s ease-out;
+  transform: translateY(24px);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-animate].animate-in { opacity: 1; transform: translateY(0); }
+
+/* ============================================
+   Hero animations
+   ============================================ */
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.99);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 
-[data-animate].animate-in {
-  opacity: 1;
-  transform: translateY(0);
+.hero-animate {
+  opacity: 0;
+  animation: hero-reveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.hero-animate-delay-1 { animation-delay: 0.06s; }
+.hero-animate-delay-2 { animation-delay: 0.16s; }
+.hero-animate-delay-3 { animation-delay: 0.28s; }
+.hero-animate-delay-4 { animation-delay: 0.42s; }
+.hero-animate-delay-5 { animation-delay: 0.56s; }
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0); }
+  50%       { box-shadow: 0 0 20px 3px rgba(255, 153, 0, 0.22); }
+}
+.glow-pulse { animation: glow-pulse 3.5s ease-in-out infinite; }
+
+/* Floating geometric animations */
+@keyframes float-triangle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%      { transform: translateY(-8px) rotate(120deg); }
+  66%      { transform: translateY(4px) rotate(240deg); }
+}
+@keyframes float-square {
+  0%, 100% { transform: translateY(0px) rotate(12deg) scale(1); }
+  50%      { transform: translateY(-12px) rotate(32deg) scale(1.1); }
+}
+@keyframes float-circle {
+  0%, 100% { transform: scale(1) translateX(0px); }
+  33%      { transform: scale(1.2) translateX(-4px); }
+  66%      { transform: scale(0.9) translateX(4px); }
+}
+@keyframes float-rhombus {
+  0%, 100% { transform: rotate(45deg) translateY(0px); }
+  25%      { transform: rotate(55deg) translateY(-6px); }
+  75%      { transform: rotate(35deg) translateY(6px); }
 }
 
-/* Respeta prefers-reduced-motion */
+/* ============================================
+   View Transitions
+   ============================================ */
+@keyframes vt-in  { from { opacity: 0; transform: translateY(12px); } }
+@keyframes vt-out { to   { opacity: 0; transform: translateY(-12px); } }
+
+::view-transition-old(root) { animation: 200ms ease-in  vt-out; }
+::view-transition-new(root) { animation: 260ms ease-out vt-in;  }
+
+/* ============================================
+   Layout
+   ============================================ */
+.container-sbg {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px)  { .container-sbg { padding-inline: 2rem; } }
+@media (min-width: 1024px) { .container-sbg { padding-inline: 2.5rem; } }
+
+/* ============================================
+   prefers-reduced-motion
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  [data-animate] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  [data-animate].animate-in {
-    opacity: 1;
-    transform: none;
-  }
-
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* ============================================
-   Focus visible global (accesibilidad)
-   ============================================ */
-:focus-visible {
-  outline: 2px solid var(--sbg-accent);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* ============================================
-   Utilidades de layout
-   ============================================ */
-.container-sbg {
-  width: 100%;
-  max-width: 80rem; /* 1280px = max-w-7xl */
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-@media (min-width: 640px) {
-  .container-sbg {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+  [data-animate], .hero-animate,
+  .hero-animate-delay-1, .hero-animate-delay-2,
+  .hero-animate-delay-3, .hero-animate-delay-4,
+  .hero-animate-delay-5 {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
   }
-}
-
-@media (min-width: 1024px) {
-  .container-sbg {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+  .glow-pulse { animation: none; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }
