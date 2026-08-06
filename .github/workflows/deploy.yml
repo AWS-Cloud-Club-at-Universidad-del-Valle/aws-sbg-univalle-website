@@ -36,7 +36,6 @@ jobs:
     name: Build & Deploy to AWS
     runs-on: ubuntu-latest
 
-    # Selecciona automáticamente el Environment
     environment: ${{ github.ref_name == 'main' && 'Production' || 'development' }}
 
     permissions:
@@ -47,13 +46,13 @@ jobs:
       # --------------------------------------------------------
       # Checkout
       # --------------------------------------------------------
-      - name: 📥 Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       # --------------------------------------------------------
       # Node.js
       # --------------------------------------------------------
-      - name: ⚙️ Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -62,43 +61,43 @@ jobs:
       # --------------------------------------------------------
       # Instalar dependencias
       # --------------------------------------------------------
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: |
-          echo "📦 Instalando dependencias con npm ci..."
+          echo "Instalando dependencias con npm ci..."
           npm ci
-          echo "✅ Dependencias instaladas correctamente."
+          echo "Dependencias instaladas correctamente."
 
       # --------------------------------------------------------
       # Build
       # --------------------------------------------------------
-      - name: 🔨 Build site
+      - name: Build site
         run: |
-          echo "🔨 Iniciando build..."
+          echo "Iniciando build..."
           npm run build
-          echo "✅ Build completado. Archivos generados en /dist."
+          echo "Build completado. Archivos generados en /dist."
 
       # --------------------------------------------------------
       # Verificar dist/
       # --------------------------------------------------------
-      - name: 🔍 Verify dist directory
+      - name: Verify dist directory
         run: |
           if [ ! -d "dist" ]; then
-            echo "❌ ERROR: El directorio dist/ no existe."
+            echo "ERROR: El directorio dist/ no existe."
             exit 1
           fi
 
           if [ -z "$(ls -A dist)" ]; then
-            echo "❌ ERROR: El directorio dist/ está vacío."
+            echo "ERROR: El directorio dist/ está vacío."
             exit 1
           fi
 
           FILE_COUNT=$(find dist -type f | wc -l)
-          echo "✅ dist/ existe y contiene $FILE_COUNT archivos."
+          echo "dist/ existe y contiene $FILE_COUNT archivos."
 
       # --------------------------------------------------------
       # Autenticación AWS mediante OIDC
       # --------------------------------------------------------
-      - name: 🔐 Configure AWS credentials (OIDC)
+      - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
@@ -108,7 +107,7 @@ jobs:
       # --------------------------------------------------------
       # Subir assets con hash
       # --------------------------------------------------------
-      - name: Sync hashed assets to S3 (cache: 1 year)
+      - name: Sync hashed assets to S3 (cache 1 year)
         run: |
           aws s3 sync dist/_astro/ "s3://${{ secrets.AWS_BUCKET_NAME }}/_astro/" \
             --cache-control "public, max-age=31536000, immutable" \
@@ -117,7 +116,7 @@ jobs:
       # --------------------------------------------------------
       # Subir HTML y archivos raíz
       # --------------------------------------------------------
-      - name: 📄 Sync HTML and root files to S3 (no-cache)
+      - name: Sync HTML and root files to S3 (no-cache)
         run: |
           aws s3 sync dist/ "s3://${{ secrets.AWS_BUCKET_NAME }}/" \
             --cache-control "no-cache, no-store, must-revalidate" \
@@ -128,7 +127,7 @@ jobs:
       # --------------------------------------------------------
       # Invalidar CloudFront
       # --------------------------------------------------------
-      - name: 🔄 Invalidate CloudFront cache
+      - name: Invalidate CloudFront cache
         run: |
           INVALIDATION_ID=$(aws cloudfront create-invalidation \
             --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
@@ -136,18 +135,18 @@ jobs:
             --query 'Invalidation.Id' \
             --output text)
 
-          echo "✅ Invalidación creada: $INVALIDATION_ID"
+          echo "Invalidacion creada: $INVALIDATION_ID"
 
       # --------------------------------------------------------
       # Resumen
       # --------------------------------------------------------
-      - name: 🎉 Deployment summary
+      - name: Deployment summary
         run: |
           echo "=================================================="
-          echo "🎉 DESPLIEGUE COMPLETADO"
+          echo "DESPLIEGUE COMPLETADO"
           echo "=================================================="
           echo "Ambiente: ${{ github.ref_name == 'main' && 'Production' || 'development' }}"
-          echo "Rama:      ${{ github.ref_name }}"
-          echo "Commit:    ${{ github.sha }}"
-          echo "Actor:     ${{ github.actor }}"
+          echo "Rama:     ${{ github.ref_name }}"
+          echo "Commit:   ${{ github.sha }}"
+          echo "Actor:    ${{ github.actor }}"
           echo "=================================================="
