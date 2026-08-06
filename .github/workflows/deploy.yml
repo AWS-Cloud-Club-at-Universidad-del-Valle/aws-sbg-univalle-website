@@ -35,9 +35,6 @@ jobs:
     name: Build & Deploy to AWS
     runs-on: ubuntu-latest
 
-    # ← NUEVO: selecciona el environment según la rama
-    environment: ${{ github.ref_name == 'main' && 'Production' || 'development' }}
-
     permissions:
       id-token: write
       contents: read
