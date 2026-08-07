@@ -17,6 +17,8 @@ export interface ISiteConfig {
     github?: string;
     twitter?: string;
     whatsapp?: string;
+    youtube?: string;
+    email?: string;
   };
 }
 
@@ -137,4 +139,25 @@ export interface IBenefit {
   description: string;
   /** Nombre de icono Lucide. */
   icon: string;
+}
+
+// ============================================
+// Enlaces sociales (About page)
+// ============================================
+
+export interface ISocialLink {
+  /** Unique key identifier for the platform */
+  key: string;
+  /** Platform name for display and aria-label */
+  platform: string;
+  /** Accessible label: "{platform} del AWS SBG Univalle" */
+  ariaLabel: string;
+  /** Target URL (https:// or mailto:) */
+  href: string;
+  /** Inline SVG markup for the platform icon */
+  icon: string;
+  /** Whether this link opens in a new tab (false for mailto) */
+  external: boolean;
+  /** Color para el efecto glow en hover (rgba) */
+  glowColor?: string;
 }

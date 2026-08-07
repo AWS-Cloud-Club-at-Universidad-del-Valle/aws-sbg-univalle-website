@@ -1,0 +1,57 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const badges = ["AWS", "Cloud", "Workshops", "Certificaciones", "Comunidad", "Networking", "Leadership"];
+---
+
+<section
+  aria-labelledby="quienes-somos"
+  class:list={['relative py-16 sm:py-20 lg:py-24', className]}
+  data-animate
+>
+  <!-- Floating shape decorativa -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-8 right-8 hidden sm:block h-3 w-3 opacity-10"
+    style="background: var(--sbg-accent); animation: float-rhombus 8s ease-in-out infinite 1s;"
+  ></div>
+  <div class="container-sbg">
+    <h2
+      id="quienes-somos"
+      class="text-2xl sm:text-3xl lg:text-4xl mb-8"
+      data-animate
+    >
+      ¿Quiénes somos?
+    </h2>
+
+    <div
+      class="relative overflow-hidden rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] backdrop-blur-sm p-6 sm:p-8 lg:p-10"
+      data-animate
+    >
+      <!-- Radial gradient decorativo -->
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0"
+        style="background: radial-gradient(ellipse at 100% 100%, rgba(139,92,246,0.05), transparent 70%);"
+      ></div>
+      <p class="text-base sm:text-lg leading-relaxed text-[var(--sbg-text-muted)]">
+        Somos una comunidad de estudiantes de la Universidad del Valle apasionados por la computación en la nube. Aprendemos tecnologías AWS, organizamos talleres y charlas, nos preparamos para certificaciones y conectamos a los estudiantes con profesionales, oportunidades y otras comunidades tecnológicas.
+      </p>
+
+      <div class="mt-6 flex flex-wrap gap-2">
+        {badges.map(badge => (
+          <span
+            class="inline-flex items-center gap-1.5 rounded-full border border-[var(--sbg-border)] bg-[var(--sbg-accent-subtle)] px-3 py-1 text-[0.72rem] text-[var(--sbg-text-muted)]"
+            style="font-family:'Space Mono',monospace;"
+          >
+            {badge}
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

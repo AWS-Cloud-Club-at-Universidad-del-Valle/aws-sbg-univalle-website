@@ -148,10 +148,10 @@ const isHome = Astro.url.pathname === '/';
     <!--
       Script de animaciones de scroll — IntersectionObserver.
       Vanilla JS, sin dependencias. Respeta prefers-reduced-motion.
+      Usa astro:page-load para re-inicializar tras navegación con Client Router.
     -->
     <script>
-      (function initScrollAnimations() {
-        // No animar si el usuario prefiere movimiento reducido
+      function initScrollAnimations() {
         const reducedMotion = window.matchMedia(
           '(prefers-reduced-motion: reduce)'
         ).matches;
@@ -164,7 +164,6 @@ const isHome = Astro.url.pathname === '/';
         }
 
         if (!('IntersectionObserver' in window)) {
-          // Fallback: mostrar todo sin animación
           elements.forEach(el => el.classList.add('animate-in'));
           return;
         }
@@ -174,7 +173,6 @@ const isHome = Astro.url.pathname === '/';
             entries.forEach(entry => {
               if (entry.isIntersecting) {
                 entry.target.classList.add('animate-in');
-                // Unobserve: la animación ocurre solo una vez
                 observer.unobserve(entry.target);
               }
             });
@@ -186,7 +184,10 @@ const isHome = Astro.url.pathname === '/';
         );
 
         elements.forEach(el => observer.observe(el));
-      })();
+      }
+
+      // Se ejecuta en carga inicial Y tras cada navegación del Client Router
+      document.addEventListener('astro:page-load', initScrollAnimations);
     </script>
   </body>
 </html>
