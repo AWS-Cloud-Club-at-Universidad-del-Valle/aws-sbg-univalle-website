@@ -1,6 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HeroSection from '@/components/sections/HeroSection.astro';
+import WhatIsSection from '@/components/sections/WhatIsSection.astro';
+import BenefitsSection from '@/components/sections/BenefitsSection.astro';
+import FaqSection from '@/components/sections/FaqSection.astro';
+import ContactSection from '@/components/sections/ContactSection.astro';
+import SectionDivider from '@/components/common/SectionDivider.astro';
 ---
 
 <BaseLayout
@@ -8,4 +13,12 @@ import HeroSection from '@/components/sections/HeroSection.astro';
   description="Comunidad estudiantil de tecnología cloud AWS en la Universidad del Valle. Aprende, certifícate y conecta con los mejores builders de Colombia."
 >
   <HeroSection />
+  <SectionDivider />
+  <WhatIsSection />
+  <SectionDivider />
+  <BenefitsSection />
+  <SectionDivider />
+  <FaqSection />
+  <SectionDivider />
+  <ContactSection />
 </BaseLayout>

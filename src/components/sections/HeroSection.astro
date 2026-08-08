@@ -108,28 +108,28 @@ const { class: className = '' } = Astro.props;
 </section>
 
 <script is:inline>
-(function initHeroCanvas() {
-  const canvas    = document.getElementById('hero-canvas');
-  const spotlight = document.getElementById('cursor-spotlight');
-  const svcName   = document.getElementById('svc-name');
-  const svcDesc   = document.getElementById('svc-desc');
-  const section   = document.getElementById('hero-section');
+document.addEventListener('astro:page-load', function initHeroCanvas() {
+  var canvas    = document.getElementById('hero-canvas');
+  var spotlight = document.getElementById('cursor-spotlight');
+  var svcName   = document.getElementById('svc-name');
+  var svcDesc   = document.getElementById('svc-desc');
+  var section   = document.getElementById('hero-section');
   if (!canvas || !section) return;
 
-  const ctx = canvas.getContext('2d');
-  let W, H, raf;
-  let mouse = { x: -9999, y: -9999, active: false };
-  let hoveredNode = null;
+  var ctx = canvas.getContext('2d');
+  var W, H, raf;
+  var mouse = { x: -9999, y: -9999, active: false };
+  var hoveredNode = null;
 
-  const COLORS = {
-    compute:  '#FF9900',  // AWS Compute/Serverless (Smile - Orange)
-    storage:  '#3F8624',  // AWS Storage (Endor - Green)
-    database: '#2E73B8',  // AWS Database (Nebula - Blue)
-    network:  '#8C4FFF',  // AWS Networking (Galaxy - Purple)
-    ml:       '#01A88D',  // AWS AI/ML (Orbit - Teal)
+  var COLORS = {
+    compute:  '#FF9900',
+    storage:  '#3F8624',
+    database: '#2E73B8',
+    network:  '#8C4FFF',
+    ml:       '#01A88D',
   };
 
-  const AWS_NODES = [
+  var AWS_NODES = [
     { label: 'EC2',         desc: 'Servidores virtuales escalables en la nube',        cat: 'compute'  },
     { label: 'Lambda',      desc: 'Funciones serverless sin infraestructura propia',   cat: 'compute'  },
     { label: 'S3',          desc: 'Almacenamiento de objetos ilimitado y duradero',    cat: 'storage'  },
@@ -176,7 +176,7 @@ const { class: className = '' } = Astro.props;
         x: baseX + jx, y: baseY + jy,
         vx: (Math.random() - 0.5) * 0.15,
         vy: (Math.random() - 0.5) * 0.15,
-        r: 0, targetR: 22, alpha: 0, targetAlpha: 0.85, // Increased size and opacity
+        r: 0, targetR: 22, alpha: 0, targetAlpha: 0.85,
       };
     });
   }
@@ -200,7 +200,7 @@ const { class: className = '' } = Astro.props;
       var dist = Math.sqrt(dx*dx + dy*dy);
       if (dist < 200 && mouse.active) {
         n.x += dx * 0.014; n.y += dy * 0.014;
-        n.targetR = 35; n.targetAlpha = 1; // Brighter on hover
+        n.targetR = 35; n.targetAlpha = 1;
       } else {
         n.targetR = 22; n.targetAlpha = 0.85;
       }
@@ -271,31 +271,27 @@ const { class: className = '' } = Astro.props;
     }
 
     nodes.forEach(function(n) {
-      // Enhanced glow effects
       ctx.shadowColor = n.color;
-      ctx.shadowBlur  = n.r > 28 ? 20 : 8; // Increased glow
+      ctx.shadowBlur  = n.r > 28 ? 20 : 8;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r * 0.4, 0, Math.PI * 2);
       ctx.fillStyle = n.color + Math.round(n.alpha * 0.25 * 255).toString(16).padStart(2,'0');
       ctx.fill();
-      
-      // Inner bright core
+
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r * 0.2, 0, Math.PI * 2);
       ctx.fillStyle = n.color + Math.round(n.alpha * 0.8 * 255).toString(16).padStart(2,'0');
       ctx.fill();
-      
-      // Outer ring
+
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r * 0.4, 0, Math.PI * 2);
       ctx.strokeStyle = n.color + Math.round(n.alpha * 255).toString(16).padStart(2,'0');
-      ctx.lineWidth = 2; ctx.stroke(); // Thicker outline
+      ctx.lineWidth = 2; ctx.stroke();
       ctx.shadowBlur = 0;
-      
-      // Text with bright gray color like in the reference image
+
       ctx.font = (n.r > 28 ? '700 12px' : '700 10px') + " 'Space Mono',monospace";
       ctx.textAlign = 'center';
-      ctx.fillStyle = 'rgba(229,231,235,' + (n.alpha * 0.95) + ')'; // Matches --sbg-text
+      ctx.fillStyle = 'rgba(229,231,235,' + (n.alpha * 0.95) + ')';
       ctx.fillText(n.label, n.x, n.y + n.r * 0.4 + 15);
     });
 
@@ -332,9 +328,10 @@ const { class: className = '' } = Astro.props;
   resize();
   draw();
 
-  document.addEventListener('astro:before-swap', function() {
+  document.addEventListener('astro:before-swap', function cleanup() {
     cancelAnimationFrame(raf);
     ro.disconnect();
+    document.removeEventListener('astro:before-swap', cleanup);
   });
-})();
+});
 </script>

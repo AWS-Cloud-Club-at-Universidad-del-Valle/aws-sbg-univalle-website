@@ -133,6 +133,13 @@ const isHome = Astro.url.pathname === '/';
   </head>
 
   <body class="bg-[var(--sbg-bg)] text-[var(--sbg-text)] antialiased">
+    <!-- Global cursor spotlight -->
+    <div
+      id="global-cursor-glow"
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-0 z-[1] opacity-0 transition-opacity duration-500"
+    ></div>
+
     <a href="#main-content" class="skip-link">Ir al contenido principal</a>
 
     <div class="layout-with-sidebar">
@@ -188,6 +195,25 @@ const isHome = Astro.url.pathname === '/';
 
       // Se ejecuta en carga inicial Y tras cada navegación del Client Router
       document.addEventListener('astro:page-load', initScrollAnimations);
+    </script>
+
+    <!-- Global cursor spotlight that follows mouse across the entire page -->
+    <script is:inline>
+    document.addEventListener('astro:page-load', function() {
+      var glow = document.getElementById('global-cursor-glow');
+      if (!glow) return;
+      var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reducedMotion) return;
+
+      document.addEventListener('mousemove', function(e) {
+        glow.style.background = 'radial-gradient(600px circle at ' + e.clientX + 'px ' + e.clientY + 'px, rgba(255,153,0,0.04) 0%, rgba(139,92,246,0.02) 40%, transparent 70%)';
+        glow.style.opacity = '1';
+      });
+
+      document.addEventListener('mouseleave', function() {
+        glow.style.opacity = '0';
+      });
+    });
     </script>
   </body>
 </html>
