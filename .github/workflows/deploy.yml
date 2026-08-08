@@ -4,12 +4,13 @@
 #
 # Propósito:
 #   Construye el sitio Astro y lo despliega automáticamente
-#   en Amazon S3 + CloudFront cada vez que se hace push a main
-#   o develop.
+#   en Amazon S3 + CloudFront cada vez que se hace push a
+#   main o develop.
 #
 # Autenticación:
 #   Usa OIDC (OpenID Connect) — sin access keys estáticas.
-#   GitHub solicita un token temporal a AWS vía sts:AssumeRoleWithWebIdentity.
+#   GitHub solicita un token temporal a AWS vía
+#   sts:AssumeRoleWithWebIdentity.
 #
 # GitHub Secrets requeridos (Settings → Environments):
 #   AWS_ROLE_ARN               — ARN del IAM Role para OIDC
@@ -24,10 +25,10 @@ on:
   push:
     branches:
       - main
-      - develop # ← NUEVO: también se activa en develop
+      - develop
 
 concurrency:
-  group: ${{ github.ref_name }}-deploy # ← CAMBIADO: un grupo por rama
+  group: ${{ github.ref_name }}-deploy
   cancel-in-progress: true
 
 jobs:
@@ -35,7 +36,6 @@ jobs:
     name: Build & Deploy to AWS
     runs-on: ubuntu-latest
 
-    # ← NUEVO: selecciona el environment según la rama
     environment: ${{ github.ref_name == 'main' && 'Production' || 'development' }}
 
     permissions:
@@ -43,54 +43,80 @@ jobs:
       contents: read
 
     steps:
-      - name: 📥 Checkout repository
+      # --------------------------------------------------------
+      # Checkout
+      # --------------------------------------------------------
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js
+      # --------------------------------------------------------
+      # Node.js
+      # --------------------------------------------------------
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
 
-      - name: 📦 Install dependencies
+      # --------------------------------------------------------
+      # Instalar dependencias
+      # --------------------------------------------------------
+      - name: Install dependencies
         run: |
-          echo "📦 Instalando dependencias con npm ci..."
+          echo "Instalando dependencias con npm ci..."
           npm ci
-          echo "✅ Dependencias instaladas correctamente."
+          echo "Dependencias instaladas correctamente."
 
-      - name: 🔨 Build site
+      # --------------------------------------------------------
+      # Build
+      # --------------------------------------------------------
+      - name: Build site
         run: |
-          echo "🔨 Iniciando build..."
+          echo "Iniciando build..."
           npm run build
-          echo "✅ Build completado. Archivos generados en /dist."
+          echo "Build completado. Archivos generados en /dist."
 
-      - name: 🔍 Verify dist directory
+      # --------------------------------------------------------
+      # Verificar dist/
+      # --------------------------------------------------------
+      - name: Verify dist directory
         run: |
           if [ ! -d "dist" ]; then
-            echo "❌ ERROR: El directorio dist/ no existe."
+            echo "ERROR: El directorio dist/ no existe."
             exit 1
           fi
-          if [ -z "$(ls -A dist)" ]; then
-            echo "❌ ERROR: El directorio dist/ está vacío."
-            exit 1
-          fi
-          FILE_COUNT=$(find dist -type f | wc -l)
-          echo "✅ dist/ existe y contiene $FILE_COUNT archivos."
 
-      - name: 🔐 Configure AWS credentials (OIDC)
+          if [ -z "$(ls -A dist)" ]; then
+            echo "ERROR: El directorio dist/ está vacío."
+            exit 1
+          fi
+
+          FILE_COUNT=$(find dist -type f | wc -l)
+          echo "dist/ existe y contiene $FILE_COUNT archivos."
+
+      # --------------------------------------------------------
+      # Autenticación AWS mediante OIDC
+      # --------------------------------------------------------
+      - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHubActions-Deploy-${{ github.run_id }}
 
-      - name: "☁️ Sync hashed assets to S3 (cache: 1 year)"
+      # --------------------------------------------------------
+      # Subir assets con hash
+      # --------------------------------------------------------
+      - name: Sync hashed assets to S3 (cache 1 year)
         run: |
           aws s3 sync dist/_astro/ "s3://${{ secrets.AWS_BUCKET_NAME }}/_astro/" \
             --cache-control "public, max-age=31536000, immutable" \
             --no-progress
 
-      - name: 📄 Sync HTML and root files to S3 (no-cache)
+      # --------------------------------------------------------
+      # Subir HTML y archivos raíz
+      # --------------------------------------------------------
+      - name: Sync HTML and root files to S3 (no-cache)
         run: |
           aws s3 sync dist/ "s3://${{ secrets.AWS_BUCKET_NAME }}/" \
             --cache-control "no-cache, no-store, must-revalidate" \
@@ -98,22 +124,29 @@ jobs:
             --delete \
             --no-progress
 
-      - name: 🔄 Invalidate CloudFront cache
+      # --------------------------------------------------------
+      # Invalidar CloudFront
+      # --------------------------------------------------------
+      - name: Invalidate CloudFront cache
         run: |
           INVALIDATION_ID=$(aws cloudfront create-invalidation \
             --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
             --paths "/*" \
             --query 'Invalidation.Id' \
             --output text)
-          echo "✅ Invalidación creada: $INVALIDATION_ID"
 
-      - name: 🎉 Deployment summary
+          echo "Invalidacion creada: $INVALIDATION_ID"
+
+      # --------------------------------------------------------
+      # Resumen
+      # --------------------------------------------------------
+      - name: Deployment summary
         run: |
           echo "=================================================="
-          echo "  🎉 DESPLIEGUE COMPLETADO"
+          echo "DESPLIEGUE COMPLETADO"
           echo "=================================================="
-          echo "  Ambiente: ${{ github.ref_name == 'main' && 'Production' || 'development' }}"
-          echo "  Rama:     ${{ github.ref_name }}"
-          echo "  Commit:   ${{ github.sha }}"
-          echo "  Actor:    ${{ github.actor }}"
+          echo "Ambiente: ${{ github.ref_name == 'main' && 'Production' || 'development' }}"
+          echo "Rama:     ${{ github.ref_name }}"
+          echo "Commit:   ${{ github.sha }}"
+          echo "Actor:    ${{ github.actor }}"
           echo "=================================================="
