@@ -21,6 +21,7 @@ import { SITE_CONFIG } from '@/lib/constants';
 import { buildJsonLdOrganization } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   /** Título de la página. Se concatena con el nombre del sitio. */
@@ -126,37 +127,38 @@ const isHome = Astro.url.pathname === '/';
         />
       )
     }
+
+    <!-- View Transitions API -->
+    <ClientRouter />
   </head>
 
-  <body class="min-h-screen bg-[var(--sbg-bg)] text-[var(--sbg-text)] antialiased">
-    <!--
-      Skip link: primer elemento interactivo del body.
-      Visible solo al recibir foco por teclado (Tab).
-      Cumple WCAG 2.1 AA criterio 2.4.1.
-    -->
-    <a href="#main-content" class="skip-link">
-      Ir al contenido principal
-    </a>
+  <body class="bg-[var(--sbg-bg)] text-[var(--sbg-text)] antialiased">
+    <!-- Global cursor spotlight -->
+    <div
+      id="global-cursor-glow"
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-0 z-[1] opacity-0 transition-opacity duration-500"
+    ></div>
 
-    <!--
-      Navbar y Footer importados directamente.
-      Todas las páginas comparten el mismo layout.
-    -->
-    <Navbar />
+    <a href="#main-content" class="skip-link">Ir al contenido principal</a>
 
-    <main id="main-content" tabindex="-1">
-      <slot />
-    </main>
-
-    <Footer />
+    <div class="layout-with-sidebar">
+      <Navbar />
+      <div class="sidebar-content pt-14 lg:pt-0">
+        <main id="main-content" tabindex="-1">
+          <slot />
+        </main>
+        <Footer />
+      </div>
+    </div>
 
     <!--
       Script de animaciones de scroll — IntersectionObserver.
       Vanilla JS, sin dependencias. Respeta prefers-reduced-motion.
+      Usa astro:page-load para re-inicializar tras navegación con Client Router.
     -->
     <script>
-      (function initScrollAnimations() {
-        // No animar si el usuario prefiere movimiento reducido
+      function initScrollAnimations() {
         const reducedMotion = window.matchMedia(
           '(prefers-reduced-motion: reduce)'
         ).matches;
@@ -169,7 +171,6 @@ const isHome = Astro.url.pathname === '/';
         }
 
         if (!('IntersectionObserver' in window)) {
-          // Fallback: mostrar todo sin animación
           elements.forEach(el => el.classList.add('animate-in'));
           return;
         }
@@ -179,7 +180,6 @@ const isHome = Astro.url.pathname === '/';
             entries.forEach(entry => {
               if (entry.isIntersecting) {
                 entry.target.classList.add('animate-in');
-                // Unobserve: la animación ocurre solo una vez
                 observer.unobserve(entry.target);
               }
             });
@@ -191,7 +191,29 @@ const isHome = Astro.url.pathname === '/';
         );
 
         elements.forEach(el => observer.observe(el));
-      })();
+      }
+
+      // Se ejecuta en carga inicial Y tras cada navegación del Client Router
+      document.addEventListener('astro:page-load', initScrollAnimations);
+    </script>
+
+    <!-- Global cursor spotlight that follows mouse across the entire page -->
+    <script is:inline>
+    document.addEventListener('astro:page-load', function() {
+      var glow = document.getElementById('global-cursor-glow');
+      if (!glow) return;
+      var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reducedMotion) return;
+
+      document.addEventListener('mousemove', function(e) {
+        glow.style.background = 'radial-gradient(600px circle at ' + e.clientX + 'px ' + e.clientY + 'px, rgba(255,153,0,0.04) 0%, rgba(139,92,246,0.02) 40%, transparent 70%)';
+        glow.style.opacity = '1';
+      });
+
+      document.addEventListener('mouseleave', function() {
+        glow.style.opacity = '0';
+      });
+    });
     </script>
   </body>
 </html>

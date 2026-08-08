@@ -1,0 +1,59 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  aria-labelledby="mision"
+  class:list={[className]}
+  data-animate
+>
+  <div
+    class="relative overflow-hidden rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-6 sm:p-8"
+    data-animate
+  >
+    <!-- Border-left gradiente -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute top-0 left-0 bottom-0 w-[3px]"
+      style="background: linear-gradient(to bottom, var(--sbg-accent), transparent);"
+    ></div>
+    <!-- Radial gradient fondo -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0"
+      style="background: radial-gradient(ellipse at 0% 0%, rgba(139,92,246,0.06), transparent 70%);"
+    ></div>
+    <!-- Icono SVG decorativo -->
+    <svg
+      aria-hidden="true"
+      class="pointer-events-none absolute top-4 right-4 opacity-[0.15]"
+      width="40"
+      height="40"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="var(--sbg-accent)"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="12" cy="12" r="6" />
+      <circle cx="12" cy="12" r="2" />
+    </svg>
+
+    <h2
+      id="mision"
+      class="mb-4 text-xl sm:text-2xl"
+      data-animate
+    >
+      Misión
+    </h2>
+    <p class="text-base leading-relaxed text-[var(--sbg-text-muted)]">
+      Impulsar el crecimiento de los estudiantes mediante aprendizaje práctico, eventos técnicos y una comunidad colaborativa que fomente el liderazgo, el trabajo en equipo y la conexión con AWS y la industria.
+    </p>
+  </div>
+</section>

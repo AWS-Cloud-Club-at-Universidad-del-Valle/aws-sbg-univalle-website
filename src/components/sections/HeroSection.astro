@@ -1,281 +1,337 @@
 ---
-/**
- * HeroSection — Sección Hero de la landing page.
- *
- * Layout:
- * - Mobile: columna única, texto arriba, ilustración abajo
- * - Desktop (≥ 1024px): dos columnas, texto izquierda, ilustración derecha
- *
- * Requisitos del spec satisfechos: 3.1, 3.2, 3.3, 3.4, 3.5
- *
- * Decisiones:
- * - La imagen hero es un SVG inline para evitar dependencias de archivos
- *   externos y garantizar LCP < 2.5s sin peticiones adicionales.
- * - Los botones son <a> semánticos (navegan), no <button> (acciones).
- * - fetchpriority="high" no aplica a SVG inline; el LCP lo consigue
- *   el hecho de que el SVG está en el HTML inicial (sin petición extra).
- * - Fondo con gradiente sutil del azul Univalle al blanco, Mobile First.
- */
-
-interface Props {
-  /** Clase CSS adicional para el elemento <section>. */
-  class?: string;
-}
-
+interface Props { class?: string; }
 const { class: className = '' } = Astro.props;
 ---
 
 <section
   aria-labelledby="hero-heading"
-  class:list={[
-    'relative overflow-hidden',
-    'bg-gradient-to-br from-[var(--sbg-primary)] via-[var(--sbg-primary-light)] to-[#1a3a6e]',
-    'py-16 sm:py-20 lg:py-28',
-    className,
-  ]}
+  id="hero-section"
+  class:list={['relative overflow-hidden bg-[var(--sbg-bg)]', className]}
+  style="min-height: 100svh; display: flex; align-items: center;"
 >
-  <!-- Patrón decorativo de fondo (puntos) -->
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-0 opacity-10"
-    style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px;"
-  >
+  <div id="cursor-spotlight" aria-hidden="true"
+    class="pointer-events-none fixed inset-0 z-0 opacity-0 transition-opacity duration-300"
+    style="background: radial-gradient(600px circle at 50% 50%, rgba(255,153,0,0.06) 0%, transparent 70%);">
   </div>
 
-  <div class="container-sbg relative">
-    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+    style="background:radial-gradient(ellipse 55% 45% at 30% 0%,rgba(255,153,0,0.08) 0%,transparent 65%);"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute bottom-0 right-0 h-[50vh] w-[50vw]"
+    style="background:radial-gradient(ellipse at 80% 100%,rgba(35,47,62,0.35) 0%,transparent 60%);"></div>
 
-      <!-- ─── Columna de texto ─── -->
-      <div class="text-center lg:text-left" data-animate>
+  <canvas id="hero-canvas" aria-hidden="true"
+    class="pointer-events-none absolute inset-0 h-full w-full opacity-75"></canvas>
 
-        <!-- Badge "Bienvenido" -->
-        <div
-          class="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--sbg-accent)]/40 bg-[var(--sbg-accent)]/10 px-4 py-1.5"
-        >
-          <span
-            class="h-1.5 w-1.5 rounded-full bg-[var(--sbg-accent)]"
-            aria-hidden="true"
-          ></span>
-          <span class="text-xs font-semibold uppercase tracking-widest text-[var(--sbg-accent)]">
-            AWS Student Builder Group
-          </span>
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.025]"
+    style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"></div>
+
+  <div class="container-sbg relative z-10 py-24 lg:py-32">
+    <div class="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
+
+      <!-- Columna texto -->
+      <div class="text-center lg:text-left">
+
+        <div class="hero-animate hero-animate-delay-1 mb-5">
+          <span class="code-label"># aws.student_builder_group</span>
         </div>
 
-        <!-- Heading principal — único h1 de la página -->
-        <h1
-          id="hero-heading"
-          class="font-display text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl"
-        >
-          Construye el futuro
-          <span class="block text-[var(--sbg-accent)]">en la nube</span>
+        <h1 id="hero-heading"
+          class="hero-animate hero-animate-delay-2 text-[2.6rem] leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.4rem] xl:text-[3.8rem]">
+          Construye el<br/>
+          <span class="text-[var(--sbg-accent-light)]">futuro en la nube</span>
         </h1>
 
-        <!-- Subtítulo -->
-        <p class="mt-6 text-base leading-relaxed text-white/80 sm:text-lg lg:max-w-xl">
-          Somos la comunidad estudiantil AWS de la Universidad del Valle. Aprende
-          tecnología cloud, certifícate con AWS y conecta con los mejores
-          builders de Colombia.
+        <p class="hero-animate hero-animate-delay-3 mt-6 max-w-md text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg lg:mx-0 mx-auto"
+          style="font-family:'Nunito Sans',sans-serif;">
+          Comunidad estudiantil AWS en la Universidad del Valle.
+          Aprende, certifícate y construye con los mejores builders de Colombia.
         </p>
 
-        <!-- CTAs -->
-        <div
-          class="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start"
-        >
-          <!-- CTA primario: naranja AWS -->
-          <a
-            href="#cta"
-            class:list={[
-              'inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl sm:w-auto',
-              'bg-[var(--sbg-accent)] px-7 py-3',
-              'text-base font-semibold text-[var(--sbg-aws-dark)]',
-              'transition-all duration-200 hover:bg-[var(--sbg-accent-hover)] hover:shadow-lg hover:shadow-[var(--sbg-accent)]/30',
-              'focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2',
-            ]}
-          >
-            <!-- Icono usuario -->
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <div class="hero-animate hero-animate-delay-4 mt-9 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
+          <a href="#cta"
+            class="inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-xl bg-[var(--sbg-accent)] px-8 text-[0.9rem] font-bold text-white shadow-lg shadow-[rgba(0,102,51,0.3)] transition-all duration-200 hover:bg-[var(--sbg-accent-hover)] hover:-translate-y-px sm:w-auto focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+            style="font-family:'Space Mono',monospace;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="19" y1="8" x2="19" y2="14"/>
+              <line x1="22" y1="11" x2="16" y2="11"/>
             </svg>
             Únete al grupo
           </a>
-
-          <!-- CTA secundario: borde blanco -->
-          <a
-            href="#eventos"
-            class:list={[
-              'inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl sm:w-auto',
-              'border-2 border-white/40 px-7 py-3',
-              'text-base font-semibold text-white',
-              'transition-all duration-200 hover:border-white hover:bg-white/10',
-              'focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2',
-            ]}
-          >
-            <!-- Icono calendario -->
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-            Ver próximos eventos
+          <a href="#eventos"
+            class="inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-xl border border-[var(--sbg-border)] bg-white/[0.03] px-8 text-[0.9rem] font-semibold text-[var(--sbg-text-muted)] transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] hover:text-white sm:w-auto focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2"
+            style="font-family:'Space Mono',monospace;">
+            Ver eventos
           </a>
         </div>
 
-        <!-- Indicadores de confianza -->
-        <div
-          class="mt-10 flex flex-wrap items-center justify-center gap-6 lg:justify-start"
-          aria-label="Datos del grupo"
-        >
-          {
-            [
-              { value: '700+', label: 'Miembros' },
-              { value: '15+', label: 'Eventos' },
-              { value: '2', label: 'Proyectos cloud' },
-            ].map(({ value, label }) => (
-              <div class="flex flex-col items-center lg:items-start">
-                <span class="font-display text-2xl font-extrabold text-[var(--sbg-accent)]">
-                  {value}
-                </span>
-                <span class="text-xs text-white/60">{label}</span>
-              </div>
-            ))
-          }
+        <div class="hero-animate hero-animate-delay-5 mt-12 flex flex-wrap justify-center gap-8 lg:justify-start">
+          {[
+            { value: '700+', label: 'miembros',  code: '# members'   },
+            { value: '15+',  label: 'eventos',   code: '# events'    },
+            { value: '8',    label: 'semestres', code: '# semesters' },
+          ].map(({ value, label, code }) => (
+            <div class="flex flex-col items-center lg:items-start gap-0.5">
+              <span class="code-label text-[10px]">{code}</span>
+              <span class="text-2xl font-bold text-white leading-none" style="font-family:'Space Mono',monospace;">{value}</span>
+              <span class="text-[11px] text-[var(--sbg-text-subtle)] uppercase tracking-widest" style="font-family:'Nunito Sans',sans-serif;">{label}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <!-- ─── Columna de ilustración ─── -->
-      <div class="flex justify-center lg:justify-end" data-animate aria-hidden="true">
-        <!--
-          Ilustración SVG inline del Hero.
-          Sin petición de red → LCP inmediato.
-          aria-hidden porque es decorativa; el texto comunica el contenido.
-        -->
-        <svg
-          viewBox="0 0 480 400"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-full max-w-sm lg:max-w-md xl:max-w-lg"
-          role="img"
-          aria-label="Ilustración de estudiantes construyendo en la nube AWS"
-        >
-          <!-- Nube central AWS -->
-          <ellipse cx="240" cy="160" rx="120" ry="70" fill="#FF9900" fill-opacity="0.15"/>
-          <path
-            d="M160 160 Q160 100 200 100 Q210 70 240 70 Q270 70 280 100 Q320 100 320 140 Q340 140 340 160 Q340 180 320 180 H160 Q140 180 140 160 Q140 140 160 140 Z"
-            fill="#FF9900"
-            fill-opacity="0.25"
-            stroke="#FF9900"
-            stroke-width="2"
-          />
-
-          <!-- Servicios AWS flotando alrededor de la nube -->
-          <!-- S3 -->
-          <rect x="120" y="100" width="44" height="44" rx="10" fill="#1a3a6e" stroke="#FF9900" stroke-width="1.5"/>
-          <text x="142" y="120" text-anchor="middle" font-size="9" font-family="monospace" fill="#FF9900" font-weight="bold">S3</text>
-          <text x="142" y="132" text-anchor="middle" font-size="7" font-family="sans-serif" fill="white" fill-opacity="0.7">Storage</text>
-
-          <!-- Lambda -->
-          <rect x="316" y="100" width="44" height="44" rx="10" fill="#1a3a6e" stroke="#FF9900" stroke-width="1.5"/>
-          <text x="338" y="120" text-anchor="middle" font-size="9" font-family="monospace" fill="#FF9900" font-weight="bold">λ</text>
-          <text x="338" y="132" text-anchor="middle" font-size="7" font-family="sans-serif" fill="white" fill-opacity="0.7">Lambda</text>
-
-          <!-- EC2 -->
-          <rect x="196" y="200" width="44" height="44" rx="10" fill="#1a3a6e" stroke="#FF9900" stroke-width="1.5"/>
-          <text x="218" y="220" text-anchor="middle" font-size="9" font-family="monospace" fill="#FF9900" font-weight="bold">EC2</text>
-          <text x="218" y="232" text-anchor="middle" font-size="7" font-family="sans-serif" fill="white" fill-opacity="0.7">Compute</text>
-
-          <!-- RDS -->
-          <rect x="240" y="200" width="44" height="44" rx="10" fill="#1a3a6e" stroke="#FF9900" stroke-width="1.5"/>
-          <text x="262" y="220" text-anchor="middle" font-size="9" font-family="monospace" fill="#FF9900" font-weight="bold">RDS</text>
-          <text x="262" y="232" text-anchor="middle" font-size="7" font-family="sans-serif" fill="white" fill-opacity="0.7">Database</text>
-
-          <!-- Líneas conectoras (cloud → services) -->
-          <line x1="160" y1="144" x2="142" y2="144" stroke="#FF9900" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
-          <line x1="320" y1="144" x2="338" y2="144" stroke="#FF9900" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
-          <line x1="218" y1="180" x2="218" y2="200" stroke="#FF9900" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
-          <line x1="262" y1="180" x2="262" y2="200" stroke="#FF9900" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
-
-          <!-- Figura estudiante 1 (izquierda) -->
-          <circle cx="170" cy="290" r="18" fill="#1a3a6e" stroke="#FF9900" stroke-width="1.5"/>
-          <rect x="155" y="310" width="30" height="50" rx="8" fill="#1a3a6e" stroke="#FF9900" stroke-width="1.5"/>
-          <!-- Laptop -->
-          <rect x="180" y="320" width="50" height="32" rx="4" fill="#FF9900" fill-opacity="0.2" stroke="#FF9900" stroke-width="1.5"/>
-          <rect x="178" y="352" width="54" height="4" rx="2" fill="#FF9900" fill-opacity="0.4"/>
-
-          <!-- Figura estudiante 2 (derecha) -->
-          <circle cx="310" cy="290" r="18" fill="#003087" stroke="#FF9900" stroke-width="1.5"/>
-          <rect x="295" y="310" width="30" height="50" rx="8" fill="#003087" stroke="#FF9900" stroke-width="1.5"/>
-          <!-- Laptop -->
-          <rect x="250" y="320" width="50" height="32" rx="4" fill="#FF9900" fill-opacity="0.2" stroke="#FF9900" stroke-width="1.5"/>
-          <rect x="248" y="352" width="54" height="4" rx="2" fill="#FF9900" fill-opacity="0.4"/>
-
-          <!-- Badge certificación (flotando) -->
-          <circle cx="390" cy="250" r="28" fill="#FF9900" fill-opacity="0.15" stroke="#FF9900" stroke-width="1.5"/>
-          <text x="390" y="245" text-anchor="middle" font-size="18" fill="#FF9900">★</text>
-          <text x="390" y="262" text-anchor="middle" font-size="8" font-family="sans-serif" fill="white" fill-opacity="0.8">AWS</text>
-
-          <!-- Badge "Builder" (flotando) -->
-          <rect x="60" y="240" width="60" height="28" rx="14" fill="#FF9900" fill-opacity="0.2" stroke="#FF9900" stroke-width="1.5"/>
-          <text x="90" y="258" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#FF9900" font-weight="bold">BUILDER</text>
-
-          <!-- Partículas decorativas -->
-          <circle cx="100" cy="60" r="3" fill="#FF9900" opacity="0.6"/>
-          <circle cx="380" cy="80" r="2" fill="#FF9900" opacity="0.4"/>
-          <circle cx="420" cy="200" r="4" fill="#FF9900" opacity="0.3"/>
-          <circle cx="60" cy="320" r="3" fill="#FF9900" opacity="0.5"/>
-          <circle cx="440" cy="340" r="2" fill="#FF9900" opacity="0.4"/>
-        </svg>
+      <!-- Columna derecha: panel de servicio activo -->
+      <div class="hero-animate hero-animate-delay-3 hidden lg:flex flex-col items-center justify-center gap-4 select-none pointer-events-none">
+        <span class="code-label"># mueve el cursor para interactuar</span>
+        <div id="active-service-label"
+          class="rounded-xl border border-[var(--sbg-border-accent)] bg-[var(--sbg-bg-surface)] px-6 py-4 text-center transition-all duration-300"
+          style="min-width:230px;min-height:68px;backdrop-filter:blur(8px);">
+          <p id="svc-name" class="text-base font-bold text-[var(--sbg-text)]" style="font-family:'Space Mono',monospace;"></p>
+          <p id="svc-desc" class="mt-1.5 text-[11px] text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;line-height:1.5;"></p>
+        </div>
       </div>
+
     </div>
 
     <!-- Scroll indicator -->
-    <div
-      class="mt-12 flex justify-center lg:mt-16"
-      aria-hidden="true"
-    >
-      <a
-        href="#quienes-somos"
-        class="flex flex-col items-center gap-1 text-white/40 transition-colors hover:text-white/70 focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-4 focus-visible:rounded"
-        aria-label="Ir a la sección Quiénes somos"
-      >
-        <span class="text-xs">Conoce más</span>
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
-          class="animate-bounce"
-        >
-          <polyline points="6 9 12 15 18 9" />
+    <div class="mt-16 flex justify-center">
+      <a href="#quienes-somos" aria-label="Ir a Quiénes somos"
+        class="flex flex-col items-center gap-2 text-[var(--sbg-text-subtle)] transition-colors duration-200 hover:text-[var(--sbg-text-muted)] focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded">
+        <span class="code-label text-[10px]">scroll</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" class="animate-bounce">
+          <polyline points="6 9 12 15 18 9"/>
         </svg>
       </a>
     </div>
   </div>
 </section>
+
+<script is:inline>
+document.addEventListener('astro:page-load', function initHeroCanvas() {
+  var canvas    = document.getElementById('hero-canvas');
+  var spotlight = document.getElementById('cursor-spotlight');
+  var svcName   = document.getElementById('svc-name');
+  var svcDesc   = document.getElementById('svc-desc');
+  var section   = document.getElementById('hero-section');
+  if (!canvas || !section) return;
+
+  var ctx = canvas.getContext('2d');
+  var W, H, raf;
+  var mouse = { x: -9999, y: -9999, active: false };
+  var hoveredNode = null;
+
+  var COLORS = {
+    compute:  '#FF9900',
+    storage:  '#3F8624',
+    database: '#2E73B8',
+    network:  '#8C4FFF',
+    ml:       '#01A88D',
+  };
+
+  var AWS_NODES = [
+    { label: 'EC2',         desc: 'Servidores virtuales escalables en la nube',        cat: 'compute'  },
+    { label: 'Lambda',      desc: 'Funciones serverless sin infraestructura propia',   cat: 'compute'  },
+    { label: 'S3',          desc: 'Almacenamiento de objetos ilimitado y duradero',    cat: 'storage'  },
+    { label: 'RDS',         desc: 'Bases de datos relacionales administradas por AWS', cat: 'database' },
+    { label: 'DynamoDB',    desc: 'NoSQL con latencia de un solo dígito en ms',        cat: 'database' },
+    { label: 'CloudFront',  desc: 'CDN global con más de 400 puntos de presencia',     cat: 'network'  },
+    { label: 'VPC',         desc: 'Red virtual privada completamente aislada',         cat: 'network'  },
+    { label: 'IAM',         desc: 'Control de identidades y permisos en AWS',          cat: 'network'  },
+    { label: 'ECS',         desc: 'Orquestación de contenedores Docker en AWS',        cat: 'compute'  },
+    { label: 'Route 53',    desc: 'Servicio DNS escalable y de alta disponibilidad',   cat: 'network'  },
+    { label: 'CloudWatch',  desc: 'Monitoreo y observabilidad en tiempo real',         cat: 'storage'  },
+    { label: 'API Gateway', desc: 'Creación y gestión de APIs REST y WebSocket',       cat: 'network'  },
+    { label: 'Cognito',     desc: 'Autenticación y gestión de usuarios',               cat: 'network'  },
+    { label: 'SQS',         desc: 'Cola de mensajes totalmente administrada',          cat: 'storage'  },
+    { label: 'Bedrock',     desc: 'IA generativa con modelos fundacionales de AWS',    cat: 'ml'       },
+    { label: 'SageMaker',   desc: 'Machine Learning end-to-end en la nube',            cat: 'ml'       },
+    { label: 'Aurora',      desc: 'Base de datos relacional 5x más rápida que MySQL',  cat: 'database' },
+    { label: 'EKS',         desc: 'Kubernetes totalmente administrado por AWS',        cat: 'compute'  },
+  ];
+
+  var nodes = [];
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+    placeNodes();
+  }
+
+  function placeNodes() {
+    nodes = AWS_NODES.map(function(svc, i) {
+      var cols = 5;
+      var col  = i % cols;
+      var row  = Math.floor(i / cols);
+      var totalRows = Math.ceil(AWS_NODES.length / cols);
+      var baseX = (col + 0.5) / cols * W;
+      var baseY = (row + 0.5) / totalRows * H;
+      var seed  = (i * 2654435761) >>> 0;
+      var jx = ((seed & 0xFF) / 255 - 0.5) * (W / cols) * 0.5;
+      var jy = (((seed >> 8) & 0xFF) / 255 - 0.5) * (H / totalRows) * 0.5;
+      return {
+        label: svc.label,
+        desc:  svc.desc,
+        color: COLORS[svc.cat] || '#FF9900',
+        x: baseX + jx, y: baseY + jy,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        r: 0, targetR: 22, alpha: 0, targetAlpha: 0.85,
+      };
+    });
+  }
+
+  var EDGES = [
+    [0,1],[0,2],[1,3],[1,4],[2,11],[3,4],[4,7],
+    [5,6],[5,9],[6,7],[7,12],[8,0],[9,5],[10,0],
+    [10,3],[11,0],[12,7],[13,10],[14,15],[3,16],[0,17],
+  ];
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    var now = performance.now();
+
+    nodes.forEach(function(n) {
+      n.x += n.vx; n.y += n.vy;
+      var pad = 50;
+      if (n.x < pad || n.x > W - pad) n.vx *= -1;
+      if (n.y < pad || n.y > H - pad) n.vy *= -1;
+      var dx = mouse.x - n.x, dy = mouse.y - n.y;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 200 && mouse.active) {
+        n.x += dx * 0.014; n.y += dy * 0.014;
+        n.targetR = 35; n.targetAlpha = 1;
+      } else {
+        n.targetR = 22; n.targetAlpha = 0.85;
+      }
+      n.r     += (n.targetR     - n.r)     * 0.08;
+      n.alpha += (n.targetAlpha - n.alpha) * 0.06;
+    });
+
+    EDGES.forEach(function(e) {
+      var na = nodes[e[0]], nb = nodes[e[1]];
+      if (!na || !nb) return;
+      var d = Math.hypot(nb.x - na.x, nb.y - na.y);
+      if (d > 320) return;
+      ctx.beginPath();
+      ctx.moveTo(na.x, na.y);
+      ctx.lineTo(nb.x, nb.y);
+      ctx.strokeStyle = 'rgba(74,144,217,' + (1 - d/320) * 0.08 + ')';
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+    });
+
+    var closestDist = Infinity, closestNode = null;
+    nodes.forEach(function(n) {
+      var dx = mouse.x - n.x, dy = mouse.y - n.y;
+      var dist = Math.hypot(dx, dy);
+      var MAX = 240;
+      if (dist < MAX && mouse.active) {
+        var t = 1 - dist / MAX;
+        var grad = ctx.createLinearGradient(mouse.x, mouse.y, n.x, n.y);
+        grad.addColorStop(0, 'rgba(255,153,0,' + (t * 0.6) + ')');
+        grad.addColorStop(1, n.color + Math.round(t * 0.5 * 255).toString(16).padStart(2,'0'));
+        ctx.beginPath();
+        ctx.moveTo(mouse.x, mouse.y);
+        ctx.lineTo(n.x, n.y);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 0.6 + t * 1.2;
+        ctx.stroke();
+      }
+      if (dist < closestDist) { closestDist = dist; closestNode = n; }
+    });
+
+    if (closestDist < 200 && mouse.active && closestNode !== hoveredNode) {
+      hoveredNode = closestNode;
+      if (svcName) svcName.textContent = closestNode.label;
+      if (svcDesc) svcDesc.textContent = closestNode.desc;
+    } else if ((closestDist >= 200 || !mouse.active) && hoveredNode) {
+      hoveredNode = null;
+      if (svcName) svcName.textContent = '';
+      if (svcDesc) svcDesc.textContent = '';
+    }
+
+    if (mouse.active) {
+      var pulse = (Math.sin(now * 0.003) + 1) * 0.5;
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 22 + pulse * 8, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,153,0,' + (0.08 + pulse * 0.1) + ')';
+      ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 12 + pulse * 4, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(46,115,184,' + (0.12 + pulse * 0.1) + ')';
+      ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF9900';
+      ctx.shadowColor = '#FF9900';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    nodes.forEach(function(n) {
+      ctx.shadowColor = n.color;
+      ctx.shadowBlur  = n.r > 28 ? 20 : 8;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r * 0.4, 0, Math.PI * 2);
+      ctx.fillStyle = n.color + Math.round(n.alpha * 0.25 * 255).toString(16).padStart(2,'0');
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r * 0.2, 0, Math.PI * 2);
+      ctx.fillStyle = n.color + Math.round(n.alpha * 0.8 * 255).toString(16).padStart(2,'0');
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r * 0.4, 0, Math.PI * 2);
+      ctx.strokeStyle = n.color + Math.round(n.alpha * 255).toString(16).padStart(2,'0');
+      ctx.lineWidth = 2; ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      ctx.font = (n.r > 28 ? '700 12px' : '700 10px') + " 'Space Mono',monospace";
+      ctx.textAlign = 'center';
+      ctx.fillStyle = 'rgba(229,231,235,' + (n.alpha * 0.95) + ')';
+      ctx.fillText(n.label, n.x, n.y + n.r * 0.4 + 15);
+    });
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  function updateSpotlight(x, y) {
+    if (!spotlight) return;
+    spotlight.style.background = 'radial-gradient(500px circle at ' + x + 'px ' + y + 'px, rgba(255,153,0,0.06) 0%, transparent 70%)';
+    spotlight.style.opacity = '1';
+  }
+
+  section.addEventListener('mousemove', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    mouse.active = true;
+    updateSpotlight(e.clientX, e.clientY);
+  });
+  section.addEventListener('mouseleave', function() {
+    mouse.active = false;
+    if (spotlight) spotlight.style.opacity = '0';
+  });
+  section.addEventListener('touchmove', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var touch = e.touches[0];
+    mouse.x = touch.clientX - rect.left;
+    mouse.y = touch.clientY - rect.top;
+    mouse.active = true;
+  }, { passive: true });
+
+  var ro = new ResizeObserver(resize);
+  ro.observe(canvas);
+  resize();
+  draw();
+
+  document.addEventListener('astro:before-swap', function cleanup() {
+    cancelAnimationFrame(raf);
+    ro.disconnect();
+    document.removeEventListener('astro:before-swap', cleanup);
+  });
+});
+</script>

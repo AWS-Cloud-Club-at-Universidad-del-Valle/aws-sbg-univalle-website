@@ -1,0 +1,70 @@
+---
+/**
+ * AboutSocialSection — Sección de enlaces sociales para la página About.
+ *
+ * Renderiza los links a redes sociales del grupo como tarjetas prominentes
+ * con icono SVG inline, nombre de plataforma y efecto glow al hover.
+ *
+ * Cumple WCAG 2.1 AA: área táctil mínima 44×44px, focus-visible, aria-label.
+ */
+
+import { ABOUT_SOCIAL_LINKS } from '@/lib/constants';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  aria-labelledby="social-heading"
+  class:list={['relative overflow-hidden py-16 sm:py-20', className]}
+  data-animate
+>
+  <!-- Dot grid pattern -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 opacity-[0.025]"
+    style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"
+  ></div>
+  <!-- Floating shape decorativa -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-10 right-10 hidden sm:block h-2.5 w-2.5 rounded-full opacity-15"
+    style="background: var(--sbg-accent); animation: float-circle 7s ease-in-out infinite 0.5s;"
+  ></div>
+
+  <div class="container-sbg">
+    <h2
+      id="social-heading"
+      class="mb-10 text-center text-2xl sm:text-3xl"
+    >
+      Conéctate con nosotros
+    </h2>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+      {ABOUT_SOCIAL_LINKS.filter(link => link.href).map((link) => (
+        <a
+          href={link.href}
+          aria-label={link.ariaLabel}
+          target={link.external ? '_blank' : undefined}
+          rel={link.external ? 'noopener noreferrer' : undefined}
+          class="social-card flex flex-col items-center justify-center gap-2 rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-elevated)] p-5 min-w-[100px] min-h-[100px] transition-all duration-200 hover:scale-105 hover:border-[var(--sbg-accent-border)] focus-visible:ring-2 focus-visible:ring-[var(--sbg-accent)] focus-visible:outline-none"
+          style={`--glow-color: ${link.glowColor || 'transparent'}`}
+        >
+          <span class="[&>svg]:w-7 [&>svg]:h-7 text-[var(--sbg-text-muted)]" set:html={link.icon} />
+          <span class="text-[0.72rem] text-[var(--sbg-text-muted)]" style="font-family:'Space Mono',monospace;">
+            {link.platform}
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .social-card:hover {
+    box-shadow: 0 0 20px var(--glow-color);
+  }
+</style>

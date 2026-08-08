@@ -1,0 +1,62 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div aria-hidden="true" class:list={["py-4", className]}>
+  <div class="section-divider-wrapper">
+    <!-- Rombo decorativo centrado -->
+    <svg
+      class="section-divider-diamond"
+      width="8"
+      height="8"
+      viewBox="0 0 8 8"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="4"
+        y="0"
+        width="5.66"
+        height="5.66"
+        transform="rotate(45 4 0)"
+        fill="var(--sbg-accent-border)"
+      />
+    </svg>
+    <!-- Línea gradiente -->
+    <div class="section-divider-line"></div>
+  </div>
+</div>
+
+<style>
+  .section-divider-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .section-divider-line {
+    height: 1px;
+    max-width: 55%;
+    width: 100%;
+    margin: 0 auto;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--sbg-accent-border),
+      transparent
+    );
+  }
+
+  .section-divider-diamond {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+</style>

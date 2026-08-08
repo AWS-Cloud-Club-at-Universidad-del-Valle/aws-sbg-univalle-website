@@ -1,0 +1,91 @@
+---
+/**
+ * ResourcesHeroSection — Hero banner for the Resources page.
+ *
+ * Renders the page title, a code-label, and an introductory paragraph
+ * with staggered hero-reveal entrance animations. Includes decorative
+ * floating geometric shapes consistent with the site's visual language.
+ *
+ * Contains the sole <h1> element for the /resources page.
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  aria-labelledby="resources-hero-heading"
+  class:list={['relative overflow-hidden py-20 lg:py-28', className]}
+>
+  <!-- Radial gradient backgrounds -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+    style="background:radial-gradient(ellipse 55% 45% at 30% 0%,rgba(255,153,0,0.08) 0%,transparent 65%);"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-0 right-0 h-[50vh] w-[50vw]"
+    style="background:radial-gradient(ellipse at 80% 100%,rgba(35,47,62,0.35) 0%,transparent 60%);"
+  ></div>
+
+  <!-- Dot grid pattern -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 opacity-[0.025]"
+    style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"
+  ></div>
+
+  <!-- Decorative floating geometric shapes -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-16 left-8 h-0 w-0 opacity-20"
+    style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid var(--sbg-accent-light); animation: float-triangle 6s ease-in-out infinite;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-20 right-12 h-3 w-3 rounded-full opacity-15"
+    style="background: var(--sbg-orange); animation: float-circle 7s ease-in-out infinite;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-1/3 right-1/4 h-2 w-2 rounded-full opacity-10"
+    style="background: var(--sbg-accent); animation: float-circle 5s ease-in-out infinite 1s;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute hidden sm:block bottom-1/4 left-[15%] h-2.5 w-2.5 opacity-10"
+    style="background: var(--sbg-accent); animation: float-square 8s ease-in-out infinite 2s;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute hidden lg:block top-1/4 right-16 h-3 w-3 opacity-10"
+    style="background: var(--sbg-orange); animation: float-rhombus 9s ease-in-out infinite 1.5s;"
+  ></div>
+
+  <!-- Content -->
+  <div class="container-sbg relative z-10">
+    <div class="max-w-2xl">
+      <span class="hero-animate hero-animate-delay-1 code-label mb-4 inline-block">
+        # resources.learn_aws
+      </span>
+
+      <h1
+        id="resources-hero-heading"
+        class="hero-animate hero-animate-delay-2 text-[2.4rem] leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.2rem]"
+      >
+        Recursos
+      </h1>
+
+      <p
+        class="hero-animate hero-animate-delay-3 mt-5 max-w-lg text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
+        style="font-family:'Nunito Sans',sans-serif;"
+      >
+        Explora herramientas y plataformas oficiales de AWS diseñadas para impulsar tu aprendizaje en tecnología cloud.
+      </p>
+    </div>
+  </div>
+</section>

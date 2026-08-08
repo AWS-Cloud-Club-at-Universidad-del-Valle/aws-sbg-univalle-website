@@ -1,363 +1,244 @@
 ---
 /**
- * Navbar — Barra de navegación principal del sitio.
- *
- * Desktop (≥ 1024px): logo + links horizontales, sticky, 72px de alto.
- * Mobile (< 1024px): logo + botón hamburger, 64px de alto.
- * El drawer mobile se controla por el script inline de este componente.
- *
- * Accesibilidad:
- * - aria-expanded sincronizado con estado visual del drawer
- * - Escape cierra el drawer y devuelve foco al botón
- * - Todos los interactivos son navegables por teclado
- * - Link activo marcado con aria-current="page"
+ * Navbar — Sidebar vertical izquierdo fijo.
+ * Desktop: 220px fijo a la izquierda, logo + nav + CTA + redes.
+ * Mobile: hidden por defecto, toggle hamburger en top bar.
  */
-
 import { NAV_LINKS, SITE_CONFIG } from '@/lib/constants';
 
-interface Props {
-  /** Clase CSS adicional para el elemento <header>. */
-  class?: string;
-}
-
+interface Props { class?: string; }
 const { class: className = '' } = Astro.props;
-
 const currentPath = Astro.url.pathname;
 ---
 
-<header
+<!-- ── Top bar mobile (solo < 1024px) ── -->
+<div class="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between border-b border-[var(--sbg-border)] bg-[var(--sbg-sidebar-bg)]/95 backdrop-blur-md px-4 lg:hidden">
+  <a href="/" aria-label="AWS SBG Univalle" class="flex items-center gap-2.5">
+    <div class="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--sbg-accent)]">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 17L7 7L11 14L15 10L19 17"/>
+      </svg>
+    </div>
+    <span class="font-mono text-xs font-bold text-[var(--sbg-text)]">AWS SBG</span>
+  </a>
+  <button id="mob-toggle" type="button" aria-expanded="false" aria-label="Abrir menú"
+    class="flex h-9 w-9 items-center justify-center rounded-lg text-[var(--sbg-text-muted)] hover:bg-[var(--sbg-bg-elevated)] transition-colors focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)]">
+    <svg id="mob-icon-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+    <svg id="mob-icon-close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" class="hidden">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ── Sidebar ── -->
+<aside
+  id="sidebar"
   class:list={[
-    'sticky top-0 z-40 w-full border-b border-[var(--sbg-border)]',
-    'bg-white/95 backdrop-blur-sm',
+    'fixed top-0 left-0 z-30 h-screen w-[220px]',
+    'flex flex-col border-r border-[var(--sbg-border)] bg-[var(--sbg-sidebar-bg)]',
+    'transition-transform duration-300 ease-out',
+    '-translate-x-full lg:translate-x-0',
+    'overflow-hidden', // Para floating elements
     className,
   ]}
-  role="banner"
+  aria-label="Navegación principal"
 >
-  <div class="container-sbg">
-    <nav
-      aria-label="Navegación principal"
-      class="flex h-16 items-center justify-between lg:h-[72px]"
-    >
-      <!-- Logo -->
-      <a
-        href="/"
-        aria-label={`${SITE_CONFIG.shortName} — Página principal`}
-        class="flex items-center gap-2 text-[var(--sbg-primary)] focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2 focus-visible:rounded"
-      >
-        <!-- SVG inline del logo SBG — placeholder geométrico hasta tener el logo definitivo -->
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <rect width="32" height="32" rx="6" fill="#003087" />
-          <path
-            d="M8 22L12 10L16 18L20 13L24 22"
-            stroke="#FF9900"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-        <span class="hidden font-display text-sm font-bold sm:block lg:text-base">
-          AWS SBG
-          <span class="hidden xl:inline"> Univalle</span>
-        </span>
-      </a>
-
-      <!-- Links desktop — visibles solo en ≥ 1024px -->
-      <ul
-        class="hidden items-center gap-1 lg:flex"
-        role="list"
-        aria-label="Links de navegación"
-      >
-        {
-          NAV_LINKS.map(({ href, label }) => {
-            const isActive =
-              href === '/'
-                ? currentPath === '/'
-                : currentPath.startsWith(href);
-            return (
-              <li>
-                <a
-                  href={href}
-                  aria-current={isActive ? 'page' : undefined}
-                  class:list={[
-                    'relative inline-flex items-center rounded-lg px-3 py-2',
-                    'text-sm font-medium transition-colors duration-150',
-                    'hover:bg-[var(--sbg-bg-subtle)] hover:text-[var(--sbg-primary)]',
-                    'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2',
-                    isActive
-                      ? 'text-[var(--sbg-primary)] font-semibold after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-[var(--sbg-accent)] after:rounded-full'
-                      : 'text-[var(--sbg-text-muted)]',
-                  ]}
-                >
-                  {label}
-                </a>
-              </li>
-            );
-          })
-        }
-      </ul>
-
-      <!-- CTA desktop -->
-      <a
-        href="/#cta"
-        class:list={[
-          'hidden lg:inline-flex items-center justify-center gap-2',
-          'rounded-lg bg-[var(--sbg-accent)] px-4 py-2',
-          'text-sm font-semibold text-[var(--sbg-aws-dark)]',
-          'transition-colors duration-150 hover:bg-[var(--sbg-accent-hover)]',
-          'focus-visible:outline-2 focus-visible:outline-[var(--sbg-aws-dark)] focus-visible:outline-offset-2',
-          'min-h-[44px]',
-        ]}
-      >
-        Únete al grupo
-      </a>
-
-      <!-- Botón hamburger — visible solo en < 1024px -->
-      <button
-        id="mobile-menu-toggle"
-        type="button"
-        aria-controls="mobile-menu"
-        aria-expanded="false"
-        aria-label="Abrir menú de navegación"
-        class:list={[
-          'flex items-center justify-center rounded-lg lg:hidden',
-          'min-h-[44px] min-w-[44px] text-[var(--sbg-text)]',
-          'hover:bg-[var(--sbg-bg-subtle)] transition-colors duration-150',
-          'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2',
-        ]}
-      >
-        <!-- Icono hamburger (3 líneas) -->
-        <svg
-          id="icon-menu"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-        <!-- Icono X (cerrar) — oculto por defecto -->
-        <svg
-          id="icon-close"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
-          class="hidden"
-        >
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
-    </nav>
+  <!-- Floating geometric elements -->
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none overflow-hidden">
+    <!-- Floating triangle -->
+    <div class="absolute -top-4 -right-6 w-12 h-12 opacity-20"
+         style="background: linear-gradient(135deg, var(--sbg-accent) 0%, var(--sbg-orange) 100%); 
+                clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+                animation: float-triangle 8s ease-in-out infinite;"></div>
+    
+    <!-- Floating square -->
+    <div class="absolute top-1/3 -left-3 w-8 h-8 opacity-15"
+         style="background: linear-gradient(45deg, var(--sbg-orange) 0%, var(--sbg-accent) 100%);
+                animation: float-square 6s ease-in-out infinite 1s;"></div>
+    
+    <!-- Floating circle -->
+    <div class="absolute bottom-1/4 -right-4 w-10 h-10 opacity-25 rounded-full"
+         style="background: radial-gradient(circle, var(--sbg-accent) 0%, transparent 70%);
+                animation: float-circle 7s ease-in-out infinite 2s;"></div>
+    
+    <!-- Floating rhombus -->
+    <div class="absolute bottom-12 left-3 w-6 h-6 opacity-20"
+         style="background: linear-gradient(90deg, var(--sbg-orange) 0%, var(--sbg-accent) 100%);
+                animation: float-rhombus 5s ease-in-out infinite 0.5s;"></div>
+    
+    <!-- Subtle gradient overlay -->
+    <div class="absolute inset-0 opacity-30"
+         style="background: linear-gradient(180deg, 
+                rgba(220,20,60,0.03) 0%, 
+                transparent 40%, 
+                transparent 60%, 
+                rgba(255,153,0,0.02) 100%);"></div>
   </div>
-</header>
 
-<!--
-  Drawer mobile — fuera del <header> para ocupar pantalla completa.
-  Controlado por el script de abajo.
-  Oculto por defecto con translate-x-full.
--->
-<div
-  id="mobile-menu"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Menú de navegación"
-  class:list={[
-    'fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw]',
-    'translate-x-full transform transition-transform duration-300 ease-out',
-    'bg-white shadow-xl lg:hidden',
-    'flex flex-col',
-  ]}
->
-  <!-- Header del drawer -->
-  <div
-    class="flex items-center justify-between border-b border-[var(--sbg-border)] px-4 py-4"
-  >
-    <span class="font-display text-sm font-bold text-[var(--sbg-primary)]">
-      AWS SBG Univalle
-    </span>
-    <button
-      id="mobile-menu-close"
-      type="button"
-      aria-label="Cerrar menú de navegación"
-      class:list={[
-        'flex items-center justify-center rounded-lg',
-        'min-h-[44px] min-w-[44px] text-[var(--sbg-text-muted)]',
-        'hover:bg-[var(--sbg-bg-subtle)] transition-colors duration-150',
-        'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2',
-      ]}
-    >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
+  <!-- Logo with enhanced styling -->
+  <div class="relative flex items-center gap-3 border-b border-[var(--sbg-border)] px-5 py-5">
+    <!-- Background glow -->
+    <div class="absolute inset-0 opacity-60"
+         style="background: radial-gradient(ellipse at center left, 
+                rgba(220,20,60,0.05) 0%, 
+                transparent 70%);"></div>
+    
+    <div class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--sbg-accent)] to-[var(--sbg-accent-hover)] shadow-lg shadow-[rgba(220,20,60,0.35)]">
+      <!-- AWS cloud icon -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+        <polyline points="13 11 9 17 11 17"/>
       </svg>
-    </button>
+    </div>
+    <div class="relative">
+      <p class="font-mono text-[12px] font-bold leading-none text-[var(--sbg-text)] tracking-wide">AWS SBG</p>
+      <p class="mt-1 font-mono text-[9px] text-[var(--sbg-accent-light)] opacity-80 tracking-wider">Univalle</p>
+    </div>
   </div>
 
-  <!-- Links de navegación mobile -->
-  <nav aria-label="Menú de navegación móvil" class="flex-1 overflow-y-auto px-4 py-2">
+  <!-- Nav label with enhanced styling -->
+  <div class="relative px-5 pt-6 pb-3">
+    <span class="code-label text-[9px] relative z-10"># navigation</span>
+    <!-- Decorative line -->
+    <div class="absolute left-5 bottom-1 w-12 h-0.5 bg-gradient-to-r from-[var(--sbg-accent-light)] to-transparent opacity-40"></div>
+  </div>
+
+  <!-- Enhanced Links -->
+  <nav aria-label="Menú principal" class="relative flex-1 overflow-y-auto px-3">
     <ul role="list" class="space-y-1">
-      {
-        NAV_LINKS.map(({ href, label }) => {
-          const isActive =
-            href === '/'
-              ? currentPath === '/'
-              : currentPath.startsWith(href);
-          return (
-            <li>
-              <a
-                href={href}
-                aria-current={isActive ? 'page' : undefined}
+      {NAV_LINKS.map(({ href, label }) => {
+        const isActive = href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+        return (
+          <li>
+            <a
+              href={href}
+              aria-current={isActive ? 'page' : undefined}
+              class:list={[
+                'group relative flex items-center gap-3 rounded-xl px-4 py-3',
+                'text-sm transition-all duration-200 overflow-hidden',
+                'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded-xl',
+                isActive
+                  ? 'bg-gradient-to-r from-[var(--sbg-accent-subtle)] to-[var(--sbg-orange-subtle)] text-[var(--sbg-accent-light)] font-semibold border border-[var(--sbg-accent-border)]'
+                  : 'text-[var(--sbg-text-muted)] hover:bg-gradient-to-r hover:from-[var(--sbg-bg-elevated)] hover:to-[var(--sbg-bg-surface)] hover:text-[var(--sbg-text)]',
+              ]}
+              style="font-family:'Nunito Sans',sans-serif;"
+            >
+              <!-- Enhanced active indicator -->
+              <span
                 class:list={[
-                  'flex items-center rounded-lg px-3 py-3',
-                  'text-base font-medium transition-colors duration-150',
-                  'focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2',
-                  isActive
-                    ? 'bg-[var(--sbg-bg-subtle)] text-[var(--sbg-primary)] font-semibold border-l-2 border-[var(--sbg-accent)]'
-                    : 'text-[var(--sbg-text)] hover:bg-[var(--sbg-bg-subtle)] hover:text-[var(--sbg-primary)]',
+                  'relative h-5 w-1 rounded-full transition-all duration-200 shrink-0',
+                  isActive 
+                    ? 'bg-gradient-to-b from-[var(--sbg-accent-light)] to-[var(--sbg-accent)] shadow-lg shadow-[var(--sbg-accent)]/30' 
+                    : 'bg-transparent group-hover:bg-[var(--sbg-border-accent)]',
                 ]}
+                aria-hidden="true"
               >
-                {label}
-              </a>
-            </li>
-          );
-        })
-      }
+                {isActive && (
+                  <span class="absolute inset-0 bg-gradient-to-b from-[var(--sbg-accent-light)] to-[var(--sbg-accent)] rounded-full animate-pulse opacity-60"></span>
+                )}
+              </span>
+              
+              <span class="relative z-10">{label}</span>
+              
+              <!-- Subtle hover effect background -->
+              {!isActive && (
+                <span class="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--sbg-accent)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" aria-hidden="true"></span>
+              )}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   </nav>
 
-  <!-- CTA mobile -->
-  <div class="border-t border-[var(--sbg-border)] p-4">
+  <!-- Enhanced CTA section -->
+  <div class="relative border-t border-[var(--sbg-border)] p-4">
+    <!-- Background glow -->
+    <div class="absolute inset-0 opacity-40"
+         style="background: radial-gradient(ellipse at center, 
+                rgba(220,20,60,0.04) 0%, 
+                transparent 80%);"></div>
+    
     <a
       href="/#cta"
-      class:list={[
-        'flex items-center justify-center w-full rounded-lg',
-        'bg-[var(--sbg-accent)] px-4 py-3',
-        'text-base font-semibold text-[var(--sbg-aws-dark)]',
-        'transition-colors duration-150 hover:bg-[var(--sbg-accent-hover)]',
-        'focus-visible:outline-2 focus-visible:outline-[var(--sbg-aws-dark)] focus-visible:outline-offset-2',
-        'min-h-[44px]',
-      ]}
+      class="relative flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-[var(--sbg-accent)] to-[var(--sbg-accent-hover)] px-4 py-3 font-mono text-[11px] font-bold text-white shadow-xl shadow-[rgba(220,20,60,0.3)] transition-all duration-200 hover:shadow-2xl hover:shadow-[rgba(220,20,60,0.4)] hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-white overflow-hidden group"
     >
-      Únete al grupo
+      <!-- Animated background shimmer -->
+      <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" aria-hidden="true"></span>
+      
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="relative z-10">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <line x1="19" y1="8" x2="19" y2="14"/>
+        <line x1="22" y1="11" x2="16" y2="11"/>
+      </svg>
+      <span class="relative z-10">Join now</span>
     </a>
-  </div>
-</div>
 
-<!-- Overlay oscuro detrás del drawer -->
-<div
-  id="mobile-menu-overlay"
-  aria-hidden="true"
-  class="fixed inset-0 z-40 bg-black/40 opacity-0 transition-opacity duration-300 lg:hidden pointer-events-none"
->
-</div>
+    <!-- Enhanced social links -->
+    <div class="relative mt-4 flex items-center justify-center gap-1">
+      {[
+        { href: SITE_CONFIG.social.linkedin, label: 'LinkedIn', path: 'M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z M2 9h4v12H2z M4 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4z' },
+        { href: SITE_CONFIG.social.github,   label: 'GitHub',   path: 'M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22' },
+        { href: SITE_CONFIG.social.instagram,label: 'Instagram',path: 'M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4V9h4v2.4A6 6 0 0 1 16 8z M2 9h4v12H2z' },
+      ].filter(s => s.href).map(({ href, label, path }) => (
+        <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+          class="relative flex h-9 w-9 items-center justify-center rounded-lg text-[var(--sbg-text-subtle)] transition-all duration-200 hover:bg-[var(--sbg-bg-elevated)] hover:text-[var(--sbg-accent-light)] hover:shadow-md hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] group overflow-hidden">
+          <!-- Hover background -->
+          <span class="absolute inset-0 bg-gradient-to-br from-[var(--sbg-accent)]/10 to-[var(--sbg-orange)]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200" aria-hidden="true"></span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="relative z-10">
+            <path d={path}/>
+          </svg>
+        </a>
+      ))}
+    </div>
+  </div>
+</aside>
+
+<!-- Overlay mobile -->
+<div id="mob-overlay" aria-hidden="true"
+  class="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
 
 <script is:inline>
-  /**
-   * Toggle del menú mobile.
-   * Algoritmo: toggleMobileMenu del design.md
-   * - Sincroniza aria-expanded con el estado visual
-   * - Bloquea scroll del body cuando el menú está abierto
-   * - Devuelve foco al botón hamburger al cerrar
-   * - Cierra con Escape
-   */
-  (function initMobileMenu() {
-    const toggle = document.getElementById('mobile-menu-toggle');
-    const closeBtn = document.getElementById('mobile-menu-close');
-    const drawer = document.getElementById('mobile-menu');
-    const overlay = document.getElementById('mobile-menu-overlay');
-    const iconMenu = document.getElementById('icon-menu');
-    const iconClose = document.getElementById('icon-close');
+(function() {
+  const toggle   = document.getElementById('mob-toggle');
+  const sidebar  = document.getElementById('sidebar');
+  const overlay  = document.getElementById('mob-overlay');
+  const iconOpen = document.getElementById('mob-icon-open');
+  const iconClose= document.getElementById('mob-icon-close');
+  if (!toggle || !sidebar || !overlay) return;
 
-    if (!toggle || !closeBtn || !drawer || !overlay) return;
+  function open() {
+    sidebar.classList.remove('-translate-x-full');
+    sidebar.classList.add('translate-x-0');
+    overlay.classList.remove('opacity-0','pointer-events-none');
+    overlay.classList.add('opacity-100');
+    toggle.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+    iconOpen.classList.add('hidden');
+    iconClose.classList.remove('hidden');
+  }
+  function close() {
+    sidebar.classList.add('-translate-x-full');
+    sidebar.classList.remove('translate-x-0');
+    overlay.classList.add('opacity-0','pointer-events-none');
+    overlay.classList.remove('opacity-100');
+    toggle.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+    iconOpen.classList.remove('hidden');
+    iconClose.classList.add('hidden');
+    toggle.focus();
+  }
 
-    function openMenu() {
-      drawer.classList.remove('translate-x-full');
-      drawer.classList.add('translate-x-0');
-      overlay.classList.remove('opacity-0', 'pointer-events-none');
-      overlay.classList.add('opacity-100');
-      toggle.setAttribute('aria-expanded', 'true');
-      toggle.setAttribute('aria-label', 'Cerrar menú de navegación');
-      document.body.classList.add('overflow-hidden');
-      iconMenu?.classList.add('hidden');
-      iconClose?.classList.remove('hidden');
-
-      // Mover foco al primer elemento del drawer
-      const firstFocusable = drawer.querySelector('a, button');
-      if (firstFocusable instanceof HTMLElement) {
-        firstFocusable.focus();
-      }
-    }
-
-    function closeMenu() {
-      drawer.classList.add('translate-x-full');
-      drawer.classList.remove('translate-x-0');
-      overlay.classList.add('opacity-0', 'pointer-events-none');
-      overlay.classList.remove('opacity-100');
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Abrir menú de navegación');
-      document.body.classList.remove('overflow-hidden');
-      iconMenu?.classList.remove('hidden');
-      iconClose?.classList.add('hidden');
-
-      // Devolver foco al botón hamburger
-      toggle.focus();
-    }
-
-    // Toggle al hacer clic en el hamburger
-    toggle.addEventListener('click', () => {
-      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-      isOpen ? closeMenu() : openMenu();
-    });
-
-    // Cerrar con el botón X del drawer
-    closeBtn.addEventListener('click', closeMenu);
-
-    // Cerrar al hacer clic en el overlay
-    overlay.addEventListener('click', closeMenu);
-
-    // Cerrar con Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
-        closeMenu();
-      }
-    });
-
-    // Cerrar automáticamente al hacer clic en un link del drawer
-    drawer.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', closeMenu);
-    });
-
-    // Cerrar el menú si la pantalla se agranda a desktop
-    const mq = window.matchMedia('(min-width: 1024px)');
-    mq.addEventListener('change', (e) => {
-      if (e.matches) closeMenu();
-    });
-  })();
+  toggle.addEventListener('click', () =>
+    toggle.getAttribute('aria-expanded') === 'true' ? close() : open());
+  overlay.addEventListener('click', close);
+  document.addEventListener('keydown', e => e.key === 'Escape' && close());
+  sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    if (window.innerWidth < 1024) close();
+  }));
+  window.matchMedia('(min-width:1024px)').addEventListener('change', e => { if (e.matches) close(); });
+})();
 </script>

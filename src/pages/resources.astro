@@ -1,0 +1,71 @@
+---
+/**
+ * Página /resources — Recursos educativos de AWS para estudiantes.
+ *
+ * Presenta una guía visual curada de recursos oficiales de AWS
+ * para impulsar el aprendizaje cloud de los miembros del grupo.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ResourcesHeroSection from '@/components/sections/ResourcesHeroSection.astro';
+import ResourceCard from '@/components/common/ResourceCard.astro';
+import SectionDivider from '@/components/common/SectionDivider.astro';
+import { RESOURCES, RESOURCE_ACCENT_COLORS } from '@/lib/constants';
+---
+
+<BaseLayout
+  title="Recursos"
+  description="Descubre recursos oficiales de AWS para estudiantes: plataformas de aprendizaje, certificaciones y laboratorios prácticos para impulsar tu carrera cloud."
+>
+  <ResourcesHeroSection />
+
+  <SectionDivider />
+
+  <!-- Elementos decorativos de fondo entre secciones -->
+  <div class="relative" aria-hidden="true">
+    <!-- Radial gradient decorativo -->
+    <div
+      class="pointer-events-none absolute inset-x-0 top-0 h-[40vh]"
+      style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(255,153,0,0.06) 0%,transparent 70%);"
+    ></div>
+
+    <!-- Dot grid 36×36px -->
+    <div
+      class="pointer-events-none absolute inset-0 h-32 opacity-[0.03]"
+      style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"
+    ></div>
+
+    <!-- Forma geométrica flotante animada -->
+    <div
+      class="pointer-events-none absolute top-4 left-[20%] h-2.5 w-2.5 rounded-full opacity-[0.08]"
+      style="background:var(--sbg-accent);animation:float-circle 7s ease-in-out infinite;"
+    ></div>
+  </div>
+
+  <!-- Sección de cards de recursos -->
+  <section aria-labelledby="resources-explore-heading" class="relative py-16 lg:py-24" data-animate>
+    <!-- Decorativo de fondo dentro de la sección -->
+    <div
+      class="pointer-events-none absolute inset-x-0 bottom-0 h-[30vh]"
+      aria-hidden="true"
+      style="background:radial-gradient(ellipse at 70% 100%,rgba(35,47,62,0.08) 0%,transparent 60%);"
+    ></div>
+
+    <div class="container-sbg relative z-10">
+      <span class="code-label mb-4 inline-block"># resources.explore</span>
+      <h2
+        id="resources-explore-heading"
+        class="text-2xl sm:text-3xl lg:text-4xl tracking-tight mb-10"
+      >
+        Explora los recursos
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+        {RESOURCES.map((resource, i) => (
+          <div class:list={['lg:col-span-2', i === 3 && 'lg:col-start-2']}>
+            <ResourceCard resource={resource} accentColor={RESOURCE_ACCENT_COLORS[i]} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

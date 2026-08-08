@@ -1,0 +1,60 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  aria-labelledby="vision"
+  class:list={[className]}
+  data-animate
+>
+  <div
+    class="relative overflow-hidden rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-6 sm:p-8"
+    data-animate
+  >
+    <!-- Border-left gradiente -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute top-0 left-0 bottom-0 w-[3px]"
+      style="background: linear-gradient(to bottom, var(--sbg-orange), transparent);"
+    ></div>
+    <!-- Radial gradient fondo -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0"
+      style="background: radial-gradient(ellipse at 100% 100%, rgba(255,153,0,0.05), transparent 70%);"
+    ></div>
+    <!-- Icono SVG decorativo (rocket) -->
+    <svg
+      aria-hidden="true"
+      class="pointer-events-none absolute top-4 right-4 opacity-[0.15]"
+      width="40"
+      height="40"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="var(--sbg-orange)"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+    </svg>
+
+    <h2
+      id="vision"
+      class="mb-4 text-xl sm:text-2xl"
+      data-animate
+    >
+      Visión
+    </h2>
+    <p class="text-base leading-relaxed text-[var(--sbg-text-muted)]">
+      Ser la comunidad estudiantil líder en Cloud Computing y tecnologías Cloud Native de la Universidad del Valle, formando talento preparado para afrontar los retos de la industria tecnológica global.
+    </p>
+  </div>
+</section>

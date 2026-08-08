@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AboutHeroSection from '@/components/sections/AboutHeroSection.astro';
+import AboutIdentitySection from '@/components/sections/AboutIdentitySection.astro';
+import AboutMissionSection from '@/components/sections/AboutMissionSection.astro';
+import AboutVisionSection from '@/components/sections/AboutVisionSection.astro';
+import AboutSocialSection from '@/components/sections/AboutSocialSection.astro';
+import AboutCtaSection from '@/components/sections/AboutCtaSection.astro';
+import SectionDivider from '@/components/common/SectionDivider.astro';
+---
+
+<BaseLayout
+  title="Nosotros"
+  description="Conoce al AWS Student Builder Group Universidad del Valle: nuestra misión, visión y cómo conectamos estudiantes con la industria cloud."
+>
+  <div class="space-y-8 sm:space-y-12 lg:space-y-16">
+    <AboutHeroSection />
+    <SectionDivider />
+    <AboutIdentitySection />
+    <SectionDivider />
+
+    <!-- Mission + Vision responsive grid -->
+    <div class="container-sbg">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+        <AboutMissionSection />
+        <AboutVisionSection />
+      </div>
+    </div>
+
+    <SectionDivider />
+    <AboutSocialSection />
+    <SectionDivider />
+    <AboutCtaSection />
+  </div>
+</BaseLayout>
