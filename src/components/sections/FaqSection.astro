@@ -1,0 +1,120 @@
+---
+/**
+ * FaqSection — Conversational FAQ disguised as "Cosas que te estarás preguntando".
+ * Uses an accordion-style interaction with smooth expand/collapse.
+ * Doesn't feel like a boring FAQ — more like a friend answering your doubts.
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const questions = [
+  {
+    q: '¿Necesito saber programar para unirme?',
+    a: 'No. Tenemos rutas para todos los niveles. Muchos miembros empiezan sin experiencia técnica y terminan construyendo proyectos en la nube. Lo único que necesitas es curiosidad.',
+  },
+  {
+    q: '¿Es solo para estudiantes de Ingeniería de Sistemas?',
+    a: 'Para nada. La nube toca todas las disciplinas: salud, negocios, ciencia de datos, diseño. Tenemos miembros de más de 10 carreras diferentes.',
+  },
+  {
+    q: '¿Cuánto tiempo debo dedicarle?',
+    a: 'Tú decides tu ritmo. Hacemos eventos cada 2-3 semanas que duran entre 1 y 3 horas. Puedes participar en lo que más te interese sin compromisos rígidos.',
+  },
+  {
+    q: '¿Puedo obtener certificaciones de AWS?',
+    a: 'Sí. Te ayudamos a prepararte para certificaciones oficiales como AWS Cloud Practitioner y Solutions Architect. Varios miembros ya están certificados.',
+  },
+  {
+    q: '¿Cómo me uno?',
+    a: 'Nuestra página oficial es Meetup. Solo síguenos ahí y ya eres parte — así de fácil. No hay proceso de admisión, entrevista ni formularios. Un clic y estás dentro.',
+  },
+  {
+    q: '¿Hacen eventos presenciales?',
+    a: 'Sí, hacemos eventos presenciales en la Universidad del Valle. Pero también tenemos una fuerte presencia virtual: workshops online, sesiones por Meet y contenido que puedes consumir desde donde estés.',
+  },
+];
+---
+
+<section
+  id="preguntas"
+  aria-labelledby="faq-heading"
+  class:list={['relative py-20 lg:py-28 overflow-hidden', className]}
+>
+  <!-- Background -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-0 left-0 h-[40vh] w-[50vw] opacity-20"
+    style="background:radial-gradient(ellipse at 10% 20%,rgba(139,92,246,0.08) 0%,transparent 60%);"
+  ></div>
+
+  <div class="container-sbg relative z-10">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16 lg:items-start">
+      <!-- Left column: heading -->
+      <div data-animate class="lg:sticky lg:top-24">
+        <span class="code-label mb-4 inline-block"># dudas_resueltas</span>
+        <h2
+          id="faq-heading"
+          class="text-[2rem] leading-[1.1] sm:text-[2.4rem] lg:text-[2.8rem]"
+        >
+          Cosas que te estarás <span class="text-[var(--sbg-accent-light)]">preguntando</span>
+        </h2>
+        <p
+          class="mt-4 text-base leading-[1.8] text-[var(--sbg-text-muted)]"
+          style="font-family:'Nunito Sans',sans-serif;"
+        >
+          Las respuestas cortas a lo que todos quieren saber antes de dar el primer paso.
+        </p>
+
+        <!-- Decorative element -->
+        <div aria-hidden="true" class="mt-8 hidden lg:block">
+          <div class="flex items-center gap-2 text-[var(--sbg-text-subtle)]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span class="text-xs" style="font-family:'Space Mono',monospace;">6 respuestas rápidas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: questions -->
+      <div class="space-y-3" role="list" aria-label="Preguntas frecuentes">
+        {questions.map((item, i) => (
+          <details
+            data-animate
+            class="group rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)]/50 transition-all duration-200 hover:border-[var(--sbg-accent-border)] open:border-[var(--sbg-accent-border)] open:bg-[var(--sbg-bg-surface)]"
+            style={`transition-delay: ${i * 50}ms;`}
+            role="listitem"
+          >
+            <summary
+              class="flex cursor-pointer items-center gap-3 px-5 py-4 text-[0.92rem] font-bold text-white select-none list-none [&::-webkit-details-marker]:hidden"
+              style="font-family:'Space Mono',monospace;"
+            >
+              <!-- Expand icon -->
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--sbg-accent-subtle)] text-[var(--sbg-accent-light)] transition-transform duration-200 group-open:rotate-45">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </span>
+              <span class="flex-1">{item.q}</span>
+            </summary>
+            <div class="px-5 pb-5 pl-[3.25rem]">
+              <p
+                class="text-sm leading-relaxed text-[var(--sbg-text-muted)]"
+                style="font-family:'Nunito Sans',sans-serif;"
+              >
+                {item.a}
+              </p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

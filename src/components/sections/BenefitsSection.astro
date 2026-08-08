@@ -1,0 +1,164 @@
+---
+/**
+ * BenefitsSection — What members get by joining.
+ * Features cursor-tracking glow on each card for a wow effect.
+ */
+
+import { BENEFITS } from '@/lib/constants';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+// Map icon names to SVG markup
+const iconMap: Record<string, string> = {
+  cloud: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`,
+  award: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`,
+  users: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  'code-2': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  trophy: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>`,
+  briefcase: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+};
+
+// Glow colors per benefit for variety
+const glowColors = [
+  'rgba(255,153,0,0.35)',
+  'rgba(139,92,246,0.35)',
+  'rgba(1,168,141,0.35)',
+  'rgba(46,115,184,0.35)',
+  'rgba(255,153,0,0.35)',
+  'rgba(139,92,246,0.35)',
+];
+---
+
+<section
+  id="beneficios"
+  aria-labelledby="benefits-heading"
+  class:list={['relative py-20 lg:py-28 overflow-hidden', className]}
+>
+  <!-- Background accents -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-1/3 right-0 h-[50vh] w-[40vw] opacity-20"
+    style="background:radial-gradient(ellipse at 90% 50%,rgba(255,153,0,0.08) 0%,transparent 65%);"
+  ></div>
+
+  <div class="container-sbg relative z-10">
+    <!-- Header -->
+    <div class="max-w-3xl" data-animate>
+      <span class="code-label mb-4 inline-block"># lo_que_ganas</span>
+      <h2
+        id="benefits-heading"
+        class="text-[2rem] leading-[1.1] sm:text-[2.6rem] lg:text-[3rem]"
+      >
+        ¿Por qué unirte?
+      </h2>
+      <p
+        class="mt-4 max-w-xl text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
+        style="font-family:'Nunito Sans',sans-serif;"
+      >
+        No necesitas experiencia previa ni pagar nada. Solo ganas de aprender y construir cosas increíbles en la nube.
+      </p>
+    </div>
+
+    <!-- Benefits grid -->
+    <div id="benefits-grid" class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {BENEFITS.map((benefit, i) => (
+        <div
+          data-animate
+          data-glow-color={glowColors[i] || glowColors[0]}
+          class="benefit-card group relative flex gap-4 rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)]/60 p-5 transition-all duration-300 hover:border-[var(--sbg-accent-border)] hover:bg-[var(--sbg-bg-surface)] hover:shadow-xl hover:-translate-y-0.5"
+          style={`transition-delay: ${i * 60}ms;`}
+        >
+          <!-- Cursor-tracking glow -->
+          <div
+            aria-hidden="true"
+            class="benefit-glow pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500"
+          ></div>
+
+          <!-- Outer glow on hover -->
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            style={`box-shadow: 0 0 30px ${(glowColors[i] || glowColors[0]).replace('0.35', '0.1')}, inset 0 0 20px ${(glowColors[i] || glowColors[0]).replace('0.35', '0.05')};`}
+          ></div>
+
+          <!-- Icon -->
+          <div class="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--sbg-orange-subtle)] text-[var(--sbg-orange)] transition-all duration-300 group-hover:bg-[var(--sbg-orange)] group-hover:text-white group-hover:shadow-lg group-hover:shadow-[var(--sbg-orange)]/25 group-hover:scale-110">
+            <Fragment set:html={iconMap[benefit.icon] || iconMap['cloud']} />
+          </div>
+
+          <!-- Text -->
+          <div class="relative z-10">
+            <h3
+              class="text-[0.95rem] font-bold text-white leading-tight"
+              style="font-family:'Space Mono',monospace;"
+            >
+              {benefit.title}
+            </h3>
+            <p
+              class="mt-1.5 text-[0.82rem] leading-relaxed text-[var(--sbg-text-muted)]"
+              style="font-family:'Nunito Sans',sans-serif;"
+            >
+              {benefit.description}
+            </p>
+          </div>
+
+          <!-- Bottom accent line -->
+          <div
+            aria-hidden="true"
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-0 rounded-full transition-all duration-500 group-hover:w-2/3"
+            style={`background: linear-gradient(90deg, transparent, ${glowColors[i] || glowColors[0]}, transparent);`}
+          ></div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Highlighted callout -->
+    <div
+      data-animate
+      class="benefit-callout group mt-10 flex flex-col items-center gap-4 rounded-2xl border border-[var(--sbg-accent-border)] bg-[var(--sbg-accent-subtle)] p-6 text-center transition-all duration-300 hover:shadow-2xl hover:shadow-[var(--sbg-accent)]/10 sm:flex-row sm:text-left"
+    >
+      <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--sbg-accent)] text-white transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[var(--sbg-accent)]/40">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-bold text-white" style="font-family:'Space Mono',monospace;">
+          100% gratuito y abierto
+        </p>
+        <p class="mt-1 text-sm text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
+          Solo necesitas ser estudiante de la Universidad del Valle. No importa tu carrera, semestre o nivel técnico.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+document.addEventListener('astro:page-load', function() {
+  var cards = document.querySelectorAll('.benefit-card');
+  if (!cards.length) return;
+
+  cards.forEach(function(card) {
+    var glow = card.querySelector('.benefit-glow');
+    if (!glow) return;
+    var color = card.getAttribute('data-glow-color') || 'rgba(255,153,0,0.35)';
+
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      glow.style.background = 'radial-gradient(280px circle at ' + x + 'px ' + y + 'px, ' + color + ' 0%, transparent 70%)';
+      glow.style.opacity = '1';
+    });
+
+    card.addEventListener('mouseleave', function() {
+      glow.style.opacity = '0';
+    });
+  });
+});
+</script>
