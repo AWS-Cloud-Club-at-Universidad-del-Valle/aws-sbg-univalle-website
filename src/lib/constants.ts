@@ -230,6 +230,67 @@ export const FEATURED_RESOURCES: IResource[] = [
 ];
 
 // ============================================
+// Recursos educativos — Página /resources
+// ============================================
+
+export const RESOURCES: IResource[] = [
+  {
+    title: 'AWS Skill Builder',
+    description:
+      'Plataforma de aprendizaje online con cursos, labs y rutas personalizadas para todos los niveles.',
+    url: 'https://skillbuilder.aws/',
+    category: 'curso',
+    icon: 'skill-builder',
+    isExternal: true,
+  },
+  {
+    title: 'AWS Academy',
+    description:
+      'Programa académico que lleva contenido cloud oficial de AWS a instituciones educativas.',
+    url: 'https://aws.amazon.com/es/training/awsacademy/',
+    category: 'curso',
+    icon: 'academy',
+    isExternal: true,
+  },
+  {
+    title: 'AWS Certification',
+    description:
+      'Valida tus habilidades cloud con certificaciones reconocidas globalmente por la industria.',
+    url: 'https://aws.amazon.com/es/certification/',
+    category: 'certificacion',
+    icon: 'certification',
+    isExternal: true,
+  },
+  {
+    title: 'AWS Workshops',
+    description:
+      'Laboratorios prácticos guiados para aprender servicios AWS construyendo proyectos reales.',
+    url: 'https://builder.aws.com/build/workshops?trk=aca14daf-abad-48ab-b076-80aef7f8194d&sc_channel=el&tab=discover',
+    category: 'herramienta',
+    icon: 'workshops',
+    isExternal: true,
+  },
+  {
+    title: 'AWS Builder Center',
+    description:
+      'Centro de recursos para builders con herramientas, proyectos y comunidad de constructores.',
+    url: 'https://bit.ly/45y5hpA',
+    category: 'comunidad',
+    icon: 'builder-center',
+    isExternal: true,
+  },
+];
+
+/** Colores de acento asignados a cada recurso (índice corresponde a RESOURCES). */
+export const RESOURCE_ACCENT_COLORS: string[] = [
+  'var(--sbg-accent)',  // AWS Skill Builder → Morado
+  'var(--sbg-orange)',  // AWS Academy → Naranja
+  'var(--sbg-success)', // AWS Certification → Verde
+  'var(--sbg-blue)',    // AWS Workshops → Azul
+  'var(--sbg-orange)',  // AWS Builder Center → Naranja (repetido, icono distinto)
+];
+
+// ============================================
 // Beneficios de unirse al grupo
 // ============================================
 
