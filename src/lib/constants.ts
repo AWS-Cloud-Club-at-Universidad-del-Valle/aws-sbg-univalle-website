@@ -39,6 +39,7 @@ export const SITE_CONFIG: ISiteConfig = {
 export const NAV_LINKS: INavLink[] = [
   { href: '/', label: 'Inicio' },
   { href: '/about', label: 'Nosotros' },
+  { href: '/certificate', label: 'Certifícate' },
   { href: '/events', label: 'Eventos' },
   { href: '/resources', label: 'Recursos' },
   { href: '/contact', label: 'Contacto' },
