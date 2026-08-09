@@ -1,0 +1,96 @@
+---
+/**
+ * ContactTeamSection — Sección Core Team con scroll horizontal.
+ *
+ * Desktop/Mobile: scroll horizontal con CSS scroll-snap.
+ * Tablet: grid 2 columnas.
+ * NO es carrusel automático — control exclusivo del usuario.
+ */
+import { CORE_TEAM_MEMBERS } from '@/lib/constants';
+import TeamMemberCard from '@/components/common/TeamMemberCard.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  aria-labelledby="core-team-heading"
+  class:list={['py-12 sm:py-16', className]}
+>
+  <div class="container-sbg">
+    <div class="mb-8 sm:mb-10" data-animate>
+      <span class="code-label mb-3 block"># contact.team</span>
+      <h2 id="core-team-heading" class="text-2xl sm:text-3xl">
+        Core Team
+      </h2>
+    </div>
+
+    <div class="scroll-wrapper" data-animate>
+      <div class="team-scroll-container">
+        {CORE_TEAM_MEMBERS.map((member) => (
+          <TeamMemberCard member={member} />
+        ))}
+      </div>
+      <div aria-hidden="true" class="scroll-fade-right"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .scroll-wrapper {
+    position: relative;
+  }
+
+  .team-scroll-container {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 8px;
+  }
+
+  .team-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .team-scroll-container > :global(*) {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  .scroll-fade-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    background: linear-gradient(to right, transparent, var(--sbg-bg));
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Tablet: grid 2 columnas */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .team-scroll-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      overflow-x: visible;
+      scroll-snap-type: none;
+    }
+
+    .team-scroll-container > :global(*) {
+      min-width: unset;
+      max-width: unset;
+    }
+
+    .scroll-fade-right {
+      display: none;
+    }
+  }
+</style>

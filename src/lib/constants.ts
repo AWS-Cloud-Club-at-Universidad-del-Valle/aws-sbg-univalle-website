@@ -8,6 +8,7 @@ import type {
   IResource,
   IBenefit,
   ISocialLink,
+  ICoreTeamMember,
 } from '@/types/index';
 
 // ============================================
@@ -373,5 +374,47 @@ export const ABOUT_SOCIAL_LINKS: ISocialLink[] = [
     icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908z"/></svg>',
     external: false,
     glowColor: 'rgba(139,92,246,0.15)',
+  },
+];
+
+// ============================================
+// Core Team — Página /contact
+// ============================================
+
+export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
+  {
+    name: 'Miguel Ángel Sanclemente Mejía',
+    role: 'Team Leader',
+    area: 'Logistics & Events Lead',
+    linkedin: 'https://www.linkedin.com/in/miguel-sanclemente-mejia-1538073a6/',
+    github: 'https://github.com/MiguelSanclemente',
+  },
+  {
+    name: 'Pablo Nicolás Marín González',
+    role: 'Team Leader',
+    area: 'Partnerships & Academy Lead',
+    linkedin: 'https://www.linkedin.com/in/pablo-nicolas-marin-gonzalez-33b8042a1/',
+    github: 'https://github.com/Slylem0',
+  },
+  {
+    name: 'Sebastián Cifuentes Flórez',
+    role: 'Team Leader',
+    area: 'Marketing & Community Lead',
+    linkedin: 'https://www.linkedin.com/in/sebastian-cifuentes-florez-65872b187/',
+    github: 'https://github.com/SpecTr03',
+  },
+  {
+    name: 'Jann Carlo Martinez',
+    role: 'Team Leader',
+    area: 'Planning & Monitoring Lead',
+    linkedin: 'https://www.linkedin.com/in/jann-carlo-martinez-cardona-b1578a2b8/',
+    github: 'https://github.com/JannC23',
+  },
+  {
+    name: 'Aura María Peláez',
+    role: 'Team Leader',
+    area: 'Tech Lead',
+    linkedin: 'https://www.linkedin.com/in/aura-maria-pelaez-luna-a0b4a33a8',
+    github: 'https://github.com/aura2025',
   },
 ];

@@ -1,0 +1,127 @@
+---
+/**
+ * ContactHeroSection — Hero banner for the Contact page.
+ *
+ * Renders the page title, a code-label, and an introductory paragraph
+ * with staggered hero-reveal entrance animations. Includes decorative
+ * floating geometric shapes and a network/nodes SVG consistent with
+ * the site's visual language.
+ *
+ * Contains the sole <h1> element for the /contact page.
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  aria-labelledby="contact-hero-heading"
+  class:list={['relative overflow-hidden py-14 lg:py-20', className]}
+>
+  <!-- Radial gradient backgrounds -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+    style="background:radial-gradient(ellipse 55% 45% at 30% 0%,rgba(255,153,0,0.08) 0%,transparent 65%);"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-0 right-0 h-[50vh] w-[50vw]"
+    style="background:radial-gradient(ellipse at 80% 100%,rgba(35,47,62,0.35) 0%,transparent 60%);"
+  ></div>
+
+  <!-- Dot grid pattern -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 opacity-[0.025]"
+    style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"
+  ></div>
+
+  <!-- Decorative floating geometric shapes -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-16 left-8 h-0 w-0 opacity-20"
+    style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid var(--sbg-accent-light); animation: float-triangle 6s ease-in-out infinite;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-20 right-12 h-3 w-3 rounded-full opacity-15"
+    style="background: var(--sbg-orange); animation: float-circle 7s ease-in-out infinite;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-1/3 right-1/4 h-2 w-2 rounded-full opacity-10"
+    style="background: var(--sbg-accent); animation: float-circle 5s ease-in-out infinite 1s;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute hidden sm:block bottom-1/4 left-[15%] h-2.5 w-2.5 opacity-10"
+    style="background: var(--sbg-accent); animation: float-square 8s ease-in-out infinite 2s;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute hidden lg:block top-1/4 right-16 h-3 w-3 opacity-10"
+    style="background: var(--sbg-orange); animation: float-rhombus 9s ease-in-out infinite 1.5s;"
+  ></div>
+
+  <!-- Content -->
+  <div class="container-sbg relative z-10">
+    <div class="lg:grid lg:grid-cols-2 lg:items-center lg:gap-8">
+      <!-- Columna izquierda: texto -->
+      <div class="max-w-2xl lg:max-w-none">
+        <span class="hero-animate hero-animate-delay-1 code-label mb-4 inline-block">
+          # contact.core_team
+        </span>
+
+        <h1
+          id="contact-hero-heading"
+          class="hero-animate hero-animate-delay-2 text-[2.4rem] leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.2rem]"
+        >
+          Conoce a nuestro equipo
+        </h1>
+
+        <p
+          class="hero-animate hero-animate-delay-3 mt-5 max-w-lg text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
+          style="font-family:'Nunito Sans',sans-serif;"
+        >
+          Las personas que lideran la comunidad AWS más activa de la Universidad del Valle. Conoce a quienes hacen posible cada evento y proyecto.
+        </p>
+      </div>
+
+      <!-- Columna derecha: SVG decorativo de nodos/conexiones (solo desktop) -->
+      <div class="hidden lg:block pointer-events-none" aria-hidden="true">
+        <svg
+          viewBox="0 0 300 250"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-full h-auto opacity-[0.10]"
+        >
+          <!-- Líneas de conexión entre 5 nodos (red/networking) -->
+          <line x1="150" y1="40" x2="60" y2="110" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="150" y1="40" x2="240" y2="110" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="60" y1="110" x2="100" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="240" y1="110" x2="200" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="100" y1="210" x2="200" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="60" y1="110" x2="240" y2="110" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="150" y1="40" x2="100" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1" stroke-linecap="round" opacity="0.5" />
+          <line x1="150" y1="40" x2="200" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1" stroke-linecap="round" opacity="0.5" />
+
+          <!-- 5 Nodos (representan 5 team members) -->
+          <!-- Nodo 1: superior centro (líder) -->
+          <circle cx="150" cy="40" r="12" fill="var(--sbg-orange, #FF9900)" />
+          <!-- Nodo 2: medio izquierda -->
+          <circle cx="60" cy="110" r="9" fill="var(--sbg-accent, #8B5CF6)" />
+          <!-- Nodo 3: medio derecha -->
+          <circle cx="240" cy="110" r="9" fill="var(--sbg-accent, #8B5CF6)" />
+          <!-- Nodo 4: inferior izquierda -->
+          <circle cx="100" cy="210" r="8" fill="var(--sbg-orange, #FF9900)" />
+          <!-- Nodo 5: inferior derecha -->
+          <circle cx="200" cy="210" r="8" fill="var(--sbg-accent, #8B5CF6)" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
