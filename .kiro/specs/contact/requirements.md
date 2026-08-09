@@ -81,31 +81,28 @@ Página "Contacto" (`/contact`) del sitio web del AWS Student Builder Group Univ
 6. EL TeamMemberCard DEBE renderizar enlaces a LinkedIn y GitHub como iconos SVG integrados visualmente dentro de la tarjeta, con `target="_blank"` y `rel="noopener noreferrer"`, cada uno con área táctil mínima de 44×44px.
 7. CADA enlace social DEBE incluir `aria-label` descriptivo con el formato "LinkedIn de [nombre]" o "GitHub de [nombre]".
 8. CUANDO un usuario pasa el cursor sobre un enlace social, EL enlace DEBE aplicar una transición de color y fondo con duración máxima de 200ms, mostrando feedback visual claro de interactividad.
-9. EL TeamMemberCard DEBE tener un fondo usando `--sbg-bg-surface` con `rounded-xl` y borde de 1px usando `--sbg-border`, con un ancho mínimo entre 320px y 360px para garantizar amplitud visual.
+9. EL TeamMemberCard DEBE tener un fondo usando `--sbg-bg-surface` con `rounded-xl` y borde de 1px usando `--sbg-border`, con un ancho máximo de 480px y `width: 100%` para aprovechar el espacio disponible en su contenedor.
 10. CUANDO un usuario pasa el cursor sobre un TeamMemberCard, EL componente DEBE aplicar una transición con: `translateY(-6px)`, incremento de sombra significativo, efecto glow perimetral sutil usando `--sbg-accent-border`, y borde que transiciona a color accent, con duración máxima de 300ms y easing `ease-out`.
 11. CUANDO un TeamMemberCard recibe foco de teclado (via tab en los enlaces internos), EL componente DEBE mostrar un focus indicator visible con ring de exactamente 2px en color `--sbg-accent` y outline-offset de 3px.
 12. EL TeamMemberCard DEBE incluir al menos un elemento decorativo sutil (gradiente de esquina o línea) con `aria-hidden="true"` que lo diferencie de una tarjeta genérica.
 13. EL TeamMemberCard DEBE usar el atributo `data-animate` para animaciones de entrada al scroll.
 14. MIENTRAS el usuario tenga `prefers-reduced-motion: reduce` activo, EL TeamMemberCard DEBE mostrar su contenido inmediatamente con `opacity: 1` y `transform: none`, sin animación de entrada ni transiciones de hover.
 
-### Requirement 5: Layout de la Sección Core Team con Scroll Horizontal
+### Requirement 5: Layout Vertical de la Sección Core Team
 
-**User Story:** Como visitante, quiero explorar los integrantes del equipo mediante un scroll horizontal fluido que me permita ver tarjetas amplias centradas en las personas, para tener una experiencia visual moderna con control total de la navegación.
+**User Story:** Como visitante, quiero ver los integrantes del equipo organizados verticalmente con tarjetas prominentes y centradas, para recorrer cada perfil mediante el scroll natural de la página y apreciar la presentación individual de cada integrante.
 
 #### Acceptance Criteria
 
 1. LA Core_Team_Section DEBE renderizar exactamente 5 instancias de TeamMemberCard, una por cada integrante definido en Core_Team_Data.
 2. LA Core_Team_Section DEBE renderizarse dentro de un elemento `<section>` con `aria-labelledby` referenciando un `<h2>` con texto "Core Team" y un `id` asociado.
 3. LA Core_Team_Section DEBE incluir un code-label con el texto `# contact.team` usando la clase `code-label` del Design_System.
-4. MIENTRAS el viewport sea ≥1024px (desktop), LA Core_Team_Section DEBE usar un layout de scroll horizontal con CSS `scroll-snap-type: x mandatory` donde las tarjetas tienen un ancho mínimo entre 320px y 360px, mostrando indicadores visuales sutiles de que hay más contenido disponible por scroll.
-5. MIENTRAS el viewport sea ≥640px y <1024px (tablet), LA Core_Team_Section DEBE mostrar las tarjetas en un grid de 2 columnas con tarjetas de mayor tamaño que la versión anterior.
-6. MIENTRAS el viewport sea <640px (mobile), LA Core_Team_Section DEBE usar scroll horizontal con `scroll-snap-type: x mandatory` mostrando una tarjeta completa y un peek parcial de la siguiente tarjeta para indicar contenido adicional.
-7. EL contenedor de scroll DEBE usar `scroll-snap-align: start` en cada tarjeta para que el snap se alinee al inicio de cada card.
-8. LA Core_Team_Section NO DEBE implementar carrusel automático ni auto-play. EL control de navegación DEBE ser exclusivamente del usuario.
-9. EL contenedor de scroll horizontal DEBE ser accesible con teclado (navegable con Tab entre tarjetas), mouse (drag horizontal), touchpad (scroll horizontal nativo), y gestos touch (swipe).
-10. LA Core_Team_Section DEBE usar un gap de 24px entre cards en todos los breakpoints.
-11. LA Core_Team_Section DEBE estar envuelta en la clase `container-sbg` para mantener el ancho máximo y padding consistentes.
-12. EL contenedor de scroll horizontal DEBE ocultar la scrollbar visualmente manteniendo la funcionalidad accesible (`scrollbar-width: none` y `::-webkit-scrollbar { display: none }`).
+4. LA Core_Team_Section DEBE usar un layout vertical (flex-direction: column) donde las tarjetas se apilan una debajo de otra, centradas horizontalmente dentro del contenedor.
+5. CADA TeamMemberCard DEBE ocupar el ancho completo disponible hasta un máximo de 480px, centrada dentro del contenedor.
+6. LA Core_Team_Section DEBE usar un gap vertical de 24px entre cards en todos los breakpoints.
+7. LA Core_Team_Section DEBE estar envuelta en la clase `container-sbg` para mantener el ancho máximo y padding consistentes.
+8. EL usuario DEBE poder recorrer todos los integrantes mediante scroll vertical normal de la página, sin scroll horizontal ni carrusel.
+9. LA Core_Team_Section NO DEBE implementar scroll horizontal, carrusel, ni overflow-x en ningún viewport.
 
 ### Requirement 6: Preparación para Imágenes S3
 
@@ -133,19 +130,18 @@ Página "Contacto" (`/contact`) del sitio web del AWS Student Builder Group Univ
 
 ### Requirement 8: Diseño Responsive
 
-**User Story:** Como usuario mobile, quiero que la página de Contacto sea completamente usable y visualmente atractiva en mi dispositivo, con scroll horizontal intuitivo para explorar el equipo.
+**User Story:** Como usuario mobile, quiero que la página de Contacto sea completamente usable y visualmente atractiva en mi dispositivo, con las tarjetas organizadas verticalmente de forma legible.
 
 #### Acceptance Criteria
 
 1. LA Contact_Page DEBE usar layout responsive mobile-first donde los estilos base apuntan a viewports menores a 640px.
-2. MIENTRAS el viewport sea menor a 640px, LA Core_Team_Section DEBE mostrar las tarjetas en scroll horizontal con snap, una tarjeta visible completa y un peek parcial de la siguiente (indicando contenido adicional).
-3. MIENTRAS el viewport sea ≥640px y <1024px, LOS TeamMemberCards DEBEN disponerse en un grid de 2 columnas con tarjetas amplias.
-4. MIENTRAS el viewport sea ≥1024px, LOS TeamMemberCards DEBEN disponerse en scroll horizontal con tarjetas de ancho mínimo 320-360px, mostrando múltiples tarjetas simultáneamente.
-5. LA Contact_Page DEBE usar la clase `container-sbg` para aplicar max-width, centrado horizontal y padding lateral responsivo.
-6. LA Contact_Page DEBE renderizar todo el body text a mínimo 16px en todos los viewports.
-7. LA Contact_Page NO DEBE producir scrollbar horizontal a nivel de página en ningún viewport de 320px a 2560px (el scroll horizontal es exclusivamente dentro del contenedor de tarjetas).
-8. MIENTRAS el viewport sea menor a 640px, todos los elementos interactivos DEBEN tener touch target mínimo de 44×44px.
-9. EL SVG decorativo del Hero DEBE ocultarse en viewports < 1024px.
+2. EN TODOS los viewports, LA Core_Team_Section DEBE mostrar las tarjetas apiladas verticalmente, centradas horizontalmente, recorribles mediante scroll vertical de página.
+3. LAS tarjetas DEBEN mantener `width: 100%` con `max-width: 480px` en todos los breakpoints, adaptándose al ancho disponible sin desbordarse.
+4. LA Contact_Page DEBE usar la clase `container-sbg` para aplicar max-width, centrado horizontal y padding lateral responsivo.
+5. LA Contact_Page DEBE renderizar todo el body text a mínimo 16px en todos los viewports.
+6. LA Contact_Page NO DEBE producir scrollbar horizontal a nivel de página en ningún viewport de 320px a 2560px.
+7. MIENTRAS el viewport sea menor a 640px, todos los elementos interactivos DEBEN tener touch target mínimo de 44×44px.
+8. EL SVG decorativo del Hero DEBE ocultarse en viewports < 1024px.
 
 ### Requirement 9: Accesibilidad
 
@@ -163,7 +159,7 @@ Página "Contacto" (`/contact`) del sitio web del AWS Student Builder Group Univ
 8. LOS avatares (tanto placeholder con iniciales como imágenes) DEBEN tener `aria-hidden="true"` ya que el nombre completo se presenta como texto visible en la tarjeta.
 9. LA Contact_Page DEBE ser completamente operable con navegación de teclado, donde el orden de tabulación sigue el orden visual de lectura sin trampas de foco.
 10. MIENTRAS el usuario tenga `prefers-reduced-motion: reduce` activo, LA Contact_Page DEBE mostrar todo el contenido inmediatamente sin animaciones ni transiciones.
-11. EL contenedor de scroll horizontal DEBE ser navegable con teclado y DEBE exponer su contenido a lectores de pantalla en orden secuencial sin requerir scroll para acceder a la información.
+11. LAS tarjetas DEBEN exponerse a lectores de pantalla en orden secuencial sin requerir interacciones especiales para acceder a la información.
 
 ### Requirement 10: Enlaces Externos
 

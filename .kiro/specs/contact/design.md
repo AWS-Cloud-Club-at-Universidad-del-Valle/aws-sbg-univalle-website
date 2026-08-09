@@ -2,13 +2,13 @@
 
 ## Overview
 
-La página `/contact` presenta al Core Team del AWS Student Builder Group Universidad del Valle mediante tarjetas interactivas de formato amplio con avatar prominente (96-120px, soporte condicional para imagen o placeholder con iniciales), nombre destacado, cargo, área como badge pill, y enlaces sociales integrados (LinkedIn, GitHub). El layout principal del Core Team utiliza **scroll horizontal con CSS scroll-snap** en desktop y mobile, priorizando a las personas como protagonistas visuales. Se integra completamente con el sistema de diseño existente (tema oscuro, acentos geométricos, animaciones float-*, hero-animate, data-animate) y cumple WCAG 2.1 AA.
+La página `/contact` presenta al Core Team del AWS Student Builder Group Universidad del Valle mediante tarjetas interactivas de formato amplio con avatar prominente (96-120px, soporte condicional para imagen o placeholder con iniciales), nombre destacado, cargo, área como badge pill, y enlaces sociales integrados (LinkedIn, GitHub). El layout principal del Core Team utiliza **una columna vertical centrada** donde las tarjetas se apilan una debajo de otra, permitiendo al usuario recorrer los integrantes mediante scroll vertical normal de la página. Se integra completamente con el sistema de diseño existente (tema oscuro, acentos geométricos, animaciones float-*, hero-animate, data-animate) y cumple WCAG 2.1 AA.
 
 ### Decisiones Técnicas Principales
 
 | Decisión | Justificación | Req. vinculado |
 |----------|---------------|----------------|
-| Scroll horizontal con CSS scroll-snap | Experiencia visual moderna, tarjetas amplias centradas en personas, navegación intuitiva | Req. 5.4, 5.6 |
+| Layout vertical con tarjetas centradas | Presentación clara de cada integrante, scroll natural de página, sin fricción UX | Req. 5.4, 5.8 |
 | Avatares con soporte condicional (imagen o CSS+iniciales) | Preparado para S3 futuro sin refactoring; rendimiento 0 requests mientras no haya fotos | Req. 6.1–6.5 |
 | Datos del team en `constants.ts` con `image?: string` | Separación datos/presentación, extensibilidad | Req. 3.1, 3.4 |
 | Componente `TeamMemberCard.astro` independiente | Reutilizable en otras páginas | Req. 4.1, 14.2 |
@@ -70,7 +70,7 @@ src/
 │   │   └── SectionDivider.astro             # Existente, sin modificar
 │   └── sections/
 │       ├── ContactHeroSection.astro         # Hero section (MODIFICAR - reducir padding)
-│       ├── ContactTeamSection.astro         # Scroll horizontal (REESCRIBIR)
+│       ├── ContactTeamSection.astro         # Layout vertical (REESCRIBIR)
 │       ├── ContactNetworkingSection.astro   # (ELIMINAR)
 │       └── ContactCtaSection.astro          # (ELIMINAR)
 ├── types/
@@ -320,43 +320,36 @@ const hasImage = member.image && member.image.trim().length > 0;
 
 Todo lo demás se mantiene idéntico: radial gradients, dot grid, floating shapes, SVG de nodos, hero-animate con delays, grid 2 columnas con SVG decorativo en desktop. *(Req. 2.11)*
 
-### 5. Componente `ContactTeamSection.astro` (reescrito con scroll horizontal)
+### 5. Componente `ContactTeamSection.astro` (layout vertical)
 
 **Archivo:** `src/components/sections/ContactTeamSection.astro`
 
 #### Composición Visual
 
 ```
-Desktop (≥1024px): Scroll horizontal con snap
-┌────────────────────────────────────────────────────────────────────────┐
-│  # contact.team                                                         │
-│  Core Team                                                              │
-│                                                                         │
-│  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐  ┌──                         │
-│  │ Card │  │ Card │  │ Card │  │ Card │  │ Ca...  ← scroll →          │
-│  │  1   │  │  2   │  │  3   │  │  4   │  │  5                         │
-│  └──────┘  └──────┘  └──────┘  └──────┘  └──                         │
-│  [gradiente fade izq]                    [gradiente fade der]          │
-└────────────────────────────────────────────────────────────────────────┘
-
-Tablet (≥640px <1024px): Grid 2 columnas
-┌──────┐  ┌──────┐
-│ Card │  │ Card │
-└──────┘  └──────┘
-┌──────┐  ┌──────┐
-│ Card │  │ Card │
-└──────┘  └──────┘
-┌──────┐
-│ Card │
-└──────┘
-
-Mobile (<640px): Scroll horizontal con peek
-┌──────────────────────────┐
-│  ┌──────┐  ┌───          │
-│  │ Card │  │ Ca... peek  │  ← swipe →
-│  │  1   │  │             │
-│  └──────┘  └───          │
-└──────────────────────────┘
+Todos los viewports: Columna vertical centrada
+┌────────────────────────────────────────────────┐
+│  # contact.team                                 │
+│  Core Team                                      │
+│                                                 │
+│         ┌──────────────────────┐               │
+│         │      Card 1          │               │
+│         └──────────────────────┘               │
+│         ┌──────────────────────┐               │
+│         │      Card 2          │               │
+│         └──────────────────────┘               │
+│         ┌──────────────────────┐               │
+│         │      Card 3          │               │
+│         └──────────────────────┘               │
+│         ┌──────────────────────┐               │
+│         │      Card 4          │               │
+│         └──────────────────────┘               │
+│         ┌──────────────────────┐               │
+│         │      Card 5          │               │
+│         └──────────────────────┘               │
+│                                                 │
+│  ↓ scroll vertical normal de página ↓          │
+└────────────────────────────────────────────────┘
 ```
 
 #### Markup
@@ -369,87 +362,35 @@ Mobile (<640px): Scroll horizontal con peek
       <h2 id="core-team-heading" class="text-2xl sm:text-3xl">Core Team</h2>
     </div>
 
-    <div class="scroll-wrapper" data-animate>
-      <div class="team-scroll-container">
-        {CORE_TEAM_MEMBERS.map((member) => (
-          <TeamMemberCard member={member} />
-        ))}
-      </div>
-      <!-- Indicador de scroll disponible (derecha) -->
-      <div aria-hidden="true" class="scroll-fade-right"></div>
+    <div class="team-list">
+      {CORE_TEAM_MEMBERS.map((member) => (
+        <TeamMemberCard member={member} />
+      ))}
     </div>
   </div>
 </section>
 ```
 
-#### CSS del Scroll Horizontal
+#### CSS del Layout Vertical
 
 ```css
-.scroll-wrapper {
-  position: relative;
-}
-
-.team-scroll-container {
+.team-list {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 24px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding-bottom: 8px; /* espacio para sombras en hover */
-}
-
-.team-scroll-container::-webkit-scrollbar {
-  display: none;
-}
-
-.team-scroll-container > * {
-  scroll-snap-align: start;
-  flex-shrink: 0;
-  min-width: 320px;
-  max-width: 360px;
-}
-
-/* Tablet: grid 2 columnas */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .team-scroll-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    overflow-x: visible;
-    scroll-snap-type: none;
-  }
-  .team-scroll-container > * {
-    min-width: unset;
-    max-width: unset;
-  }
-  .scroll-fade-right {
-    display: none;
-  }
-}
-
-/* Indicador de scroll (gradiente fade en borde derecho) */
-.scroll-fade-right {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 60px;
-  background: linear-gradient(to right, transparent, var(--sbg-bg));
-  pointer-events: none;
-  z-index: 2;
 }
 ```
 
-**Características del scroll:**
-- Desktop (≥1024px): Flex con overflow-x auto, scroll-snap-type: x mandatory, tarjetas 320-360px, múltiples visibles
-- Tablet (≥640px <1024px): Grid 2 columnas, sin scroll
-- Mobile (<640px): Scroll horizontal con snap, una tarjeta + peek del siguiente
-- Scrollbar oculta visualmente, funcionalidad mantenida
-- NO carrusel automático, control exclusivo del usuario
-- Accesible con teclado (Tab entre tarjetas), mouse, touchpad y gestos touch
+**Características:**
+- Columna vertical, tarjetas centradas
+- Cada tarjeta usa width: 100% con max-width: 480px
+- Gap de 24px entre tarjetas
+- Sin scroll horizontal, sin overflow-x, sin carrusel
+- El usuario recorre los integrantes con scroll vertical normal de la página
+- Accesible con teclado (Tab entre tarjetas) sin necesidad de interacciones especiales
 
-*(Req. 5.4–5.12)*
+*(Req. 5.4–5.9)*
 
 ### 6. Página `contact.astro` (simplificada)
 

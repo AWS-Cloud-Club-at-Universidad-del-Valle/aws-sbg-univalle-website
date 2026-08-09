@@ -2,20 +2,20 @@
 
 ## Overview
 
-Actualización de la página `/contact` del sitio AWS SBG Univalle para reflejar la nueva composición visual simplificada. Los cambios principales son: soporte condicional de imagen en `ICoreTeamMember`, rediseño del `TeamMemberCard` con avatar prominente (96-120px) y hover mejorado (translateY -6px con glow), reducción de padding en Hero, reescritura de `ContactTeamSection` con scroll horizontal CSS scroll-snap, y eliminación de secciones Networking y CTA. La composición final queda: Hero → SectionDivider → TeamSection.
+Actualización de la página `/contact` del sitio AWS SBG Univalle para reflejar la nueva composición visual simplificada. Los cambios principales son: soporte condicional de imagen en `ICoreTeamMember`, rediseño del `TeamMemberCard` con avatar prominente (96-120px) y hover mejorado (translateY -6px con glow), reducción de padding en Hero, reescritura de `ContactTeamSection` con layout vertical centrado, y eliminación de secciones Networking y CTA. La composición final queda: Hero → SectionDivider → TeamSection (tarjetas apiladas verticalmente).
 
 ## Tasks
 
-- [ ] 1. Actualizar interfaz ICoreTeamMember
-  - [ ] 1.1 Agregar campo `image?: string` en `src/types/index.ts`
+- [x] 1. Actualizar interfaz ICoreTeamMember
+  - [x] 1.1 Agregar campo `image?: string` en `src/types/index.ts`
     - Agregar el campo opcional `image?: string` a la interfaz `ICoreTeamMember` existente
     - Incluir comentario JSDoc: `/** URL de imagen de perfil opcional (HTTPS, futuro S3) */`
     - Mantener todos los campos existentes sin modificación (`name`, `role`, `area`, `linkedin`, `github`)
     - Verificar que el tipo compila sin errores (`tsc --noEmit`)
     - _Requirements: 3.4, 6.1_
 
-- [ ] 2. Reescribir componente TeamMemberCard
-  - [ ] 2.1 Reescribir `src/components/common/TeamMemberCard.astro`
+- [x] 2. Reescribir componente TeamMemberCard
+  - [x] 2.1 Reescribir `src/components/common/TeamMemberCard.astro`
     - Redefinir `interface Props` con `member: ICoreTeamMember` y `class?: string`
     - Implementar función `getInitials(name: string): string` que extrae primera letra del primer nombre y primera letra del último apellido, en mayúsculas
     - Implementar lógica condicional: `const hasImage = member.image && member.image.trim().length > 0`
@@ -47,49 +47,35 @@ Actualización de la página `/contact` del sitio AWS SBG Univalle para reflejar
     - Mantener componente dentro de 150 líneas máximo
     - _Requirements: 4.1–4.14, 6.2–6.5, 9.3, 9.5, 9.8, 11.3, 11.4, 11.8, 12.6_
 
-- [ ] 3. Ajustar ContactHeroSection
-  - [ ] 3.1 Reducir padding en `src/components/sections/ContactHeroSection.astro`
+- [x] 3. Ajustar ContactHeroSection
+  - [x] 3.1 Reducir padding en `src/components/sections/ContactHeroSection.astro`
     - Cambiar padding vertical de `py-20 lg:py-28` a `py-14 lg:py-20`
     - No modificar ningún otro aspecto del componente (gradients, floating shapes, SVG, hero-animate)
     - Verificar que el atributo de clase en el `<section>` raíz refleja el nuevo padding
     - _Requirements: 2.11, 7.1_
 
-- [ ] 4. Reescribir ContactTeamSection con scroll horizontal
-  - [ ] 4.1 Reescribir `src/components/sections/ContactTeamSection.astro`
+- [x] 4. Reescribir ContactTeamSection con layout vertical
+  - [x] 4.1 Reescribir `src/components/sections/ContactTeamSection.astro`
     - `<section>` con `aria-labelledby="core-team-heading"` y padding `py-12 sm:py-16`
     - Code-label con texto `# contact.team` usando clase `code-label`
     - `<h2 id="core-team-heading">` con texto "Core Team"
     - Envolver contenido en `container-sbg`
     - Importar `CORE_TEAM_MEMBERS` de `@/lib/constants` y `TeamMemberCard` de `@/components/common/TeamMemberCard.astro`
     - Renderizar exactamente 5 instancias de `TeamMemberCard` con `.map()`
-    - **Layout scroll horizontal (desktop ≥1024px):**
-      - Contenedor flex con `overflow-x: auto`
-      - `scroll-snap-type: x mandatory`
-      - `scroll-behavior: smooth`
-      - `-webkit-overflow-scrolling: touch`
-      - `scrollbar-width: none` y `::-webkit-scrollbar { display: none }`
-      - Tarjetas con `scroll-snap-align: start`, `flex-shrink: 0`, min-width 320px, max-width 360px
-      - Gap de 24px
-      - Indicador visual fade derecho (gradiente `linear-gradient(to right, transparent, var(--sbg-bg))`, 60px, `pointer-events: none`)
-    - **Layout tablet (≥640px <1024px):**
-      - Grid 2 columnas (`grid-template-columns: repeat(2, 1fr)`)
-      - Sin overflow-x, sin scroll-snap
-      - Ocultar indicador fade
-      - Tarjetas sin min-width/max-width fijo
-    - **Layout mobile (<640px):**
-      - Scroll horizontal con snap (igual que desktop)
-      - Una tarjeta completa visible + peek parcial de la siguiente
-    - **Accesibilidad del scroll:**
+    - **Layout vertical centrado:**
+      - Contenedor flex con `flex-direction: column` y `align-items: center`
+      - Gap de 24px entre tarjetas
+      - Sin overflow-x, sin scroll-snap, sin carrusel
+      - Tarjetas con `width: 100%` y `max-width: 480px`
+      - Scroll vertical normal de la página
+    - **Accesibilidad:**
       - Navegable con teclado (Tab entre tarjetas)
-      - Navegable con mouse, touchpad y gestos touch
-      - NO carrusel automático ni auto-play
       - Contenido accesible a lectores de pantalla en orden secuencial
-    - Usar `data-animate` en el wrapper
-    - Respetar `prefers-reduced-motion: reduce`
-    - _Requirements: 5.1–5.12, 7.1, 8.2–8.4, 9.2, 9.11, 12.7_
+    - Usar `data-animate` en las tarjetas
+    - _Requirements: 5.1–5.9, 7.1, 8.2–8.3, 9.2, 9.11_
 
-- [ ] 5. Simplificar composición de contact.astro
-  - [ ] 5.1 Simplificar `src/pages/contact.astro`
+- [x] 5. Simplificar composición de contact.astro
+  - [x] 5.1 Simplificar `src/pages/contact.astro`
     - Eliminar imports de `ContactNetworkingSection` y `ContactCtaSection`
     - Eliminar renderizado de dichos componentes y SectionDividers extra
     - Dejar composición final: `ContactHeroSection` → `SectionDivider` → `ContactTeamSection`
@@ -100,18 +86,18 @@ Actualización de la página `/contact` del sitio AWS SBG Univalle para reflejar
     - Todos los imports con alias `@/`
     - _Requirements: 1.1, 1.2, 1.6, 1.7, 14.1, 14.3, 14.4, 14.7, 14.11_
 
-- [ ] 6. Eliminar componentes obsoletos
-  - [ ] 6.1 Eliminar `src/components/sections/ContactNetworkingSection.astro`
+- [x] 6. Eliminar componentes obsoletos
+  - [x] 6.1 Eliminar `src/components/sections/ContactNetworkingSection.astro`
     - Borrar el archivo completamente del repositorio
     - Verificar que no quedan referencias a este componente en ningún otro archivo
     - _Requirements: 1.7, 14.11_
-  - [ ] 6.2 Eliminar `src/components/sections/ContactCtaSection.astro`
+  - [x] 6.2 Eliminar `src/components/sections/ContactCtaSection.astro`
     - Borrar el archivo completamente del repositorio
     - Verificar que no quedan referencias a este componente en ningún otro archivo
     - _Requirements: 1.7, 14.11_
 
-- [ ] 7. Verificación final - Build y tipos
-  - [ ] 7.1 Ejecutar verificación completa de compilación
+- [x] 7. Verificación final - Build y tipos
+  - [x] 7.1 Ejecutar verificación completa de compilación
     - Ejecutar `npx tsc --noEmit` — debe pasar sin errores
     - Ejecutar `npx astro build` — debe generar HTML estático sin errores
     - Verificar que no quedan imports rotos a componentes eliminados
