@@ -161,3 +161,22 @@ export interface ISocialLink {
   /** Color para el efecto glow en hover (rgba) */
   glowColor?: string;
 }
+
+// ============================================
+// Core Team (Contact page)
+// ============================================
+
+export interface ICoreTeamMember {
+  /** Nombre completo del integrante */
+  name: string;
+  /** Cargo/rol en el equipo */
+  role: string;
+  /** Área de responsabilidad */
+  area: string;
+  /** URL completa del perfil de LinkedIn (HTTPS) */
+  linkedin: string;
+  /** URL completa del perfil de GitHub (HTTPS) */
+  github: string;
+  /** URL de imagen de perfil opcional (HTTPS, futuro S3) */
+  image?: string;
+}
