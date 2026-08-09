@@ -1,10 +1,11 @@
 ---
 /**
- * ContactTeamSection — Sección Core Team con scroll horizontal.
+ * ContactTeamSection — Sección Core Team con grid responsive y glow interactivo.
  *
- * Desktop/Mobile: scroll horizontal con CSS scroll-snap.
+ * Desktop: grid 2 columnas con cards amplias.
  * Tablet: grid 2 columnas.
- * NO es carrusel automático — control exclusivo del usuario.
+ * Mobile: 1 columna, cards de ancho completo.
+ * Incluye cursor-tracking glow pattern (mismo que BenefitsSection de Home).
  */
 import { CORE_TEAM_MEMBERS } from '@/lib/constants';
 import TeamMemberCard from '@/components/common/TeamMemberCard.astro';
@@ -14,83 +15,73 @@ interface Props {
 }
 
 const { class: className = '' } = Astro.props;
+
+const glowColors = [
+  'rgba(255,153,0,0.35)',
+  'rgba(139,92,246,0.35)',
+  'rgba(1,168,141,0.35)',
+  'rgba(46,115,184,0.35)',
+  'rgba(255,153,0,0.35)',
+];
 ---
 
 <section
   aria-labelledby="core-team-heading"
-  class:list={['py-12 sm:py-16', className]}
+  class:list={['relative py-16 sm:py-20 overflow-hidden', className]}
 >
-  <div class="container-sbg">
-    <div class="mb-8 sm:mb-10" data-animate>
-      <span class="code-label mb-3 block"># contact.team</span>
-      <h2 id="core-team-heading" class="text-2xl sm:text-3xl">
+  <!-- Background accent -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-1/4 left-0 h-[50vh] w-[40vw] opacity-20"
+    style="background:radial-gradient(ellipse at 10% 50%,rgba(139,92,246,0.06) 0%,transparent 65%);"
+  ></div>
+
+  <div class="container-sbg relative z-10">
+    <div class="max-w-3xl mb-12" data-animate>
+      <span class="code-label mb-4 inline-block"># contact.team</span>
+      <h2
+        id="core-team-heading"
+        class="text-[2rem] leading-[1.1] sm:text-[2.6rem] lg:text-[3rem]"
+      >
         Core Team
       </h2>
+      <p
+        class="mt-4 max-w-xl text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
+        style="font-family:'Nunito Sans',sans-serif;"
+      >
+        Las personas que lideran cada área de la comunidad.
+      </p>
     </div>
 
-    <div class="scroll-wrapper" data-animate>
-      <div class="team-scroll-container">
-        {CORE_TEAM_MEMBERS.map((member) => (
-          <TeamMemberCard member={member} />
-        ))}
-      </div>
-      <div aria-hidden="true" class="scroll-fade-right"></div>
+    <div id="team-grid" class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      {CORE_TEAM_MEMBERS.map((member, i) => (
+        <TeamMemberCard member={member} glowColor={glowColors[i] || glowColors[0]} />
+      ))}
     </div>
   </div>
 </section>
 
-<style>
-  .scroll-wrapper {
-    position: relative;
-  }
+<script is:inline>
+document.addEventListener('astro:page-load', function() {
+  var cards = document.querySelectorAll('.team-card');
+  if (!cards.length) return;
 
-  .team-scroll-container {
-    display: flex;
-    gap: 24px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 8px;
-  }
+  cards.forEach(function(card) {
+    var glow = card.querySelector('.team-glow');
+    if (!glow) return;
+    var color = card.getAttribute('data-glow-color') || 'rgba(139,92,246,0.35)';
 
-  .team-scroll-container::-webkit-scrollbar {
-    display: none;
-  }
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      glow.style.background = 'radial-gradient(280px circle at ' + x + 'px ' + y + 'px, ' + color + ' 0%, transparent 70%)';
+      glow.style.opacity = '1';
+    });
 
-  .team-scroll-container > :global(*) {
-    scroll-snap-align: start;
-    flex-shrink: 0;
-  }
-
-  .scroll-fade-right {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 60px;
-    background: linear-gradient(to right, transparent, var(--sbg-bg));
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  /* Tablet: grid 2 columnas */
-  @media (min-width: 640px) and (max-width: 1023px) {
-    .team-scroll-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      overflow-x: visible;
-      scroll-snap-type: none;
-    }
-
-    .team-scroll-container > :global(*) {
-      min-width: unset;
-      max-width: unset;
-    }
-
-    .scroll-fade-right {
-      display: none;
-    }
-  }
-</style>
+    card.addEventListener('mouseleave', function() {
+      glow.style.opacity = '0';
+    });
+  });
+});
+</script>
