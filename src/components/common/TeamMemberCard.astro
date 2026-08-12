@@ -11,12 +11,11 @@ import type { ICoreTeamMember } from '@/types/index';
 interface Props {
   member: ICoreTeamMember;
   glowColor?: string;
-  glowColor?: string;
   class?: string;
 }
 
 const { member, glowColor = 'rgba(139,92,246,0.35)', class: className } = Astro.props;
-const { member, glowColor = 'rgba(139,92,246,0.35)', class: className } = Astro.props;
+
 
 function getInitials(name: string): string {
   const parts = name.split(' ');
