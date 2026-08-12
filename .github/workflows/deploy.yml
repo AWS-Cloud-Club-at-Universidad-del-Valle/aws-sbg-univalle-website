@@ -3,20 +3,28 @@
 # AWS Student Builder Group — Universidad del Valle
 #
 # Propósito:
-#   Construye el sitio Astro y lo despliega automáticamente
-#   en Amazon S3 + CloudFront cada vez que se hace push a
-#   main o develop.
+# Construye el sitio Astro y lo despliega automáticamente
+# en Amazon S3 + CloudFront cada vez que se hace push a
+# main o develop.
+#
+# Estructura del bucket:
+#
+# aws-student-builders-assets/
+# ├── develop/
+# ├── production/
+# └── members/
+#
+# develop  → S3/develop/
+# main     → S3/production/
 #
 # Autenticación:
-#   Usa OIDC (OpenID Connect) — sin access keys estáticas.
-#   GitHub solicita un token temporal a AWS vía
-#   sts:AssumeRoleWithWebIdentity.
+# Usa OIDC (OpenID Connect) — sin access keys estáticas.
 #
-# GitHub Secrets requeridos (Settings → Environments):
-#   AWS_ROLE_ARN               — ARN del IAM Role para OIDC
-#   AWS_REGION                 — Región del bucket S3 (ej: us-east-1)
-#   AWS_BUCKET_NAME            — Nombre del bucket S3
-#   CLOUDFRONT_DISTRIBUTION_ID — ID de la distribución CloudFront
+# GitHub Secrets requeridos:
+# AWS_ROLE_ARN
+# AWS_REGION
+# AWS_BUCKET_NAME
+# CLOUDFRONT_DISTRIBUTION_ID
 # ============================================================
 
 name: Deploy
@@ -36,6 +44,10 @@ jobs:
     name: Build & Deploy to AWS
     runs-on: ubuntu-latest
 
+    # Selecciona el Environment de GitHub dependiendo de la rama.
+    #
+    # main    → Production
+    # develop → development
     environment: ${{ github.ref_name == 'main' && 'Production' || 'development' }}
 
     permissions:
@@ -43,6 +55,7 @@ jobs:
       contents: read
 
     steps:
+
       # --------------------------------------------------------
       # Checkout
       # --------------------------------------------------------
@@ -95,6 +108,25 @@ jobs:
           echo "dist/ existe y contiene $FILE_COUNT archivos."
 
       # --------------------------------------------------------
+      # Determinar carpeta de despliegue
+      # --------------------------------------------------------
+      - name: Determine deployment path
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            DEPLOY_PATH="production"
+          elif [ "${GITHUB_REF_NAME}" = "develop" ]; then
+            DEPLOY_PATH="develop"
+          else
+            echo "ERROR: Rama no soportada: ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+
+          echo "DEPLOY_PATH=${DEPLOY_PATH}" >> "$GITHUB_ENV"
+
+          echo "Rama: ${GITHUB_REF_NAME}"
+          echo "Carpeta S3: ${DEPLOY_PATH}/"
+
+      # --------------------------------------------------------
       # Autenticación AWS mediante OIDC
       # --------------------------------------------------------
       - name: Configure AWS credentials (OIDC)
@@ -109,7 +141,11 @@ jobs:
       # --------------------------------------------------------
       - name: Sync hashed assets to S3 (cache 1 year)
         run: |
-          aws s3 sync dist/_astro/ "s3://${{ secrets.AWS_BUCKET_NAME }}/_astro/" \
+          echo "Subiendo assets a:"
+          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/${DEPLOY_PATH}/_astro/"
+
+          aws s3 sync dist/_astro/ \
+            "s3://${{ secrets.AWS_BUCKET_NAME }}/${DEPLOY_PATH}/_astro/" \
             --cache-control "public, max-age=31536000, immutable" \
             --no-progress
 
@@ -118,7 +154,11 @@ jobs:
       # --------------------------------------------------------
       - name: Sync HTML and root files to S3 (no-cache)
         run: |
-          aws s3 sync dist/ "s3://${{ secrets.AWS_BUCKET_NAME }}/" \
+          echo "Subiendo archivos del sitio a:"
+          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/${DEPLOY_PATH}/"
+
+          aws s3 sync dist/ \
+            "s3://${{ secrets.AWS_BUCKET_NAME }}/${DEPLOY_PATH}/" \
             --cache-control "no-cache, no-store, must-revalidate" \
             --exclude "_astro/*" \
             --delete \
@@ -129,6 +169,9 @@ jobs:
       # --------------------------------------------------------
       - name: Invalidate CloudFront cache
         run: |
+          echo "Invalidando CloudFront..."
+          echo "Distribution ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"
+
           INVALIDATION_ID=$(aws cloudfront create-invalidation \
             --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
             --paths "/*" \
@@ -147,6 +190,7 @@ jobs:
           echo "=================================================="
           echo "Ambiente: ${{ github.ref_name == 'main' && 'Production' || 'development' }}"
           echo "Rama:     ${{ github.ref_name }}"
+          echo "Carpeta:  ${DEPLOY_PATH}/"
           echo "Commit:   ${{ github.sha }}"
           echo "Actor:    ${{ github.actor }}"
           echo "=================================================="
