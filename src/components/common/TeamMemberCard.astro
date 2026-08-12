@@ -11,9 +11,11 @@ import type { ICoreTeamMember } from '@/types/index';
 interface Props {
   member: ICoreTeamMember;
   glowColor?: string;
+  glowColor?: string;
   class?: string;
 }
 
+const { member, glowColor = 'rgba(139,92,246,0.35)', class: className } = Astro.props;
 const { member, glowColor = 'rgba(139,92,246,0.35)', class: className } = Astro.props;
 
 function getInitials(name: string): string {
@@ -105,6 +107,7 @@ const hasImage = member.image && member.image.trim().length > 0;
   }
   .team-card:hover {
     background: var(--sbg-bg-surface);
+    background: var(--sbg-bg-surface);
     border-color: var(--sbg-accent-border);
     transform: translateY(-3px);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
@@ -143,6 +146,7 @@ const hasImage = member.image && member.image.trim().length > 0;
     color: var(--sbg-text-subtle); text-decoration: none;
     transition: color 200ms ease-out, background 200ms ease-out;
   }
+  .social-link:hover { color: var(--sbg-accent-light); background: rgba(139, 92, 246, 0.1); }
   .social-link:hover { color: var(--sbg-accent-light); background: rgba(139, 92, 246, 0.1); }
   .sr-only {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
