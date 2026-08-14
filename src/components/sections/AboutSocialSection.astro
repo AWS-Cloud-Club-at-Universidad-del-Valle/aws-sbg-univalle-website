@@ -1,11 +1,10 @@
 ---
 /**
- * AboutSocialSection — Sección de enlaces sociales para la página About.
+ * AboutSocialSection — Sección de redes sociales prominente y visual.
  *
- * Renderiza los links a redes sociales del grupo como tarjetas prominentes
- * con icono SVG inline, nombre de plataforma y efecto glow al hover.
- *
- * Cumple WCAG 2.1 AA: área táctil mínima 44×44px, focus-visible, aria-label.
+ * Tarjetas grandes con icono, nombre de plataforma y descripción corta.
+ * Cada red tiene su color distintivo para identificación inmediata.
+ * Responsive: 1 col mobile, 2 col tablet, 4 col desktop.
  */
 
 import { ABOUT_SOCIAL_LINKS } from '@/lib/constants';
@@ -15,56 +14,109 @@ interface Props {
 }
 
 const { class: className = '' } = Astro.props;
+
+// Platform-specific colors and descriptions
+const platformMeta: Record<string, { color: string; bg: string; desc: string }> = {
+  whatsapp: { color: '#25D366', bg: 'rgba(37,211,102,0.1)', desc: 'Únete al canal' },
+  instagram: { color: '#E4405F', bg: 'rgba(228,64,95,0.1)', desc: 'Contenido y eventos' },
+  youtube: { color: '#FF0000', bg: 'rgba(255,0,0,0.08)', desc: 'Workshops grabados' },
+  email: { color: '#A78BFA', bg: 'rgba(139,92,246,0.1)', desc: 'Escríbenos' },
+  linkedin: { color: '#0A66C2', bg: 'rgba(10,102,194,0.1)', desc: 'Networking' },
+  github: { color: '#E5E7EB', bg: 'rgba(229,231,235,0.08)', desc: 'Proyectos open source' },
+};
 ---
 
 <section
   aria-labelledby="social-heading"
-  class:list={['relative overflow-hidden py-16 sm:py-20', className]}
-  data-animate
+  class:list={['relative overflow-hidden py-20 sm:py-24', className]}
 >
-  <!-- Dot grid pattern -->
+  <!-- Background -->
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute inset-0 opacity-[0.025]"
+    class="pointer-events-none absolute inset-0 opacity-[0.02]"
     style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"
   ></div>
-  <!-- Floating shape decorativa -->
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute bottom-10 right-10 hidden sm:block h-2.5 w-2.5 rounded-full opacity-15"
-    style="background: var(--sbg-accent); animation: float-circle 7s ease-in-out infinite 0.5s;"
+    class="pointer-events-none absolute top-0 left-1/3 h-[40vh] w-[40vw] opacity-20"
+    style="background:radial-gradient(ellipse at center,rgba(139,92,246,0.05) 0%,transparent 70%);"
   ></div>
 
   <div class="container-sbg">
-    <h2
-      id="social-heading"
-      class="mb-10 text-center text-2xl sm:text-3xl"
-    >
-      Conéctate con nosotros
-    </h2>
+    <!-- Header -->
+    <div class="text-center mb-12" data-animate>
+      <span class="code-label mb-3 inline-block"># síguenos</span>
+      <h2
+        id="social-heading"
+        class="text-[2rem] leading-[1.1] sm:text-[2.6rem]"
+      >
+        Encuéntranos en <span class="text-[var(--sbg-accent-light)]">redes</span>
+      </h2>
+      <p class="mt-3 max-w-md mx-auto text-sm leading-relaxed text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
+        Cada plataforma tiene un propósito. Síguenos donde más te convenga.
+      </p>
+    </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
-      {ABOUT_SOCIAL_LINKS.filter(link => link.href).map((link) => (
-        <a
-          href={link.href}
-          aria-label={link.ariaLabel}
-          target={link.external ? '_blank' : undefined}
-          rel={link.external ? 'noopener noreferrer' : undefined}
-          class="social-card flex flex-col items-center justify-center gap-2 rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-elevated)] p-5 min-w-[100px] min-h-[100px] transition-all duration-200 hover:scale-105 hover:border-[var(--sbg-accent-border)] focus-visible:ring-2 focus-visible:ring-[var(--sbg-accent)] focus-visible:outline-none"
-          style={`--glow-color: ${link.glowColor || 'transparent'}`}
-        >
-          <span class="[&>svg]:w-7 [&>svg]:h-7 text-[var(--sbg-text-muted)]" set:html={link.icon} />
-          <span class="text-[0.72rem] text-[var(--sbg-text-muted)]" style="font-family:'Space Mono',monospace;">
-            {link.platform}
-          </span>
-        </a>
-      ))}
+    <!-- Social grid -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto">
+      {ABOUT_SOCIAL_LINKS.filter(link => link.href).map((link) => {
+        const meta = platformMeta[link.key] || { color: '#A78BFA', bg: 'rgba(139,92,246,0.1)', desc: '' };
+        return (
+          <a
+            href={link.href}
+            aria-label={link.ariaLabel}
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener noreferrer' : undefined}
+            data-animate
+            class="social-card group relative flex flex-col items-center justify-center gap-3 rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-7 min-h-[160px] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:outline-offset-2"
+            style={`--card-color: ${meta.color}; --card-bg: ${meta.bg};`}
+          >
+            <!-- Hover glow -->
+            <div
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              style={`box-shadow: 0 0 40px ${meta.bg}, inset 0 0 30px ${meta.bg};`}
+            ></div>
+
+            <!-- Bottom accent line -->
+            <div
+              aria-hidden="true"
+              class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-0 rounded-full transition-all duration-500 group-hover:w-2/3"
+              style={`background: linear-gradient(90deg, transparent, ${meta.color}, transparent);`}
+            ></div>
+
+            <!-- Icon container -->
+            <div
+              class="relative z-10 flex h-14 w-14 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+              style={`background: ${meta.bg}; border: 1px solid ${meta.color}20;`}
+            >
+              <span class="[&>svg]:w-6 [&>svg]:h-6 transition-colors duration-300" style={`color: ${meta.color};`} set:html={link.icon} />
+            </div>
+
+            <!-- Platform name -->
+            <span
+              class="relative z-10 text-sm font-bold text-white"
+              style="font-family:'Space Mono',monospace;"
+            >
+              {link.platform}
+            </span>
+
+            <!-- Description -->
+            <span
+              class="relative z-10 text-[11px] text-[var(--sbg-text-subtle)] text-center"
+              style="font-family:'Nunito Sans',sans-serif;"
+            >
+              {meta.desc}
+            </span>
+          </a>
+        );
+      })}
     </div>
   </div>
 </section>
 
 <style>
   .social-card:hover {
-    box-shadow: 0 0 20px var(--glow-color);
+    border-color: color-mix(in srgb, var(--card-color) 30%, transparent);
   }
 </style>
