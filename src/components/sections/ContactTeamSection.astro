@@ -150,15 +150,9 @@ const glowColors = [
       >
         Las personas que lideran cada área de la comunidad.
       </p>
-      <p
-        class="mt-4 max-w-xl text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
-        style="font-family:'Nunito Sans',sans-serif;"
-      >
-        Las personas que lideran cada área de la comunidad.
-      </p>
     </div>
 
-    <div id="team-grid" class="flex flex-col items-center gap-8">
+    <div id="team-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {CORE_TEAM_MEMBERS.map((member, i) => (
         <TeamMemberCard member={member} glowColor={glowColors[i] || glowColors[0]} />
       ))}
