@@ -24,10 +24,13 @@ const navIcons: Record<string, string> = {
 <!-- ── Top bar mobile (solo < 1024px) ── -->
 <div class="fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between border-b border-[var(--sbg-border)] bg-[var(--sbg-sidebar-bg)]/95 backdrop-blur-md px-4 lg:hidden">
   <a href="/" aria-label="AWS SBG Univalle" class="flex items-center gap-2.5">
-    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--sbg-orange)] to-[var(--sbg-accent)] shadow-md shadow-[rgba(255,153,0,0.2)]">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
-        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
-      </svg>
+    <div class="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden bg-[var(--sbg-bg-elevated)] shadow-md shadow-[rgba(255,153,0,0.15)]">
+      <img
+        src="https://d17sfh4fi052g2.cloudfront.net/members/logo.jpeg"
+        alt="Logo AWS SBG Univalle"
+        class="h-full w-full object-cover"
+        loading="eager"
+      />
     </div>
     <div>
       <span class="font-mono text-[11px] font-bold text-[var(--sbg-text)] block leading-none">AWS SBG</span>
@@ -76,23 +79,18 @@ const navIcons: Record<string, string> = {
          style="background-image: radial-gradient(circle, #fff 0.5px, transparent 0.5px); background-size: 20px 20px;"></div>
   </div>
 
-  <!-- Logo area with visual presence -->
-  <div class="relative border-b border-[var(--sbg-border)] px-5 py-5">
-    <a href="/" class="flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded-lg" aria-label="AWS SBG Univalle - Inicio">
-      <!-- Logo icon with animated ring -->
-      <div class="relative">
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--sbg-orange)] to-[var(--sbg-accent)] shadow-lg shadow-[rgba(255,153,0,0.25)] transition-all duration-300 group-hover:shadow-xl group-hover:shadow-[rgba(255,153,0,0.35)] group-hover:scale-105">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
-          </svg>
-        </div>
-        <!-- Animated orbit ring -->
-        <div class="absolute inset-[-4px] rounded-[14px] border border-[var(--sbg-orange)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-[spin_8s_linear_infinite]"></div>
+  <!-- Logo -->
+  <div class="relative border-b border-[var(--sbg-border)] px-4 py-5">
+    <a href="/" class="flex flex-col items-center gap-2 group focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded-lg" aria-label="AWS SBG Univalle - Inicio">
+      <div class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all duration-300 group-hover:scale-105">
+        <img
+          src="https://d17sfh4fi052g2.cloudfront.net/members/logo.jpeg"
+          alt="Logo AWS SBG Univalle"
+          class="h-full w-full object-cover"
+          loading="eager"
+        />
       </div>
-      <div class="relative">
-        <p class="font-mono text-[13px] font-bold leading-none text-white tracking-wide">AWS SBG</p>
-        <p class="mt-1.5 font-mono text-[9px] text-[var(--sbg-orange)] tracking-[0.15em] uppercase">Universidad del Valle</p>
-      </div>
+      <p class="font-mono text-[10px] font-bold leading-tight text-[var(--sbg-text-muted)] text-center tracking-wide">AWS SBG Univalle</p>
     </a>
   </div>
 
