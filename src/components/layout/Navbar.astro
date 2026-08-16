@@ -26,7 +26,7 @@ const navIcons: Record<string, string> = {
   <a href="/" aria-label="AWS SBG Univalle" class="flex items-center gap-2.5">
     <div class="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden bg-[var(--sbg-bg-elevated)] shadow-md shadow-[rgba(255,153,0,0.15)]">
       <img
-        src="https://d17sfh4fi052g2.cloudfront.net/members/logo.jpeg"
+        src="https://d17sfh4fi052g2.cloudfront.net/logos/logo_aws_sbg_univalle.jpeg"
         alt="Logo AWS SBG Univalle"
         class="h-full w-full object-cover"
         loading="eager"
@@ -84,7 +84,7 @@ const navIcons: Record<string, string> = {
     <a href="/" class="flex flex-col items-center gap-2 group focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded-lg" aria-label="AWS SBG Univalle - Inicio">
       <div class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all duration-300 group-hover:scale-105">
         <img
-          src="https://d17sfh4fi052g2.cloudfront.net/members/logo.jpeg"
+          src="https://d17sfh4fi052g2.cloudfront.net/logos/logo_aws_sbg_univalle.jpeg"
           alt="Logo AWS SBG Univalle"
           class="h-full w-full object-cover"
           loading="eager"
@@ -183,7 +183,7 @@ const navIcons: Record<string, string> = {
   class="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
 
 <script is:inline>
-(function() {
+document.addEventListener('astro:page-load', function() {
   var toggle   = document.getElementById('mob-toggle');
   var sidebar  = document.getElementById('sidebar');
   var overlay  = document.getElementById('mob-overlay');
@@ -198,8 +198,8 @@ const navIcons: Record<string, string> = {
     overlay.classList.add('opacity-100');
     toggle.setAttribute('aria-expanded','true');
     document.body.style.overflow = 'hidden';
-    iconOpen.classList.add('hidden');
-    iconClose.classList.remove('hidden');
+    if (iconOpen) iconOpen.classList.add('hidden');
+    if (iconClose) iconClose.classList.remove('hidden');
   }
   function close() {
     sidebar.classList.add('-translate-x-full');
@@ -208,9 +208,8 @@ const navIcons: Record<string, string> = {
     overlay.classList.remove('opacity-100');
     toggle.setAttribute('aria-expanded','false');
     document.body.style.overflow = '';
-    iconOpen.classList.remove('hidden');
-    iconClose.classList.add('hidden');
-    toggle.focus();
+    if (iconOpen) iconOpen.classList.remove('hidden');
+    if (iconClose) iconClose.classList.add('hidden');
   }
 
   toggle.addEventListener('click', function() {
@@ -224,5 +223,5 @@ const navIcons: Record<string, string> = {
     });
   });
   window.matchMedia('(min-width:1024px)').addEventListener('change', function(e) { if (e.matches) close(); });
-})();
+});
 </script>

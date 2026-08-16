@@ -83,7 +83,7 @@ const { class: className = '' } = Astro.props;
         </div>
       </div>
 
-      <!-- Columna derecha: panel de servicio activo -->
+      <!-- Columna derecha: panel de servicio activo (desktop) -->
       <div class="hero-animate hero-animate-delay-3 hidden lg:flex flex-col items-center justify-center gap-4 select-none pointer-events-none">
         <span class="code-label"># mueve el cursor para interactuar</span>
         <div id="active-service-label"
@@ -91,6 +91,17 @@ const { class: className = '' } = Astro.props;
           style="min-width:230px;min-height:68px;backdrop-filter:blur(8px);">
           <p id="svc-name" class="text-base font-bold text-[var(--sbg-text)]" style="font-family:'Space Mono',monospace;"></p>
           <p id="svc-desc" class="mt-1.5 text-[11px] text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;line-height:1.5;"></p>
+        </div>
+      </div>
+
+      <!-- Panel de servicio activo (mobile) -->
+      <div class="hero-animate hero-animate-delay-4 flex lg:hidden flex-col items-center mt-8 select-none pointer-events-none">
+        <span class="code-label text-[10px] mb-2"># toca las bolitas para explorar</span>
+        <div id="active-service-label-mobile"
+          class="rounded-xl border border-[var(--sbg-border-accent)] bg-[var(--sbg-bg-surface)] px-5 py-3 text-center transition-all duration-300 min-h-[56px] min-w-[200px]"
+          style="backdrop-filter:blur(8px);">
+          <p id="svc-name-mobile" class="text-sm font-bold text-[var(--sbg-text)]" style="font-family:'Space Mono',monospace;"></p>
+          <p id="svc-desc-mobile" class="mt-1 text-[10px] text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;line-height:1.4;"></p>
         </div>
       </div>
 
@@ -115,6 +126,8 @@ document.addEventListener('astro:page-load', function initHeroCanvas() {
   var spotlight = document.getElementById('cursor-spotlight');
   var svcName   = document.getElementById('svc-name');
   var svcDesc   = document.getElementById('svc-desc');
+  var svcNameMob = document.getElementById('svc-name-mobile');
+  var svcDescMob = document.getElementById('svc-desc-mobile');
   var section   = document.getElementById('hero-section');
   if (!canvas || !section) return;
 
@@ -247,10 +260,14 @@ document.addEventListener('astro:page-load', function initHeroCanvas() {
       hoveredNode = closestNode;
       if (svcName) svcName.textContent = closestNode.label;
       if (svcDesc) svcDesc.textContent = closestNode.desc;
+      if (svcNameMob) svcNameMob.textContent = closestNode.label;
+      if (svcDescMob) svcDescMob.textContent = closestNode.desc;
     } else if ((closestDist >= 200 || !mouse.active) && hoveredNode) {
       hoveredNode = null;
       if (svcName) svcName.textContent = '';
       if (svcDesc) svcDesc.textContent = '';
+      if (svcNameMob) svcNameMob.textContent = '';
+      if (svcDescMob) svcDescMob.textContent = '';
     }
 
     if (mouse.active) {
@@ -324,6 +341,16 @@ document.addEventListener('astro:page-load', function initHeroCanvas() {
     mouse.y = touch.clientY - rect.top;
     mouse.active = true;
   }, { passive: true });
+  section.addEventListener('touchstart', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var touch = e.touches[0];
+    mouse.x = touch.clientX - rect.left;
+    mouse.y = touch.clientY - rect.top;
+    mouse.active = true;
+  }, { passive: true });
+  section.addEventListener('touchend', function() {
+    mouse.active = false;
+  });
 
   var ro = new ResizeObserver(resize);
   ro.observe(canvas);
