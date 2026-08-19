@@ -25,6 +25,18 @@ const { class: className = '' } = Astro.props;
   <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.025]"
     style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"></div>
 
+  <!-- Logo AWS — visible solo en mobile/tablet (la columna derecha está oculta) -->
+  <div class="hero-animate hero-animate-delay-1 aws-logo-wrapper aws-logo-mobile">
+    <img
+      src="https://d17sfh4fi052g2.cloudfront.net/logos/logo_oficial_aws.png"
+      alt="AWS"
+      class="aws-logo"
+      loading="eager"
+      width="120"
+      height="72"
+    />
+  </div>
+
   <div class="container-sbg relative z-10 py-24 lg:py-32">
     <div class="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
 
@@ -83,8 +95,19 @@ const { class: className = '' } = Astro.props;
         </div>
       </div>
 
-      <!-- Columna derecha: panel de servicio activo (desktop) -->
-      <div class="hero-animate hero-animate-delay-3 hidden lg:flex flex-col items-center justify-center gap-4 select-none pointer-events-none">
+      <!-- Columna derecha: panel de servicio activo -->
+      <div class="hero-animate hero-animate-delay-3 hidden lg:flex flex-col items-center justify-center gap-4 select-none pointer-events-none relative">
+        <!-- Logo AWS — encima de la tarjeta interactiva, solo visible en desktop -->
+        <div class="aws-logo-wrapper aws-logo-desktop">
+          <img
+            src="https://d17sfh4fi052g2.cloudfront.net/logos/logo_oficial_aws.png"
+            alt=""
+            class="aws-logo pointer-events-auto"
+            loading="eager"
+            width="120"
+            height="72"
+          />
+        </div>
         <span class="code-label"># mueve el cursor para interactuar</span>
         <div id="active-service-label"
           class="rounded-xl border border-[var(--sbg-border-accent)] bg-[var(--sbg-bg-surface)] px-6 py-4 text-center transition-all duration-300"
@@ -119,6 +142,83 @@ const { class: className = '' } = Astro.props;
     </div>
   </div>
 </section>
+
+<style>
+  /* AWS Logo — posicionado encima de la tarjeta interactiva en desktop,
+     y en la esquina superior derecha del Hero en mobile/tablet. */
+
+  /* Versión mobile/tablet: posicionada respecto al <section#hero-section> */
+  .aws-logo-mobile {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Ocultar en desktop (donde se muestra la versión dentro de la columna derecha) */
+  @media (min-width: 1024px) {
+    .aws-logo-mobile {
+      display: none;
+    }
+  }
+
+  /* Versión desktop: se muestra como parte del flujo de la columna derecha,
+     centrada horizontalmente encima de la tarjeta interactiva. */
+  .aws-logo-desktop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .aws-logo {
+    width: 64px;
+    height: auto;
+    filter: drop-shadow(0 0 0px transparent);
+    transition: filter 300ms ease-out, transform 300ms ease-out;
+  }
+
+  .aws-logo:hover {
+    filter: brightness(1.1) drop-shadow(0 0 12px rgba(255, 153, 0, 0.5)) drop-shadow(0 0 24px rgba(255, 153, 0, 0.25));
+    transform: scale(1.06);
+  }
+
+  @media (min-width: 640px) {
+    .aws-logo-mobile {
+      top: 1.5rem;
+      right: 1.5rem;
+    }
+    .aws-logo {
+      width: 80px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .aws-logo {
+      width: 100px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .aws-logo {
+      width: 120px;
+    }
+  }
+
+  /* prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .aws-logo {
+      transition: none;
+    }
+    .aws-logo:hover {
+      transform: none;
+      filter: brightness(1.1) drop-shadow(0 0 12px rgba(255, 153, 0, 0.5));
+    }
+  }
+</style>
 
 <script is:inline>
 document.addEventListener('astro:page-load', function initHeroCanvas() {
