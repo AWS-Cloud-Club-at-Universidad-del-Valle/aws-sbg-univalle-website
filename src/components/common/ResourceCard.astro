@@ -3,6 +3,7 @@
  * ResourceCard — Tarjeta visual para un recurso educativo de AWS.
  *
  * Renderiza icono SVG, badge de categoría, título, descripción y enlace externo.
+ * Cursor-tracking glow idéntico al de TeamMemberCard.
  * Usa data-animate para animación de entrada al scroll via IntersectionObserver.
  */
 import type { IResource } from '@/types/index';
@@ -10,13 +11,35 @@ import type { IResource } from '@/types/index';
 interface Props {
   resource: IResource;
   accentColor: string;
+  glowColor?: string;
 }
 
-const { resource, accentColor } = Astro.props;
+const { resource, accentColor, glowColor = 'rgba(139,92,246,0.35)' } = Astro.props;
 const { title, description, url, category, icon } = resource;
 ---
 
-<article class="resource-card" data-animate>
+<article
+  class="resource-card group"
+  data-animate
+  data-glow-color={glowColor}
+>
+  <!-- Cursor-tracking glow -->
+  <div aria-hidden="true" class="resource-glow pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500"></div>
+
+  <!-- Outer glow on hover -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    style={`box-shadow: 0 0 30px ${glowColor.replace('0.35', '0.1')}, inset 0 0 20px ${glowColor.replace('0.35', '0.05')};`}
+  ></div>
+
+  <!-- Bottom accent line -->
+  <div
+    aria-hidden="true"
+    class="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-0 rounded-full transition-all duration-500 group-hover:w-2/3"
+    style={`background: linear-gradient(90deg, transparent, ${glowColor}, transparent);`}
+  ></div>
+
   <div class="card-wrapper">
     <!-- Icono SVG inline coloreado con accentColor -->
     <div class="icon-container">
@@ -80,17 +103,22 @@ const { title, description, url, category, icon } = resource;
 
 <style>
   .resource-card {
-    background: var(--sbg-bg-surface);
-    border: 1px solid var(--sbg-border);
-    border-radius: 0.75rem;
-    transition: transform 200ms ease-out, box-shadow 200ms ease-out, border-color 200ms ease-out;
+    position: relative; overflow: hidden;
+    background: rgba(33, 37, 46, 0.6);
+    border: 1px solid var(--sbg-border); border-radius: 0.75rem;
+    display: flex; flex-direction: column;
+    width: 100%;
+    transition: all 300ms ease-out;
   }
   .resource-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: var(--sbg-bg-surface);
+    border-color: var(--sbg-accent-border);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
   }
+  .resource-card:focus-within { outline: 2px solid var(--sbg-accent); outline-offset: 3px; }
   .card-wrapper {
+    position: relative; z-index: 10;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -126,8 +154,37 @@ const { title, description, url, category, icon } = resource;
   }
   .card-link:hover { color: var(--sbg-accent); }
   .link-icon { flex-shrink: 0; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+  }
   @media (prefers-reduced-motion: reduce) {
     .resource-card { transition: none; }
     .resource-card:hover { transform: none; }
   }
 </style>
+
+<script is:inline>
+document.addEventListener('astro:page-load', function() {
+  var cards = document.querySelectorAll('.resource-card');
+  if (!cards.length) return;
+
+  cards.forEach(function(card) {
+    var glow = card.querySelector('.resource-glow');
+    if (!glow) return;
+    var color = card.getAttribute('data-glow-color') || 'rgba(139,92,246,0.35)';
+
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      glow.style.background = 'radial-gradient(280px circle at ' + x + 'px ' + y + 'px, ' + color + ' 0%, transparent 70%)';
+      glow.style.opacity = '1';
+    });
+
+    card.addEventListener('mouseleave', function() {
+      glow.style.opacity = '0';
+    });
+  });
+});
+</script>

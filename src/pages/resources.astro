@@ -60,11 +60,20 @@ import { RESOURCES, RESOURCE_ACCENT_COLORS } from '@/lib/constants';
       </h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
-        {RESOURCES.map((resource, i) => (
-          <div class:list={['lg:col-span-2', i === 3 && 'lg:col-start-2']}>
-            <ResourceCard resource={resource} accentColor={RESOURCE_ACCENT_COLORS[i]} />
-          </div>
-        ))}
+        {RESOURCES.map((resource, i) => {
+          const glowColors = [
+            'rgba(139,92,246,0.35)',
+            'rgba(255,153,0,0.35)',
+            'rgba(76,175,80,0.35)',
+            'rgba(33,150,243,0.35)',
+            'rgba(255,153,0,0.35)',
+          ];
+          return (
+            <div class:list={['lg:col-span-2', i === 3 && 'lg:col-start-2']}>
+              <ResourceCard resource={resource} accentColor={RESOURCE_ACCENT_COLORS[i]} glowColor={glowColors[i] || glowColors[0]} />
+            </div>
+          );
+        })}
       </div>
     </div>
   </section>
