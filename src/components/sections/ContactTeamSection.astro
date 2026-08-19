@@ -1,0 +1,281 @@
+---
+/**
+ * ContactTeamSection — Sección Core Team con layout vertical y background cloud/AWS.
+ *
+ * Cards en una sola columna, centradas, con scroll vertical natural.
+ * Background rico inspirado en infraestructura cloud: circuitos, nodos,
+ * hexágonos, nubes y conexiones con animaciones sutiles.
+ * Cursor-tracking glow en cada card.
+ */
+import { CORE_TEAM_MEMBERS } from '@/lib/constants';
+import TeamMemberCard from '@/components/common/TeamMemberCard.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const glowColors = [
+  'rgba(255,153,0,0.35)',
+  'rgba(139,92,246,0.35)',
+  'rgba(1,168,141,0.35)',
+  'rgba(46,115,184,0.35)',
+  'rgba(255,153,0,0.35)',
+  'rgba(139,92,246,0.35)',
+];
+---
+
+<section
+  aria-labelledby="core-team-heading"
+  class:list={['relative py-16 sm:py-20 overflow-hidden', className]}
+  class:list={['relative py-16 sm:py-20 overflow-hidden', className]}
+>
+  <!-- BG Layer 1: Deep radial gradients for depth -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+    <div class="absolute top-0 left-0 h-[60%] w-[50%] opacity-40" style="background:radial-gradient(ellipse at 15% 20%,rgba(139,92,246,0.08) 0%,transparent 55%);"></div>
+    <div class="absolute bottom-0 right-0 h-[55%] w-[45%] opacity-35" style="background:radial-gradient(ellipse at 85% 80%,rgba(255,153,0,0.06) 0%,transparent 55%);"></div>
+    <div class="absolute top-[40%] right-[10%] h-[40%] w-[35%] opacity-25" style="background:radial-gradient(ellipse at 70% 50%,rgba(33,150,243,0.05) 0%,transparent 50%);"></div>
+    <div class="absolute top-[20%] left-[55%] h-[30%] w-[30%] opacity-20" style="background:radial-gradient(circle at 50% 50%,rgba(139,92,246,0.04) 0%,transparent 50%);"></div>
+  </div>
+
+  <!-- BG Layer 2: Dot grid -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.018]" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:32px 32px;"></div>
+
+  <!-- BG Layer 3: Left side — Cloud architecture decorations -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden hidden sm:block">
+    <svg class="absolute left-0 top-0 h-full w-[20%] lg:w-[25%]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 1000" preserveAspectRatio="xMinYMin slice" fill="none">
+      <!-- Circuit lines left -->
+      <path d="M180 50 L120 50 L120 120 L80 120 L80 200" class="circuit-line" />
+      <path d="M160 180 L130 180 L130 280 L100 280 L100 350" class="circuit-line" />
+      <path d="M140 400 L100 400 L100 480 L60 480 L60 560" class="circuit-line" />
+      <path d="M180 550 L130 550 L130 650 L90 650 L90 720" class="circuit-line" />
+      <path d="M160 750 L110 750 L110 830 L70 830 L70 900" class="circuit-line" />
+
+      <!-- Circuit nodes (intersections) -->
+      <circle cx="120" cy="50" r="3" class="circuit-node cn-1" />
+      <circle cx="80" cy="120" r="2.5" class="circuit-node cn-2" />
+      <circle cx="80" cy="200" r="3.5" class="circuit-node-alt cn-3" />
+      <circle cx="130" cy="180" r="2" class="circuit-node cn-1" />
+      <circle cx="100" cy="280" r="3" class="circuit-node-alt cn-2" />
+      <circle cx="100" cy="350" r="2.5" class="circuit-node cn-3" />
+      <circle cx="100" cy="400" r="2" class="circuit-node cn-1" />
+      <circle cx="60" cy="480" r="3" class="circuit-node-alt cn-2" />
+      <circle cx="60" cy="560" r="3.5" class="circuit-node cn-3" />
+      <circle cx="130" cy="550" r="2.5" class="circuit-node-alt cn-1" />
+      <circle cx="90" cy="650" r="3" class="circuit-node cn-2" />
+      <circle cx="90" cy="720" r="2" class="circuit-node-alt cn-3" />
+      <circle cx="110" cy="750" r="2.5" class="circuit-node cn-1" />
+      <circle cx="70" cy="830" r="3" class="circuit-node-alt cn-2" />
+
+      <!-- Hexagons (cloud infrastructure) -->
+      <polygon points="50,270 65,260 80,270 80,290 65,300 50,290" class="hex-shape" />
+      <polygon points="30,520 45,510 60,520 60,540 45,550 30,540" class="hex-shape hex-alt" />
+      <polygon points="60,780 75,770 90,780 90,800 75,810 60,800" class="hex-shape" />
+
+      <!-- Cloud shapes -->
+      <path d="M20 160 Q30 145 45 150 Q55 140 65 150 Q75 145 80 155 Q85 165 75 170 L30 170 Q15 170 20 160Z" class="cloud-shape" />
+      <path d="M40 620 Q50 605 65 610 Q75 600 85 610 Q95 605 100 615 Q105 625 95 630 L50 630 Q35 630 40 620Z" class="cloud-shape cloud-alt" />
+    </svg>
+
+    <!-- Right side decorations -->
+    <svg class="absolute right-0 top-0 h-full w-[20%] lg:w-[25%]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 1000" preserveAspectRatio="xMaxYMin slice" fill="none">
+      <!-- Circuit lines right -->
+      <path d="M20 80 L70 80 L70 160 L110 160 L110 240" class="circuit-line" />
+      <path d="M40 300 L80 300 L80 380 L120 380 L120 460" class="circuit-line" />
+      <path d="M20 500 L60 500 L60 580 L100 580 L100 650" class="circuit-line" />
+      <path d="M50 700 L90 700 L90 780 L130 780 L130 860" class="circuit-line" />
+      <path d="M30 880 L80 880 L80 950" class="circuit-line" />
+
+      <!-- Circuit nodes right -->
+      <circle cx="70" cy="80" r="3" class="circuit-node-alt cn-2" />
+      <circle cx="110" cy="160" r="2.5" class="circuit-node cn-3" />
+      <circle cx="110" cy="240" r="3" class="circuit-node-alt cn-1" />
+      <circle cx="80" cy="300" r="2" class="circuit-node cn-2" />
+      <circle cx="120" cy="380" r="3.5" class="circuit-node-alt cn-3" />
+      <circle cx="120" cy="460" r="2.5" class="circuit-node cn-1" />
+      <circle cx="60" cy="500" r="3" class="circuit-node-alt cn-2" />
+      <circle cx="100" cy="580" r="2" class="circuit-node cn-3" />
+      <circle cx="100" cy="650" r="3.5" class="circuit-node-alt cn-1" />
+      <circle cx="90" cy="700" r="2.5" class="circuit-node cn-2" />
+      <circle cx="130" cy="780" r="3" class="circuit-node-alt cn-3" />
+      <circle cx="130" cy="860" r="2" class="circuit-node cn-1" />
+
+      <!-- Hexagons right -->
+      <polygon points="120,120 135,110 150,120 150,140 135,150 120,140" class="hex-shape hex-alt" />
+      <polygon points="140,430 155,420 170,430 170,450 155,460 140,450" class="hex-shape" />
+      <polygon points="100,700 115,690 130,700 130,720 115,730 100,720" class="hex-shape hex-alt" />
+
+      <!-- Cloud shapes right -->
+      <path d="M100 30 Q110 15 125 20 Q135 10 145 20 Q155 15 160 25 Q165 35 155 40 L110 40 Q95 40 100 30Z" class="cloud-shape" />
+      <path d="M120 560 Q130 545 145 550 Q155 540 165 550 Q175 545 180 555 Q185 565 175 570 L130 570 Q115 570 120 560Z" class="cloud-shape cloud-alt" />
+      <path d="M80 900 Q90 885 105 890 Q115 880 125 890 Q135 885 140 895 Q145 905 135 910 L90 910 Q75 910 80 900Z" class="cloud-shape" />
+    </svg>
+  </div>
+
+  <!-- BG Layer 4: Floating geometric elements -->
+  <div aria-hidden="true" class="pointer-events-none absolute top-[8%] left-[4%] opacity-[0.07] hidden lg:block" style="animation:float-square 14s ease-in-out infinite;">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="32" height="32" stroke="var(--sbg-accent-light)" stroke-width="1" transform="rotate(15 24 24)"/><rect x="14" y="14" width="20" height="20" stroke="var(--sbg-orange)" stroke-width="0.5" opacity="0.6" transform="rotate(15 24 24)"/></svg>
+  </div>
+  <div aria-hidden="true" class="pointer-events-none absolute top-[30%] right-[3%] opacity-[0.06] hidden lg:block" style="animation:float-rhombus 12s ease-in-out infinite 2s;">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><polygon points="28,4 52,28 28,52 4,28" stroke="var(--sbg-accent)" stroke-width="0.8"/><polygon points="28,14 42,28 28,42 14,28" stroke="var(--sbg-orange)" stroke-width="0.5" opacity="0.5"/></svg>
+  </div>
+  <div aria-hidden="true" class="pointer-events-none absolute bottom-[25%] left-[2%] opacity-[0.06] hidden lg:block" style="animation:float-triangle 16s ease-in-out infinite 1s;">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><polygon points="22,4 40,38 4,38" stroke="var(--sbg-accent-light)" stroke-width="0.8"/></svg>
+  </div>
+  <div aria-hidden="true" class="pointer-events-none absolute bottom-[10%] right-[5%] opacity-[0.05] hidden lg:block" style="animation:float-circle 13s ease-in-out infinite 3s;">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke="var(--sbg-orange)" stroke-width="0.8"/><circle cx="20" cy="20" r="8" stroke="var(--sbg-accent)" stroke-width="0.5" opacity="0.6"/></svg>
+  </div>
+
+  <!-- BG Layer 5: Ambient glow particles -->
+  <div aria-hidden="true" class="pointer-events-none absolute top-[15%] left-[12%] w-1.5 h-1.5 rounded-full hidden sm:block" style="background:var(--sbg-accent);box-shadow:0 0 6px 2px var(--sbg-accent);animation:particle-fade 5s ease-in-out infinite;"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute top-[45%] right-[10%] w-1 h-1 rounded-full hidden sm:block" style="background:var(--sbg-orange);box-shadow:0 0 5px 2px var(--sbg-orange);animation:particle-fade 6s ease-in-out infinite 2s;"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute bottom-[35%] left-[8%] w-1 h-1 rounded-full hidden sm:block" style="background:var(--sbg-accent-light);box-shadow:0 0 5px 2px var(--sbg-accent-light);animation:particle-fade 7s ease-in-out infinite 1s;"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute top-[65%] right-[6%] w-1.5 h-1.5 rounded-full hidden lg:block" style="background:var(--sbg-orange);box-shadow:0 0 6px 2px var(--sbg-orange);animation:particle-fade 5.5s ease-in-out infinite 3s;"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute bottom-[15%] right-[15%] w-1 h-1 rounded-full hidden lg:block" style="background:var(--sbg-accent);box-shadow:0 0 4px 1px var(--sbg-accent);animation:particle-fade 8s ease-in-out infinite 4s;"></div>
+
+  <!-- Content -->
+  <div class="container-sbg relative z-10">
+    <div class="max-w-3xl mb-12" data-animate>
+      <span class="code-label mb-4 inline-block"># contact.team</span>
+      <h2
+        id="core-team-heading"
+        class="text-[2rem] leading-[1.1] sm:text-[2.6rem] lg:text-[3rem]"
+      >
+        Core Team
+      </h2>
+      <p
+        class="mt-4 max-w-xl text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
+        style="font-family:'Nunito Sans',sans-serif;"
+      >
+        Las personas que lideran cada área de la comunidad.
+      </p>
+    </div>
+
+    <div id="team-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {CORE_TEAM_MEMBERS.map((member, i) => (
+        <TeamMemberCard member={member} glowColor={glowColors[i] || glowColors[0]} />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Circuit lines — dashed with flowing animation */
+  .circuit-line {
+    stroke: var(--sbg-accent);
+    stroke-width: 0.8;
+    opacity: 0.09;
+    stroke-dasharray: 6 8;
+    animation: circuit-flow 25s linear infinite;
+  }
+
+  /* Circuit nodes with glow pulse */
+  .circuit-node {
+    fill: var(--sbg-accent);
+    opacity: 0.10;
+  }
+  .circuit-node-alt {
+    fill: var(--sbg-orange);
+    opacity: 0.08;
+  }
+  .cn-1 { animation: node-breathe 4s ease-in-out infinite; }
+  .cn-2 { animation: node-breathe 5.5s ease-in-out infinite 1.8s; }
+  .cn-3 { animation: node-breathe 7s ease-in-out infinite 3.5s; }
+
+  /* Hexagon shapes */
+  .hex-shape {
+    stroke: var(--sbg-accent);
+    stroke-width: 0.7;
+    fill: none;
+    opacity: 0.06;
+    animation: hex-pulse 8s ease-in-out infinite;
+  }
+  .hex-alt {
+    stroke: var(--sbg-orange);
+    animation-delay: 3s;
+  }
+
+  /* Cloud shapes */
+  .cloud-shape {
+    stroke: var(--sbg-accent-light);
+    stroke-width: 0.6;
+    fill: none;
+    opacity: 0.05;
+    animation: cloud-drift 18s ease-in-out infinite;
+  }
+  .cloud-alt {
+    stroke: var(--sbg-orange);
+    animation-delay: 6s;
+  }
+
+  /* Keyframes */
+  @keyframes circuit-flow {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -120; }
+  }
+
+  @keyframes node-breathe {
+    0%, 100% { opacity: 0.06; transform: scale(1); }
+    50% { opacity: 0.20; transform: scale(1.3); }
+  }
+
+  @keyframes hex-pulse {
+    0%, 100% { opacity: 0.04; }
+    50% { opacity: 0.10; }
+  }
+
+  @keyframes cloud-drift {
+    0%, 100% { transform: translateX(0); opacity: 0.04; }
+    50% { transform: translateX(4px); opacity: 0.08; }
+  }
+
+  @keyframes particle-fade {
+    0%, 100% { opacity: 0; transform: scale(0.8); }
+    50% { opacity: 0.7; transform: scale(1.2); }
+  }
+
+  /* Responsive: reduce on mobile */
+  @media (max-width: 639px) {
+    .circuit-line { opacity: 0.04; }
+    .circuit-node, .circuit-node-alt { opacity: 0.05; }
+    .hex-shape, .cloud-shape { opacity: 0.03; }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .circuit-line, .cn-1, .cn-2, .cn-3,
+    .hex-shape, .hex-alt, .cloud-shape, .cloud-alt {
+      animation: none;
+    }
+    .circuit-node { opacity: 0.08; }
+    .circuit-node-alt { opacity: 0.06; }
+    .hex-shape { opacity: 0.05; }
+    .cloud-shape { opacity: 0.04; }
+  }
+</style>
+
+<script is:inline>
+document.addEventListener('astro:page-load', function() {
+  var cards = document.querySelectorAll('.team-card');
+  if (!cards.length) return;
+
+  cards.forEach(function(card) {
+    var glow = card.querySelector('.team-glow');
+    if (!glow) return;
+    var color = card.getAttribute('data-glow-color') || 'rgba(139,92,246,0.35)';
+
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      glow.style.background = 'radial-gradient(280px circle at ' + x + 'px ' + y + 'px, ' + color + ' 0%, transparent 70%)';
+      glow.style.opacity = '1';
+    });
+
+    card.addEventListener('mouseleave', function() {
+      glow.style.opacity = '0';
+    });
+  });
+});
+</script>

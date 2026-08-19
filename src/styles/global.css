@@ -56,8 +56,8 @@
 
   /* Texto - colores como en la imagen de referencia */
   --sbg-text:            #e5e7eb;  /* Gris claro blanquecino como en la imagen */
-  --sbg-text-muted:      #9ca3af;  /* Gris medio para texto secundario */
-  --sbg-text-subtle:     #6b7280;  /* Gris sutil para labels */
+  --sbg-text-muted:      #a3aab6;  /* Gris medio para texto secundario — mejorado para contraste AA */
+  --sbg-text-subtle:     #8b929e;  /* Gris sutil para labels — mejorado para contraste AA */
 
   /* Semánticos */
   --sbg-success: #4CAF50;

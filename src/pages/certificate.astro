@@ -26,28 +26,7 @@ const certifications = [
       { name: 'Facturación, precios y soporte', weight: '12%', desc: 'Modelos de precios, AWS Free Tier, planes de soporte, Cost Explorer.' },
     ],
   },
-  {
-    id: 'ai-practitioner',
-    name: 'AWS Certified AI Practitioner',
-    code: 'AIF-C01',
-    tagline: 'Domina la IA generativa en AWS',
-    description: 'Valida conocimiento de inteligencia artificial, machine learning e IA generativa usando herramientas AWS. Una de las certificaciones más demandadas del mercado actual.',
-    color: '#A78BFA',
-    colorBg: 'rgba(139,92,246,0.1)',
-    colorGlow: 'rgba(139,92,246,0.06)',
-    duration: '120 min',
-    questions: '85',
-    passingScore: '700/1000',
-    officialCost: '$100 USD',
-    url: 'https://aws.amazon.com/certification/certified-ai-practitioner/',
-    domains: [
-      { name: 'Fundamentos de IA y ML', weight: '20%', desc: 'Tipos de aprendizaje, ciclo de vida ML, métricas de evaluación, sesgo y fairness.' },
-      { name: 'IA generativa', weight: '24%', desc: 'LLMs, transformers, prompt engineering, RAG, fine-tuning, modelos fundacionales.' },
-      { name: 'Aplicaciones de IA/ML', weight: '28%', desc: 'Amazon Bedrock, SageMaker, Rekognition, Comprehend, Textract, Polly, Lex.' },
-      { name: 'IA responsable', weight: '14%', desc: 'Transparencia, explicabilidad, gobernanza de IA, AWS AI Service Cards.' },
-      { name: 'Seguridad de IA', weight: '14%', desc: 'Protección de datos de entrenamiento, guardrails, privacidad, compliance.' },
-    ],
-  },
+
 ];
 
 const modules = [
@@ -69,14 +48,13 @@ const modules = [
 
 <BaseLayout
   title="Certifícate"
-  description="Prepárate para las certificaciones AWS con clases presenciales gratuitas. Cloud Practitioner y AI Practitioner en la Universidad del Valle."
+  description="Prepárate para la certificación AWS Cloud Practitioner con clases presenciales gratuitas en la Universidad del Valle."
 >
   <!-- Hero -->
   <section class="relative overflow-hidden py-24 lg:py-32">
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[70vh]"
       style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(255,153,0,0.07) 0%,transparent 65%);"></div>
-    <div aria-hidden="true" class="pointer-events-none absolute bottom-0 left-0 h-[50vh] w-[50vw]"
-      style="background:radial-gradient(ellipse at 20% 100%,rgba(139,92,246,0.05) 0%,transparent 60%);"></div>
+
     <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.015]"
       style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:40px 40px;"></div>
 
@@ -183,7 +161,7 @@ const modules = [
                   <span class="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md" style={`background: ${cert.colorBg}; color: ${cert.color}; font-family:'Space Mono',monospace;`}>
                     {cert.code}
                   </span>
-                  <span class="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md bg-[var(--sbg-bg-elevated)] text-[var(--sbg-text-subtle)]" style="font-family:'Space Mono',monospace;">
+                  <span class="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md bg-[var(--sbg-bg-elevated)] text-[var(--sbg-text-muted)]" style="font-family:'Space Mono',monospace;">
                     Foundational
                   </span>
                   <span class="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md bg-green-500/10 text-green-400" style="font-family:'Space Mono',monospace;">
@@ -200,7 +178,7 @@ const modules = [
 
               <!-- Expand -->
               <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--sbg-bg-elevated)] border border-[var(--sbg-border)] transition-all duration-300 group-hover:border-[var(--sbg-orange)]/20 group-open:rotate-180 group-open:border-transparent" style="group-open:background: var(--cert-bg);">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" class="text-[var(--sbg-text-subtle)] group-open:text-[var(--sbg-orange)] transition-colors">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" class="text-[var(--sbg-text-muted)] group-open:text-[var(--sbg-orange)] transition-colors">
                   <polyline points="6 9 12 15 18 9"/>
                 </svg>
               </div>
@@ -217,7 +195,7 @@ const modules = [
                   { label: 'Costo oficial', value: cert.officialCost },
                 ].map((detail) => (
                   <div class="rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-elevated)]/50 p-4 text-center transition-all duration-200 hover:border-[var(--sbg-accent-border)]">
-                    <p class="text-[10px] text-[var(--sbg-text-subtle)] uppercase tracking-wider mb-1" style="font-family:'Space Mono',monospace;">{detail.label}</p>
+                    <p class="text-[10px] text-[var(--sbg-text-muted)] uppercase tracking-wider mb-1" style="font-family:'Space Mono',monospace;">{detail.label}</p>
                     <p class="text-sm font-bold text-white" style="font-family:'Space Mono',monospace;">{detail.value}</p>
                   </div>
                 ))}
@@ -243,7 +221,7 @@ const modules = [
               </p>
 
               <!-- Domains -->
-              <h4 class="text-[11px] font-bold text-[var(--sbg-text-subtle)] uppercase tracking-[0.15em] mb-5" style="font-family:'Space Mono',monospace;">
+              <h4 class="text-[11px] font-bold text-[var(--sbg-text-muted)] uppercase tracking-[0.15em] mb-5" style="font-family:'Space Mono',monospace;">
                 Dominios del examen
               </h4>
               <div class="space-y-3">
@@ -288,8 +266,7 @@ const modules = [
 
   <!-- Modules / Skill Builder -->
   <section class="relative py-20 lg:py-28 overflow-hidden">
-    <div aria-hidden="true" class="pointer-events-none absolute top-0 right-0 h-[50vh] w-[40vw] opacity-20"
-      style="background:radial-gradient(ellipse at 80% 20%,rgba(139,92,246,0.06) 0%,transparent 60%);"></div>
+
 
     <div class="container-sbg relative z-10">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-12" data-animate>
@@ -326,7 +303,7 @@ const modules = [
 
             <!-- Number -->
             <div class="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--sbg-bg-elevated)] border border-[var(--sbg-border)] transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-[var(--sbg-orange)]/15 group-hover:to-[var(--sbg-accent)]/10 group-hover:border-[var(--sbg-orange)]/25 group-hover:shadow-lg group-hover:shadow-[var(--sbg-orange)]/10">
-              <span class="text-xs font-bold text-[var(--sbg-text-subtle)] group-hover:text-[var(--sbg-orange)] transition-colors duration-300" style="font-family:'Space Mono',monospace;">
+              <span class="text-xs font-bold text-[var(--sbg-text-muted)] group-hover:text-[var(--sbg-orange)] transition-colors duration-300" style="font-family:'Space Mono',monospace;">
                 {mod.number.toString().padStart(2, '0')}
               </span>
             </div>
@@ -346,7 +323,7 @@ const modules = [
 
       <!-- 13 modules note -->
       <div data-animate class="mt-8 text-center">
-        <p class="text-xs text-[var(--sbg-text-subtle)]" style="font-family:'Nunito Sans',sans-serif;">
+        <p class="text-xs text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
           13 módulos · ~26 horas de contenido · Sesiones semanales presenciales
         </p>
       </div>
@@ -393,7 +370,7 @@ const modules = [
           </a>
         </div>
 
-        <p class="relative z-10 mt-6 text-[11px] text-[var(--sbg-text-subtle)]" style="font-family:'Nunito Sans',sans-serif;">
+        <p class="relative z-10 mt-6 text-[11px] text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
           Sin costo · Sin entrevista · Solo un clic
         </p>
       </div>

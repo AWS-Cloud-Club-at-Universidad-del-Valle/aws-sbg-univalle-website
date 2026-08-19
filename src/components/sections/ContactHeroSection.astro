@@ -1,12 +1,13 @@
 ---
 /**
- * AboutHeroSection — Hero banner for the About page.
+ * ContactHeroSection — Hero banner for the Contact page.
  *
  * Renders the page title, a code-label, and an introductory paragraph
  * with staggered hero-reveal entrance animations. Includes decorative
- * floating geometric shapes consistent with the site's visual language.
+ * floating geometric shapes and a network/nodes SVG consistent with
+ * the site's visual language.
  *
- * Contains the sole <h1> element for the /about page.
+ * Contains the sole <h1> element for the /contact page.
  */
 
 interface Props {
@@ -17,8 +18,8 @@ const { class: className = '' } = Astro.props;
 ---
 
 <section
-  aria-labelledby="about-hero-heading"
-  class:list={['relative overflow-hidden pt-20 pb-10 lg:pt-28 lg:pb-14', className]}
+  aria-labelledby="contact-hero-heading"
+  class:list={['relative overflow-hidden py-14 lg:py-20', className]}
 >
   <!-- Radial gradient backgrounds -->
   <div
@@ -72,25 +73,25 @@ const { class: className = '' } = Astro.props;
       <!-- Columna izquierda: texto -->
       <div class="max-w-2xl lg:max-w-none">
         <span class="hero-animate hero-animate-delay-1 code-label mb-4 inline-block">
-          # about.nosotros
+          # contact.core_team
         </span>
 
         <h1
-          id="about-hero-heading"
+          id="contact-hero-heading"
           class="hero-animate hero-animate-delay-2 text-[2.4rem] leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.2rem]"
         >
-          Nosotros
+          Conoce a nuestro equipo
         </h1>
 
         <p
           class="hero-animate hero-animate-delay-3 mt-5 max-w-lg text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
           style="font-family:'Nunito Sans',sans-serif;"
         >
-          Somos la comunidad estudiantil de AWS en la Universidad del Valle. Aprendemos, construimos y conectamos talento con la industria cloud.
+          Las personas que lideran la comunidad AWS más activa de la Universidad del Valle. Conoce a quienes hacen posible cada evento y proyecto.
         </p>
       </div>
 
-      <!-- Columna derecha: SVG decorativo de arquitectura cloud (solo desktop) -->
+      <!-- Columna derecha: SVG decorativo de nodos/conexiones (solo desktop) -->
       <div class="hidden lg:block pointer-events-none" aria-hidden="true">
         <svg
           viewBox="0 0 300 250"
@@ -98,35 +99,27 @@ const { class: className = '' } = Astro.props;
           xmlns="http://www.w3.org/2000/svg"
           class="w-full h-auto opacity-[0.10]"
         >
-          <!-- Líneas de conexión entre nodos -->
-          <line x1="60" y1="50" x2="150" y2="30" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="150" y1="30" x2="240" y2="70" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="60" y1="50" x2="90" y2="130" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="150" y1="30" x2="150" y2="120" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="240" y1="70" x2="220" y2="150" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="90" y1="130" x2="150" y2="120" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="150" y1="120" x2="220" y2="150" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="90" y1="130" x2="130" y2="210" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="220" y1="150" x2="180" y2="220" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
-          <line x1="130" y1="210" x2="180" y2="220" stroke="var(--sbg-blue, #1A73E8)" stroke-width="1.5" stroke-linecap="round" />
+          <!-- Líneas de conexión entre 5 nodos (red/networking) -->
+          <line x1="150" y1="40" x2="60" y2="110" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="150" y1="40" x2="240" y2="110" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="60" y1="110" x2="100" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="240" y1="110" x2="200" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="100" y1="210" x2="200" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="60" y1="110" x2="240" y2="110" stroke="var(--sbg-blue, #2196F3)" stroke-width="1.5" stroke-linecap="round" />
+          <line x1="150" y1="40" x2="100" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1" stroke-linecap="round" opacity="0.5" />
+          <line x1="150" y1="40" x2="200" y2="210" stroke="var(--sbg-blue, #2196F3)" stroke-width="1" stroke-linecap="round" opacity="0.5" />
 
-          <!-- Nodos (círculos) -->
-          <!-- Nodo 1: superior izquierda -->
-          <circle cx="60" cy="50" r="8" fill="var(--sbg-accent, #8B5CF6)" />
-          <!-- Nodo 2: superior centro -->
-          <circle cx="150" cy="30" r="10" fill="var(--sbg-orange, #FF9900)" />
-          <!-- Nodo 3: superior derecha -->
-          <circle cx="240" cy="70" r="7" fill="var(--sbg-accent, #8B5CF6)" />
-          <!-- Nodo 4: medio izquierda -->
-          <circle cx="90" cy="130" r="9" fill="var(--sbg-orange, #FF9900)" />
-          <!-- Nodo 5: centro -->
-          <circle cx="150" cy="120" r="12" fill="var(--sbg-accent, #8B5CF6)" />
-          <!-- Nodo 6: medio derecha -->
-          <circle cx="220" cy="150" r="8" fill="var(--sbg-orange, #FF9900)" />
-          <!-- Nodo 7: inferior izquierda -->
-          <circle cx="130" cy="210" r="7" fill="var(--sbg-accent, #8B5CF6)" />
-          <!-- Nodo 8: inferior derecha -->
-          <circle cx="180" cy="220" r="9" fill="var(--sbg-orange, #FF9900)" />
+          <!-- 5 Nodos (representan 5 team members) -->
+          <!-- Nodo 1: superior centro (líder) -->
+          <circle cx="150" cy="40" r="12" fill="var(--sbg-orange, #FF9900)" />
+          <!-- Nodo 2: medio izquierda -->
+          <circle cx="60" cy="110" r="9" fill="var(--sbg-accent, #8B5CF6)" />
+          <!-- Nodo 3: medio derecha -->
+          <circle cx="240" cy="110" r="9" fill="var(--sbg-accent, #8B5CF6)" />
+          <!-- Nodo 4: inferior izquierda -->
+          <circle cx="100" cy="210" r="8" fill="var(--sbg-orange, #FF9900)" />
+          <!-- Nodo 5: inferior derecha -->
+          <circle cx="200" cy="210" r="8" fill="var(--sbg-accent, #8B5CF6)" />
         </svg>
       </div>
     </div>
