@@ -52,7 +52,7 @@ const navIcons: Record<string, string> = {
 <aside
   id="sidebar"
   class:list={[
-    'fixed top-0 left-0 z-30 h-screen w-[220px]',
+    'fixed top-14 lg:top-0 left-0 z-30 h-[calc(100vh-3.5rem)] lg:h-screen w-[220px]',
     'flex flex-col border-r border-[var(--sbg-border)] bg-[var(--sbg-sidebar-bg)]',
     'transition-transform duration-300 ease-out',
     '-translate-x-full lg:translate-x-0',
@@ -79,8 +79,8 @@ const navIcons: Record<string, string> = {
          style="background-image: radial-gradient(circle, #fff 0.5px, transparent 0.5px); background-size: 20px 20px;"></div>
   </div>
 
-  <!-- Logo -->
-  <div class="relative border-b border-[var(--sbg-border)] px-4 py-5">
+  <!-- Logo (solo desktop, en mobile ya está en la top bar) -->
+  <div class="relative border-b border-[var(--sbg-border)] px-4 py-5 hidden lg:block">
     <a href="/" class="flex flex-col items-center gap-2 group focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded-lg" aria-label="AWS SBG Univalle - Inicio">
       <div class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all duration-300 group-hover:scale-105">
         <img
