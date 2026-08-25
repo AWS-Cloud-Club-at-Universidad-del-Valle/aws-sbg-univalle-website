@@ -7,20 +7,17 @@
 # en Amazon S3 + CloudFront cada vez que se hace push a
 # main o develop.
 #
-# Estructura del bucket:
+# Infraestructura (gestionada por CDK):
 #
-# aws-student-builders-assets/
-# ├── develop/
-# ├── production/
-# └── members/
+# dev-sbg-univalle-frontend     ← bucket dev (rama develop)
+# prod-sbg-univalle-frontend    ← bucket prod (rama main)
 #
-# develop  → S3/develop/
-# main     → S3/production/
+# Cada ambiente tiene su propio bucket y CloudFront.
 #
 # Autenticación:
 # Usa OIDC (OpenID Connect) — sin access keys estáticas.
 #
-# GitHub Secrets requeridos:
+# GitHub Secrets requeridos (por Environment):
 # AWS_ROLE_ARN
 # AWS_REGION
 # AWS_BUCKET_NAME
@@ -43,7 +40,6 @@ jobs:
   deploy:
     name: Build & Deploy to AWS
     runs-on: ubuntu-latest
-
     # Selecciona el Environment de GitHub dependiendo de la rama.
     #
     # main    → Production
@@ -55,7 +51,6 @@ jobs:
       contents: read
 
     steps:
-
       # --------------------------------------------------------
       # Checkout
       # --------------------------------------------------------
@@ -98,33 +93,12 @@ jobs:
             echo "ERROR: El directorio dist/ no existe."
             exit 1
           fi
-
           if [ -z "$(ls -A dist)" ]; then
             echo "ERROR: El directorio dist/ está vacío."
             exit 1
           fi
-
           FILE_COUNT=$(find dist -type f | wc -l)
           echo "dist/ existe y contiene $FILE_COUNT archivos."
-
-      # --------------------------------------------------------
-      # Determinar carpeta de despliegue
-      # --------------------------------------------------------
-      - name: Determine deployment path
-        run: |
-          if [ "${GITHUB_REF_NAME}" = "main" ]; then
-            DEPLOY_PATH="production"
-          elif [ "${GITHUB_REF_NAME}" = "develop" ]; then
-            DEPLOY_PATH="develop"
-          else
-            echo "ERROR: Rama no soportada: ${GITHUB_REF_NAME}"
-            exit 1
-          fi
-
-          echo "DEPLOY_PATH=${DEPLOY_PATH}" >> "$GITHUB_ENV"
-
-          echo "Rama: ${GITHUB_REF_NAME}"
-          echo "Carpeta S3: ${DEPLOY_PATH}/"
 
       # --------------------------------------------------------
       # Autenticación AWS mediante OIDC
@@ -137,28 +111,28 @@ jobs:
           role-session-name: GitHubActions-Deploy-${{ github.run_id }}
 
       # --------------------------------------------------------
-      # Subir assets con hash
+      # Subir assets con hash (cache largo)
       # --------------------------------------------------------
       - name: Sync hashed assets to S3 (cache 1 year)
         run: |
           echo "Subiendo assets a:"
-          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/${DEPLOY_PATH}/_astro/"
+          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/_astro/"
 
           aws s3 sync dist/_astro/ \
-            "s3://${{ secrets.AWS_BUCKET_NAME }}/${DEPLOY_PATH}/_astro/" \
+            "s3://${{ secrets.AWS_BUCKET_NAME }}/_astro/" \
             --cache-control "public, max-age=31536000, immutable" \
             --no-progress
 
       # --------------------------------------------------------
-      # Subir HTML y archivos raíz
+      # Subir HTML y archivos raíz (sin cache)
       # --------------------------------------------------------
       - name: Sync HTML and root files to S3 (no-cache)
         run: |
           echo "Subiendo archivos del sitio a:"
-          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/${DEPLOY_PATH}/"
+          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/"
 
           aws s3 sync dist/ \
-            "s3://${{ secrets.AWS_BUCKET_NAME }}/${DEPLOY_PATH}/" \
+            "s3://${{ secrets.AWS_BUCKET_NAME }}/" \
             --cache-control "no-cache, no-store, must-revalidate" \
             --exclude "_astro/*" \
             --delete \
@@ -190,7 +164,7 @@ jobs:
           echo "=================================================="
           echo "Ambiente: ${{ github.ref_name == 'main' && 'Production' || 'development' }}"
           echo "Rama:     ${{ github.ref_name }}"
-          echo "Carpeta:  ${DEPLOY_PATH}/"
+          echo "Bucket:   ${{ secrets.AWS_BUCKET_NAME }}"
           echo "Commit:   ${{ github.sha }}"
           echo "Actor:    ${{ github.actor }}"
           echo "=================================================="
