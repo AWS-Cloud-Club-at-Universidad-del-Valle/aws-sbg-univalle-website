@@ -180,3 +180,87 @@ export interface ICoreTeamMember {
   /** URL de imagen de perfil opcional (HTTPS, futuro S3) */
   image?: string;
 }
+
+// ============================================
+// API de Eventos (backend REST)
+// ============================================
+
+/** Tipo de evento según la API. */
+export type ApiEventType = 'CHARLA' | 'WORKSHOP' | 'HACKATHON';
+
+/** Modalidad del evento según la API. */
+export type ApiEventModality = 'VIRTUAL' | 'PRESENCIAL' | 'HIBRIDO';
+
+/** Estado del evento según la API. */
+export type ApiEventStatus = 'UPCOMING' | 'COMPLETED';
+
+/** Item de evento en el listado (GET /events). */
+export interface IApiEventListItem {
+  id: string;
+  title: string;
+  /** Fecha en formato YYYY-MM-DD */
+  date: string;
+  /** Hora de inicio HH:mm */
+  startTime: string;
+  modality: ApiEventModality;
+  eventType: ApiEventType;
+  status: ApiEventStatus;
+  /** URL de imagen */
+  image?: string;
+}
+
+/** Metadatos de paginación (GET /events). */
+export interface IApiPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+/** Respuesta completa de GET /events. */
+export interface IApiEventsResponse {
+  items: IApiEventListItem[];
+  pagination: IApiPagination;
+}
+
+/** Detalle completo de un evento (GET /events/{id}). */
+export interface IApiEventDetail {
+  id: string;
+  title: string;
+  /** Descripción larga en formato markdown */
+  description: string;
+  image?: string;
+  eventType: ApiEventType;
+  modality: ApiEventModality;
+  status: ApiEventStatus;
+  /** Fecha en formato YYYY-MM-DD */
+  date: string;
+  /** Hora de inicio HH:mm */
+  startTime: string;
+  /** Hora de fin HH:mm */
+  endTime?: string;
+  timezone?: string;
+  location?: string;
+  /** URL de registro (Meetup u otra) */
+  registrationUrl?: string;
+  /** URL de la fuente original */
+  sourceUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/** Filtros/query params soportados por GET /events. */
+export interface IApiEventsQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+  type?: ApiEventType;
+  modality?: ApiEventModality;
+  status?: ApiEventStatus;
+  /** Fecha desde YYYY-MM-DD */
+  from?: string;
+  /** Fecha hasta YYYY-MM-DD */
+  to?: string;
+}

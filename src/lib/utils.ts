@@ -1,4 +1,9 @@
-import type { IEvent, ISiteConfig } from '@/types/index';
+import type {
+  IEvent,
+  ISiteConfig,
+  ApiEventType,
+  ApiEventModality,
+} from '@/types/index';
 
 // ============================================
 // Utilidades de eventos
@@ -122,4 +127,68 @@ export function slugify(text: string): string {
 export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength).trimEnd() + '…';
+}
+
+// ============================================
+// Utilidades de la API de Eventos
+// ============================================
+
+/**
+ * Formatea una fecha en formato "YYYY-MM-DD" (de la API) a español.
+ * Se construye la fecha en horario local para evitar corrimientos de zona.
+ * @example formatApiDate('2026-09-03') → "3 de septiembre de 2026"
+ */
+export function formatApiDate(dateStr: string, locale = 'es-CO'): string {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  if (!year || !month || !day) return dateStr;
+  const date = new Date(year, month - 1, day);
+  return date.toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+/**
+ * Formatea una fecha corta "YYYY-MM-DD" a "3 sep 2026".
+ */
+export function formatApiDateShort(dateStr: string, locale = 'es-CO'): string {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  if (!year || !month || !day) return dateStr;
+  const date = new Date(year, month - 1, day);
+  return date.toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
+/** Etiqueta legible para el tipo de evento de la API. */
+export function eventTypeLabel(type: ApiEventType): string {
+  const map: Record<ApiEventType, string> = {
+    CHARLA: 'Charla',
+    WORKSHOP: 'Workshop',
+    HACKATHON: 'Hackathon',
+  };
+  return map[type] ?? type;
+}
+
+/** Etiqueta legible para la modalidad de la API. */
+export function modalityLabel(modality: ApiEventModality): string {
+  const map: Record<ApiEventModality, string> = {
+    VIRTUAL: 'Virtual',
+    PRESENCIAL: 'Presencial',
+    HIBRIDO: 'Híbrido',
+  };
+  return map[modality] ?? modality;
+}
+
+/** Color de acento (rgba/hex) para cada tipo de evento. */
+export function eventTypeColor(type: ApiEventType): string {
+  const map: Record<ApiEventType, string> = {
+    CHARLA: '#2E73B8',    // azul
+    WORKSHOP: '#FF9900',  // naranja AWS
+    HACKATHON: '#8B5CF6', // morado
+  };
+  return map[type] ?? '#FF9900';
 }

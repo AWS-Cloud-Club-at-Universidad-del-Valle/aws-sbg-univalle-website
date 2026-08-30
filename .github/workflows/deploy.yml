@@ -82,10 +82,17 @@ jobs:
 
       # --------------------------------------------------------
       # Build
+      #
+      # Inyecta la URL de la API de Eventos según la rama:
+      #   main    → API de producción (/prod)
+      #   develop → API de desarrollo (/dev)
       # --------------------------------------------------------
       - name: Build site
+        env:
+          PUBLIC_EVENTS_API_URL: ${{ github.ref_name == 'main' && 'https://4fi9ot44ml.execute-api.us-east-1.amazonaws.com/prod' || 'https://orj83oh0pc.execute-api.us-east-1.amazonaws.com/dev' }}
         run: |
           echo "Iniciando build..."
+          echo "API de Eventos: ${PUBLIC_EVENTS_API_URL}"
           npm run build
           echo "Build completado. Archivos generados en /dist."
 
