@@ -4,6 +4,8 @@
  *
  * Sitio estático (SSG): el id se lee del querystring en el cliente y se
  * consume GET /events/{id}. La descripción viene en markdown y se renderiza.
+ * Los estilos viven en global.css (no scoped) porque el contenido se inyecta
+ * dinámicamente por JS y no recibiría el hash del <style> scoped.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
@@ -12,29 +14,30 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   title="Detalle del evento"
   description="Información completa del evento del AWS Student Builder Group de la Universidad del Valle."
 >
-  <section class="relative overflow-hidden py-12 lg:py-16">
-    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[50vh]"
-      style="background:radial-gradient(ellipse 55% 45% at 30% 0%,rgba(255,153,0,0.06) 0%,transparent 65%);"></div>
+  <section class="relative overflow-hidden py-10 lg:py-14">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[45vh]"
+      style="background:radial-gradient(ellipse 55% 45% at 30% 0%,rgba(255,153,0,0.07) 0%,transparent 65%);"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.02]"
+      style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"></div>
 
     <div class="container-sbg relative z-10">
-      <!-- Volver -->
-      <a href="/events" class="event-back">
+      <a href="/events" class="evd-back">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
         Volver a eventos
       </a>
 
-      <!-- Estado de carga -->
-      <div id="detail-loading" class="detail-loading">
-        <div class="skeleton-box" style="aspect-ratio:16/6;border-radius:1rem;"></div>
-        <div class="skeleton-line skeleton-line--title" style="margin-top:1.5rem;width:60%;"></div>
-        <div class="skeleton-line" style="width:40%;"></div>
+      <!-- Carga -->
+      <div id="detail-loading" class="evd-loading">
+        <div class="skeleton-box" style="aspect-ratio:16/8;border-radius:1.25rem;"></div>
+        <div class="skeleton-line skeleton-line--title" style="margin-top:1.75rem;width:55%;"></div>
+        <div class="skeleton-line" style="width:35%;"></div>
         <div class="skeleton-line" style="margin-top:1.5rem;"></div>
         <div class="skeleton-line"></div>
         <div class="skeleton-line skeleton-line--short"></div>
       </div>
 
       <!-- Contenido (rellenado por JS) -->
-      <article id="detail-content" hidden></article>
+      <article id="detail-content" class="evd" hidden></article>
 
       <!-- Error -->
       <div id="detail-error" class="events-error" hidden role="alert">
@@ -47,150 +50,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     </div>
   </section>
 </BaseLayout>
-
-<style>
-  .event-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--sbg-text-muted);
-    text-decoration: none;
-    margin-bottom: 1.75rem;
-    transition: color 0.2s ease, gap 0.2s ease;
-  }
-  .event-back:hover { color: var(--sbg-accent-light); gap: 0.6rem; }
-  .event-back:focus-visible { outline: 2px solid var(--sbg-accent); outline-offset: 3px; border-radius: 4px; }
-
-  .detail-loading { max-width: 60rem; }
-
-  .detail-hero-img {
-    width: 100%;
-    max-height: 380px;
-    object-fit: cover;
-    border-radius: 1rem;
-    border: 1px solid var(--sbg-border);
-  }
-
-  .detail-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 1.5rem 0 1rem;
-  }
-  .detail-badge {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.3rem 0.7rem;
-    border-radius: 0.5rem;
-    color: #fff;
-  }
-  .detail-badge--muted {
-    background: var(--sbg-bg-elevated);
-    color: var(--sbg-text-muted);
-  }
-
-  .detail-title {
-    font-family: 'Space Mono', monospace;
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.15;
-    color: #fff;
-    margin: 0 0 1.25rem;
-    max-width: 60rem;
-  }
-
-  .detail-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
-    padding: 1.1rem 1.3rem;
-    border: 1px solid var(--sbg-border);
-    border-radius: 0.9rem;
-    background: var(--sbg-bg-surface);
-    margin-bottom: 2rem;
-    max-width: 60rem;
-  }
-  .detail-meta__item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 0.88rem;
-    color: var(--sbg-text);
-  }
-  .detail-meta__item svg { color: var(--sbg-accent-light); flex-shrink: 0; }
-
-  .detail-body {
-    max-width: 60rem;
-    font-family: 'Nunito Sans', sans-serif;
-    color: var(--sbg-text-muted);
-    line-height: 1.8;
-  }
-  .detail-body h1, .detail-body h2, .detail-body h3 {
-    font-family: 'Space Mono', monospace;
-    color: #fff;
-    margin: 1.8rem 0 0.8rem;
-    line-height: 1.3;
-  }
-  .detail-body h1 { font-size: 1.5rem; }
-  .detail-body h2 { font-size: 1.25rem; }
-  .detail-body h3 { font-size: 1.05rem; }
-  .detail-body p { margin: 0 0 1rem; }
-  .detail-body a { color: var(--sbg-accent-light); text-decoration: underline; text-underline-offset: 3px; }
-  .detail-body a:hover { color: var(--sbg-accent); }
-  .detail-body ul, .detail-body ol { margin: 0 0 1rem; padding-left: 1.4rem; }
-  .detail-body li { margin-bottom: 0.4rem; }
-  .detail-body strong { color: var(--sbg-text); font-weight: 700; }
-  .detail-body code {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.85em;
-    background: var(--sbg-bg-elevated);
-    padding: 0.1rem 0.35rem;
-    border-radius: 0.3rem;
-  }
-  .detail-body blockquote {
-    border-left: 3px solid var(--sbg-accent-border);
-    padding-left: 1rem;
-    margin: 0 0 1rem;
-    color: var(--sbg-text-subtle);
-  }
-  .detail-body img { max-width: 100%; border-radius: 0.6rem; }
-
-  .detail-register {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin-top: 2rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #fff;
-    background: linear-gradient(135deg, var(--sbg-orange), var(--sbg-accent));
-    border-radius: 0.85rem;
-    padding: 0.9rem 1.8rem;
-    min-height: 52px;
-    text-decoration: none;
-    box-shadow: 0 8px 24px rgba(255, 153, 0, 0.25);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  .detail-register:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255, 153, 0, 0.35); }
-  .detail-register:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-
-  .detail-source {
-    display: block;
-    margin-top: 1.25rem;
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 0.8rem;
-    color: var(--sbg-text-subtle);
-  }
-  .detail-source a { color: var(--sbg-text-muted); }
-</style>
 
 <script>
   import { fetchEventById, EventsApiError } from '@/lib/eventsApi';
@@ -211,7 +70,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       .replace(/'/g, '&#39;');
   }
 
-  /** Sanitiza el HTML generado por marked: elimina scripts, iframes y handlers on*. */
+  /** Sanitiza el HTML generado por marked. */
   function sanitize(html: string): string {
     const tpl = document.createElement('template');
     tpl.innerHTML = html;
@@ -231,7 +90,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
             node.removeAttribute(attr.name);
           }
         });
-        // Enlaces externos seguros
         if (tag === 'a') {
           node.setAttribute('target', '_blank');
           node.setAttribute('rel', 'noopener noreferrer');
@@ -243,13 +101,20 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     return tpl.innerHTML;
   }
 
+  const ICONS = {
+    cal: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    clock: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    pin: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+    modVirtual: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+    ext: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+  };
+
   function initDetailPage() {
     const loading = document.getElementById('detail-loading');
     const content = document.getElementById('detail-content');
     const errorEl = document.getElementById('detail-error');
     const errorMsg = document.getElementById('detail-error-msg');
 
-    // Solo corre en la página de detalle
     if (!content || !loading || !errorEl) return;
 
     const id = new URLSearchParams(window.location.search).get('id');
@@ -266,10 +131,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       return;
     }
 
-    const calSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
-    const clockSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
-    const pinSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
-
     fetchEventById(id)
       .then((ev) => {
         if (!content) return;
@@ -278,52 +139,100 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
         const timeText = ev.endTime
           ? `${escapeHtml(ev.startTime)} – ${escapeHtml(ev.endTime)}`
           : escapeHtml(ev.startTime ?? '');
+        const modIcon = ev.modality === 'VIRTUAL' ? ICONS.modVirtual : ICONS.pin;
 
         const descHtml = ev.description
           ? sanitize(marked.parse(ev.description, { async: false }) as string)
           : '<p>Sin descripción disponible.</p>';
 
-        const imgBlock = ev.image
-          ? `<img src="${escapeHtml(ev.image)}" alt="${escapeHtml(ev.title)}" class="detail-hero-img" />`
+        // Hero inmersivo: imagen de fondo con overlay, badges + título encima.
+        const heroBg = ev.image
+          ? `<img src="${escapeHtml(ev.image)}" alt="${escapeHtml(ev.title)}" class="evd-hero-img" />`
           : '';
 
-        const locationBlock = ev.location
-          ? `<span class="detail-meta__item">${pinSvg}${escapeHtml(ev.location)}</span>`
-          : '';
+        // Stat cards horizontales (consistente con las stats del inicio)
+        const stats: string[] = [];
+        stats.push(`
+          <div class="evd-stat">
+            <span class="evd-stat-icon">${ICONS.cal}</span>
+            <span class="evd-stat-label"># fecha</span>
+            <span class="evd-stat-value">${escapeHtml(formatApiDate(ev.date))}</span>
+          </div>`);
+        if (timeText) {
+          stats.push(`
+            <div class="evd-stat">
+              <span class="evd-stat-icon">${ICONS.clock}</span>
+              <span class="evd-stat-label"># hora</span>
+              <span class="evd-stat-value">${timeText}</span>
+              ${ev.timezone ? `<span class="evd-stat-sub">${escapeHtml(ev.timezone)}</span>` : ''}
+            </div>`);
+        }
+        stats.push(`
+          <div class="evd-stat">
+            <span class="evd-stat-icon">${modIcon}</span>
+            <span class="evd-stat-label"># modalidad</span>
+            <span class="evd-stat-value">${escapeHtml(modalityLabel(ev.modality))}</span>
+          </div>`);
+        if (ev.location) {
+          stats.push(`
+            <div class="evd-stat evd-stat--wide">
+              <span class="evd-stat-icon">${ICONS.pin}</span>
+              <span class="evd-stat-label"># lugar</span>
+              <span class="evd-stat-value evd-stat-value--sm">${escapeHtml(ev.location)}</span>
+            </div>`);
+        }
+
+        // Descripción: solo si tiene contenido suficiente (evita mostrar texto truncado)
+        const descText = (ev.description || '').trim();
+        const descBlock =
+          descText.length > 0
+            ? `<div class="evd-desc">
+                 <span class="evd-info-heading"># sobre_el_evento</span>
+                 <div class="evd-body">${descHtml}</div>
+               </div>`
+            : '';
 
         const registerBlock = ev.registrationUrl
-          ? `<a href="${escapeHtml(ev.registrationUrl)}" target="_blank" rel="noopener noreferrer" class="detail-register">
-               Registrarme
-               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          ? `<a href="${escapeHtml(ev.registrationUrl)}" target="_blank" rel="noopener noreferrer" class="evd-register">
+               Registrarme ${ICONS.ext}
              </a>`
           : '';
 
         const sourceBlock = ev.sourceUrl
-          ? `<span class="detail-source">Fuente: <a href="${escapeHtml(ev.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ev.sourceUrl)}</a></span>`
+          ? `<a href="${escapeHtml(ev.sourceUrl)}" target="_blank" rel="noopener noreferrer" class="evd-source">
+               Ver en Meetup ${ICONS.ext}
+             </a>`
           : '';
 
         content.innerHTML = `
-          ${imgBlock}
-          <div class="detail-badges">
-            <span class="detail-badge" style="background:${color};">${escapeHtml(eventTypeLabel(ev.eventType))}</span>
-            <span class="detail-badge detail-badge--muted">${escapeHtml(modalityLabel(ev.modality))}</span>
+          <div class="evd-hero">
+            ${heroBg}
+            <div class="evd-hero-overlay"></div>
+            <div class="evd-hero-content">
+              <div class="evd-badges">
+                <span class="evd-badge" style="--badge-color:${color};">${escapeHtml(eventTypeLabel(ev.eventType))}</span>
+                <span class="evd-badge evd-badge--muted">${escapeHtml(modalityLabel(ev.modality))}</span>
+              </div>
+              <h1 class="evd-title">${escapeHtml(ev.title)}</h1>
+            </div>
           </div>
-          <h1 class="detail-title">${escapeHtml(ev.title)}</h1>
-          <div class="detail-meta">
-            <span class="detail-meta__item">${calSvg}${escapeHtml(formatApiDate(ev.date))}</span>
-            ${timeText ? `<span class="detail-meta__item">${clockSvg}${timeText}${ev.timezone ? ' (' + escapeHtml(ev.timezone) + ')' : ''}</span>` : ''}
-            ${locationBlock}
+
+          <div class="evd-stats">
+            ${stats.join('')}
           </div>
-          <div class="detail-body">${descHtml}</div>
-          ${registerBlock}
-          ${sourceBlock}
+
+          <div class="evd-cta-row">
+            ${registerBlock}
+            ${sourceBlock}
+          </div>
+
+          ${descBlock}
         `;
 
         if (loading) loading.hidden = true;
         if (errorEl) errorEl.hidden = true;
         content.hidden = false;
 
-        // Actualiza el título del documento
         document.title = `${ev.title} | AWS SBG Univalle`;
       })
       .catch((err) => {
