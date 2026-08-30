@@ -314,15 +314,26 @@ import SectionDivider from '@/components/common/SectionDivider.astro';
       if (pagination) pagination.hidden = true;
     }
 
+    /** Fecha de hoy en formato YYYY-MM-DD (local). */
+    function todayStr(): string {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
     async function load() {
       showSkeletons();
       if (statusEl) statusEl.textContent = 'Cargando eventos…';
 
       try {
+        // Se piden TODOS los eventos (con filtros de tipo/modalidad) sin filtrar
+        // por status en la API: el status guardado puede estar desactualizado,
+        // así que la clasificación Próximos/Realizados se hace por fecha real.
         const res = await fetchEvents({
-          status: state.status,
-          page: state.page,
-          limit: PAGE_LIMIT,
+          page: 1,
+          limit: 100,
           type: state.type || undefined,
           modality: state.modality || undefined,
         });
@@ -330,13 +341,29 @@ import SectionDivider from '@/components/common/SectionDivider.astro';
         if (!grid) return;
         grid.setAttribute('aria-busy', 'false');
 
-        // Orden: UPCOMING asc, COMPLETED desc (por fecha)
-        const items = [...res.items].sort((a, b) => {
+        const today = todayStr();
+
+        // Excluir cancelados y clasificar por fecha real.
+        const visible = res.items.filter((ev) => ev.status !== 'CANCELLED');
+        const classified = visible.filter((ev) =>
+          state.status === 'UPCOMING' ? ev.date >= today : ev.date < today
+        );
+
+        // Orden: Próximos ascendente (más cercano primero),
+        // Realizados descendente (más reciente primero).
+        classified.sort((a, b) => {
           const cmp = a.date.localeCompare(b.date);
           return state.status === 'UPCOMING' ? cmp : -cmp;
         });
 
-        if (items.length === 0) {
+        // Paginación en cliente
+        const total = classified.length;
+        const totalPages = Math.max(1, Math.ceil(total / PAGE_LIMIT));
+        if (state.page > totalPages) state.page = totalPages;
+        const start = (state.page - 1) * PAGE_LIMIT;
+        const pageItems = classified.slice(start, start + PAGE_LIMIT);
+
+        if (pageItems.length === 0) {
           grid.innerHTML = '';
           if (emptyEl) emptyEl.hidden = false;
           if (statusEl) statusEl.textContent = '';
@@ -345,22 +372,19 @@ import SectionDivider from '@/components/common/SectionDivider.astro';
         }
 
         if (emptyEl) emptyEl.hidden = true;
-        grid.innerHTML = items.map((item) => renderEventCard(item)).join('');
+        grid.innerHTML = pageItems.map((item) => renderEventCard(item)).join('');
 
-        // Estado (conteo)
         if (statusEl) {
-          const total = res.pagination.total;
-          statusEl.textContent = `${total} evento${total === 1 ? '' : 's'} encontrado${total === 1 ? '' : 's'}`;
+          statusEl.textContent = `${total} evento${total === 1 ? '' : 's'}`;
         }
 
         // Paginación
-        const p = res.pagination;
         if (pagination && pageInfo && pagePrev && pageNext) {
-          if (p.totalPages > 1) {
+          if (totalPages > 1) {
             pagination.hidden = false;
-            pageInfo.textContent = `Página ${p.page} de ${p.totalPages}`;
-            pagePrev.disabled = !p.hasPreviousPage;
-            pageNext.disabled = !p.hasNextPage;
+            pageInfo.textContent = `Página ${state.page} de ${totalPages}`;
+            pagePrev.disabled = state.page <= 1;
+            pageNext.disabled = state.page >= totalPages;
           } else {
             pagination.hidden = true;
           }
