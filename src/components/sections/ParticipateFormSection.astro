@@ -647,6 +647,8 @@ const TYPE_OPTIONS = [
         modality: isTalkLike && modalityEl ? modalityEl.value : null,
         level: isTalkLike && levelEl ? Number(levelEl.value) : null,
         additionalIdea: value('additionalIdea') || null,
+        // La validación garantiza que el consentimiento está marcado antes de enviar.
+        consent: document.getElementById('consent').checked,
       };
     }
 
@@ -672,11 +674,29 @@ const TYPE_OPTIONS = [
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       }).then(function (res) {
-        if (!res.ok) {
-          var err = new Error('server');
-          err.name = 'ServerError';
-          throw err;
-        }
+        // Respuesta exitosa: 201 { message, id, status }.
+        if (res.ok) return;
+
+        // El backend responde errores como { error, message }.
+        return res
+          .json()
+          .catch(function () {
+            return null;
+          })
+          .then(function (data) {
+            var err = new Error('request');
+            if (res.status === 400) {
+              // Error de validación: usa el mensaje del backend si viene.
+              err.name = 'ValidationError';
+              err.userMessage =
+                (data && data.message) ||
+                'Revisa los datos del formulario e intenta nuevamente.';
+            } else {
+              // 413 (payload grande), 500 u otros → error de servidor.
+              err.name = 'ServerError';
+            }
+            throw err;
+          });
       });
     }
 
@@ -700,11 +720,14 @@ const TYPE_OPTIONS = [
         })
         .catch(function (err) {
           setLoading(false);
-          if (err && err.name === 'ServerError') {
+          if (err && err.name === 'ValidationError') {
+            showSubmitError(err.userMessage);
+          } else if (err && err.name === 'ServerError') {
             showSubmitError(
               'Ocurrió un error procesando tu propuesta. Intenta nuevamente más tarde.'
             );
           } else {
+            // Error de red / conexión (fetch rechazado).
             showSubmitError(
               'No pudimos enviar tu propuesta. Intenta nuevamente.'
             );
