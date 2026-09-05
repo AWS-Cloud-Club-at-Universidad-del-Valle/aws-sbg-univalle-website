@@ -9,6 +9,9 @@ import type {
   IBenefit,
   ISocialLink,
   ICoreTeamMember,
+  IParticipationWay,
+  IModalityOption,
+  ITalkLevel,
 } from '@/types/index';
 
 // ============================================
@@ -46,6 +49,7 @@ export const NAV_LINKS: INavLink[] = [
   { href: '/certificate', label: 'Certifícate' },
   { href: '/events', label: 'Eventos' },
   { href: '/resources', label: 'Recursos' },
+  { href: '/participate', label: 'Participa' },
   { href: '/contact', label: 'Contacto' },
 ];
 
@@ -433,5 +437,92 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     linkedin: 'https://www.linkedin.com/in/jann-carlo-martinez-cardona-b1578a2b8/',
     github: 'https://github.com/JannC23',
     image: `${ASSETS_CDN_URL}/members/Jann-Carlo-Martinez.jpeg`,
+  },
+];
+
+// ============================================
+// Participa en la Comunidad — Página /participate
+// ============================================
+
+/** Correo del equipo de la comunidad (destino de las propuestas). */
+export const COMMUNITY_EMAIL = 'aws.cloud.club@correounivalle.edu.co';
+
+/**
+ * Endpoint del backend para registrar propuestas (POST /community/proposals).
+ * Se deja vacío hasta que la infraestructura (API Gateway + Lambda) esté lista.
+ * Mientras esté vacío, el formulario simula el envío para poder probar la UX.
+ */
+export const PROPOSALS_ENDPOINT = '';
+
+/** Formas de participación mostradas como tarjetas. */
+export const PARTICIPATION_WAYS: IParticipationWay[] = [
+  {
+    key: 'TALK',
+    icon: '🎤',
+    title: 'Dar una charla',
+    description:
+      'Comparte tus conocimientos y experiencias sobre cloud, desarrollo, IA, DevOps, datos o seguridad con la comunidad.',
+    actionLabel: 'Postular',
+    glowColor: 'rgba(255,153,0,0.35)',
+  },
+  {
+    key: 'WORKSHOP',
+    icon: '🛠️',
+    title: 'Proponer un workshop',
+    description:
+      'Propón una actividad práctica para aprender construyendo, orientada a AWS, cloud, automatización u otros temas.',
+    actionLabel: 'Proponer',
+    glowColor: 'rgba(139,92,246,0.35)',
+  },
+  {
+    key: 'TALLER',
+    icon: '📚',
+    title: 'Proponer un taller',
+    description:
+      'Comparte una actividad educativa, formativa o introductoria pensada para quienes están comenzando.',
+    actionLabel: 'Proponer',
+    glowColor: 'rgba(76,175,80,0.35)',
+  },
+  {
+    key: 'VOLUNTEER',
+    icon: '🙋',
+    title: 'Ser voluntario',
+    description:
+      'Ayúdanos a organizar y desarrollar nuestros eventos presenciales: logística, registro, apoyo a speakers y más.',
+    actionLabel: 'Participar',
+    glowColor: 'rgba(33,150,243,0.35)',
+  },
+];
+
+/** Opciones de modalidad para el formulario de propuesta. */
+export const PROPOSAL_MODALITIES: IModalityOption[] = [
+  { value: 'VIRTUAL', label: 'Virtual' },
+  { value: 'PRESENCIAL', label: 'Presencial' },
+  { value: 'HIBRIDA', label: 'Híbrida' },
+];
+
+/** Niveles de charla inspirados en los niveles de AWS (100–400). */
+export const TALK_LEVELS: ITalkLevel[] = [
+  {
+    value: 100,
+    label: '100 — Introductorio',
+    description:
+      'Contenido introductorio. Orientado a personas que están comenzando con el tema.',
+  },
+  {
+    value: 200,
+    label: '200 — Básico / Intermedio',
+    description: 'Contenido que asume conocimientos básicos previos.',
+  },
+  {
+    value: 300,
+    label: '300 — Intermedio / Avanzado',
+    description: 'Contenido técnico más profundo y especializado.',
+  },
+  {
+    value: 400,
+    label: '400 — Avanzado / Experto',
+    description:
+      'Contenido altamente avanzado, especializado o enfocado en escenarios complejos.',
   },
 ];

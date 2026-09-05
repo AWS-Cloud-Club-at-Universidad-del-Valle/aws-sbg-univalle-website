@@ -1,0 +1,81 @@
+---
+/**
+ * ParticipateHeroSection — Hero de la página /participate.
+ *
+ * Contiene el único <h1> de la página, un code-label y un párrafo
+ * introductorio con animaciones hero-reveal. Incluye formas geométricas
+ * decorativas coherentes con el lenguaje visual del sitio.
+ */
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  aria-labelledby="participate-hero-heading"
+  class:list={['relative overflow-hidden py-20 lg:py-28', className]}
+>
+  <!-- Fondos radiales -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+    style="background:radial-gradient(ellipse 55% 45% at 30% 0%,rgba(255,153,0,0.08) 0%,transparent 65%);"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-0 right-0 h-[50vh] w-[50vw]"
+    style="background:radial-gradient(ellipse at 80% 100%,rgba(139,92,246,0.10) 0%,transparent 60%);"
+  ></div>
+
+  <!-- Dot grid -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 opacity-[0.025]"
+    style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"
+  ></div>
+
+  <!-- Formas flotantes decorativas -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute top-16 left-8 h-0 w-0 opacity-20"
+    style="border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 18px solid var(--sbg-accent-light); animation: float-triangle 6s ease-in-out infinite;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-20 right-12 h-3 w-3 rounded-full opacity-15"
+    style="background: var(--sbg-orange); animation: float-circle 7s ease-in-out infinite;"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute hidden lg:block top-1/4 right-16 h-3 w-3 opacity-10"
+    style="background: var(--sbg-orange); animation: float-rhombus 9s ease-in-out infinite 1.5s;"
+  ></div>
+
+  <!-- Contenido -->
+  <div class="container-sbg relative z-10">
+    <div class="max-w-2xl">
+      <span class="hero-animate hero-animate-delay-1 code-label mb-4 inline-block">
+        # participate.join_us
+      </span>
+
+      <h1
+        id="participate-hero-heading"
+        class="hero-animate hero-animate-delay-2 text-[2.4rem] leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.2rem]"
+      >
+        Participa en la Comunidad
+      </h1>
+
+      <p
+        class="hero-animate hero-animate-delay-3 mt-5 max-w-lg text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
+        style="font-family:'Nunito Sans',sans-serif;"
+      >
+        Comparte tu conocimiento, crea experiencias y ayuda a seguir construyendo
+        nuestra comunidad tecnológica. Aquí puedes proponer charlas, workshops,
+        talleres, ser voluntario o compartir tus ideas.
+      </p>
+    </div>
+  </div>
+</section>

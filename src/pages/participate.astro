@@ -1,0 +1,28 @@
+---
+/**
+ * Página /participate — Participa en la Comunidad.
+ *
+ * Punto central para que cualquier persona conozca las formas de participar
+ * (charla, workshop, taller, voluntariado o idea) y envíe una propuesta.
+ *
+ * Solo frontend: el formulario envía a un endpoint configurable
+ * (PROPOSALS_ENDPOINT) y simula el envío mientras no esté disponible.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ParticipateHeroSection from '@/components/sections/ParticipateHeroSection.astro';
+import ParticipateWaysSection from '@/components/sections/ParticipateWaysSection.astro';
+import ParticipateIdeaSection from '@/components/sections/ParticipateIdeaSection.astro';
+import ParticipateFormSection from '@/components/sections/ParticipateFormSection.astro';
+import SectionDivider from '@/components/common/SectionDivider.astro';
+---
+
+<BaseLayout
+  title="Participa"
+  description="Participa en la comunidad AWS SBG Univalle: postula una charla, propón un workshop o taller, sé voluntario o comparte tus ideas para seguir construyendo comunidad."
+>
+  <ParticipateHeroSection />
+  <SectionDivider />
+  <ParticipateWaysSection />
+  <ParticipateIdeaSection />
+  <ParticipateFormSection />
+</BaseLayout>
