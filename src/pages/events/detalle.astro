@@ -147,7 +147,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
         // Hero inmersivo: imagen de fondo con overlay, badges + título encima.
         const heroBg = ev.image
-          ? `<img src="${escapeHtml(ev.image)}" alt="${escapeHtml(ev.title)}" class="evd-hero-img" />`
+          ? `<img src="${escapeHtml(ev.image)}" alt="${escapeHtml(ev.title)}" class="evd-hero-img" loading="lazy" decoding="async" />`
           : '';
 
         // Stat cards horizontales (consistente con las stats del inicio)
