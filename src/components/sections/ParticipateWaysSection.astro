@@ -1,0 +1,50 @@
+---
+/**
+ * ParticipateWaysSection — "¿Cómo puedes participar?"
+ *
+ * Grid responsive de tarjetas (ParticipationCard) con las formas de
+ * participar. Cada botón preselecciona el tipo en el formulario.
+ */
+import ParticipationCard from '@/components/common/ParticipationCard.astro';
+import { PARTICIPATION_WAYS } from '@/lib/constants';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<section
+  aria-labelledby="participate-ways-heading"
+  class:list={['relative py-16 lg:py-24', className]}
+  data-animate
+>
+  <!-- Decorativo de fondo -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 h-[30vh]"
+    style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(255,153,0,0.05) 0%,transparent 70%);"
+  ></div>
+
+  <div class="container-sbg relative z-10">
+    <span class="code-label mb-4 inline-block"># participate.ways</span>
+    <h2
+      id="participate-ways-heading"
+      class="text-2xl sm:text-3xl lg:text-4xl tracking-tight mb-3"
+    >
+      ¿Cómo puedes participar?
+    </h2>
+    <p
+      class="mb-10 max-w-2xl text-base leading-[1.8] text-[var(--sbg-text-muted)]"
+      style="font-family:'Nunito Sans',sans-serif;"
+    >
+      Elige la forma que más se ajuste a ti. Cada opción te llevará al formulario
+      con el tipo de propuesta listo para completar.
+    </p>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {PARTICIPATION_WAYS.map((way) => <ParticipationCard way={way} />)}
+    </div>
+  </div>
+</section>

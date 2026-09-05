@@ -264,3 +264,48 @@ export interface IApiEventsQuery {
   /** Fecha hasta YYYY-MM-DD */
   to?: string;
 }
+
+// ============================================
+// Participa en la Comunidad
+// ============================================
+
+/** Tipo de propuesta que el backend debe poder identificar. */
+export type ProposalType = 'TALK' | 'WORKSHOP' | 'TALLER' | 'IDEA' | 'VOLUNTEER';
+
+/** Modalidad en la que se realizaría la actividad. */
+export type ProposalModality = 'VIRTUAL' | 'PRESENCIAL' | 'HIBRIDA';
+
+/** Nivel de la charla, inspirado en los niveles de AWS (100–400). */
+export type ProposalLevel = 100 | 200 | 300 | 400;
+
+/** Forma de participación mostrada como tarjeta. */
+export interface IParticipationWay {
+  /** Tipo de propuesta que se preselecciona al abrir el formulario. */
+  key: ProposalType;
+  /** Emoji o clave de icono representativo. */
+  icon: string;
+  /** Título corto: "Dar una charla". */
+  title: string;
+  /** Descripción breve de la forma de participación. */
+  description: string;
+  /** Texto del botón: "Postular" | "Proponer" | "Participar". */
+  actionLabel: string;
+  /** Color rgba para el efecto glow en hover. */
+  glowColor?: string;
+}
+
+/** Opción de modalidad para el formulario. */
+export interface IModalityOption {
+  value: ProposalModality;
+  label: string;
+}
+
+/** Nivel de charla con descripción de ayuda para el speaker. */
+export interface ITalkLevel {
+  /** Valor numérico del nivel (100, 200, 300, 400). */
+  value: ProposalLevel;
+  /** Etiqueta legible: "200 — Básico / Intermedio". */
+  label: string;
+  /** Descripción corta que ayuda a elegir el nivel correcto. */
+  description: string;
+}
