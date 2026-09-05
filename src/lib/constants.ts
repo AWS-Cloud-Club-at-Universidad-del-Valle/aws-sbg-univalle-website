@@ -449,10 +449,10 @@ export const COMMUNITY_EMAIL = 'aws.cloud.club@correounivalle.edu.co';
 
 /**
  * Endpoint del backend para registrar propuestas (POST /community/proposals).
- * Se deja vacío hasta que la infraestructura (API Gateway + Lambda) esté lista.
- * Mientras esté vacío, el formulario simula el envío para poder probar la UX.
+ * Si se deja vacío, el formulario simula el envío para poder probar la UX.
  */
-export const PROPOSALS_ENDPOINT = '';
+export const PROPOSALS_ENDPOINT =
+  'https://orj83oh0pc.execute-api.us-east-1.amazonaws.com/dev/community/proposals';
 
 /** Formas de participación mostradas como tarjetas. */
 export const PARTICIPATION_WAYS: IParticipationWay[] = [
