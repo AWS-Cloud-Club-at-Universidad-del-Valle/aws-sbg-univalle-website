@@ -1,0 +1,762 @@
+---
+/**
+ * ParticipateFormSection — Formulario de propuestas de la comunidad.
+ *
+ * Registra propuestas de charla, workshop, taller, voluntariado o ideas.
+ * Es solo frontend: si PROPOSALS_ENDPOINT está vacío, simula el envío para
+ * poder probar la experiencia completa (loading, éxito, error).
+ *
+ * Escucha el evento global `participate:select` (emitido por las tarjetas y
+ * la sección de ideas) para preseleccionar el tipo, hacer scroll y enfocar.
+ *
+ * Comportamiento por tipo:
+ * - TALK / WORKSHOP / TALLER: requieren título, descripción, modalidad y nivel.
+ * - IDEA / VOLUNTEER: solo requieren correo, un mensaje y el consentimiento;
+ *   los campos específicos de charla se ocultan.
+ */
+import {
+  PROPOSAL_MODALITIES,
+  TALK_LEVELS,
+  PARTICIPATION_WAYS,
+  PROPOSALS_ENDPOINT,
+} from '@/lib/constants';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+// Opciones del selector de tipo (incluye IDEA junto a las formas de participación).
+const TYPE_OPTIONS = [
+  ...PARTICIPATION_WAYS.map((w) => ({ value: w.key, label: w.title })),
+  { value: 'IDEA', label: 'Compartir una idea' },
+];
+---
+
+<section
+  id="participate-form"
+  aria-labelledby="participate-form-heading"
+  class:list={['relative py-16 lg:py-24 overflow-hidden scroll-mt-20', className]}
+  data-endpoint={PROPOSALS_ENDPOINT}
+>
+  <!-- Decorativo -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0"
+    style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(255,153,0,0.05) 0%,transparent 65%);"
+  ></div>
+
+  <div class="container-sbg relative z-10">
+    <div class="mx-auto max-w-2xl">
+      <!-- Encabezado -->
+      <div data-animate class="mb-8 text-center">
+        <span class="code-label mb-3 inline-block"># participate.submit</span>
+        <h2 id="participate-form-heading" class="text-2xl sm:text-3xl lg:text-4xl tracking-tight">
+          Postula tu propuesta
+        </h2>
+        <p
+          class="mx-auto mt-4 max-w-lg text-base leading-[1.8] text-[var(--sbg-text-muted)]"
+          style="font-family:'Nunito Sans',sans-serif;"
+        >
+          ¿Tienes algo que enseñar, compartir o contar? Completa este formulario y
+          nuestro equipo revisará tu propuesta.
+        </p>
+      </div>
+
+      <!-- Confirmación (oculta hasta el envío exitoso) -->
+      <div
+        id="form-success"
+        role="status"
+        aria-live="polite"
+        hidden
+        class="rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-10 text-center"
+      >
+        <div class="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--sbg-success)] to-[#2e7d32] shadow-xl">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <h3 class="text-xl sm:text-2xl">¡Gracias por participar!</h3>
+        <p
+          class="mx-auto mt-3 max-w-md text-base leading-[1.7] text-[var(--sbg-text-muted)]"
+          style="font-family:'Nunito Sans',sans-serif;"
+        >
+          Recibimos tu propuesta correctamente. Nuestro equipo revisará la información
+          y se pondrá en contacto contigo si la propuesta avanza.
+        </p>
+        <button
+          type="button"
+          id="form-reset"
+          class="mt-7 inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-[var(--sbg-border)] px-6 text-sm font-semibold text-[var(--sbg-text)] transition-colors hover:border-[var(--sbg-accent-border)] hover:bg-[var(--sbg-bg-elevated)] focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)]"
+          style="font-family:'Space Mono',monospace;"
+        >
+          Enviar otra propuesta
+        </button>
+      </div>
+
+      <!-- Formulario -->
+      <form
+        id="proposal-form"
+        novalidate
+        data-animate
+        class="rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-6 sm:p-9"
+      >
+        <!-- Tipo de propuesta -->
+        <fieldset class="fs">
+          <legend class="legend">Tipo de propuesta</legend>
+          <div class="chip-group" role="radiogroup" aria-label="Tipo de propuesta">
+            {
+              TYPE_OPTIONS.map((opt, i) => (
+                <label class="chip">
+                  <input
+                    type="radio"
+                    name="type"
+                    value={opt.value}
+                    checked={i === 0}
+                  />
+                  <span>{opt.label}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <!-- Datos personales -->
+        <fieldset class="fs">
+          <legend class="legend">Datos personales</legend>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="field">
+              <label class="label" for="firstName">Nombre <span class="req">*</span></label>
+              <input class="input" type="text" id="firstName" name="firstName" autocomplete="given-name" maxlength="80" aria-describedby="firstName-error" required />
+              <p class="error" id="firstName-error" hidden></p>
+            </div>
+            <div class="field">
+              <label class="label" for="lastName">Apellido <span class="req">*</span></label>
+              <input class="input" type="text" id="lastName" name="lastName" autocomplete="family-name" maxlength="80" aria-describedby="lastName-error" required />
+              <p class="error" id="lastName-error" hidden></p>
+            </div>
+          </div>
+          <div class="field mt-4">
+            <label class="label" for="email">Correo electrónico <span class="req">*</span></label>
+            <input class="input" type="email" id="email" name="email" autocomplete="email" maxlength="120" aria-describedby="email-error" required />
+            <p class="error" id="email-error" hidden></p>
+          </div>
+        </fieldset>
+
+        <!-- Información de la charla (se oculta para IDEA/VOLUNTEER) -->
+        <fieldset class="fs" id="talk-fields">
+          <legend class="legend" id="talk-legend">Sobre tu propuesta</legend>
+
+          <div class="field">
+            <label class="label" for="title">Título de la charla <span class="req">*</span></label>
+            <input class="input" type="text" id="title" name="title" maxlength="120" aria-describedby="title-error" />
+            <p class="error" id="title-error" hidden></p>
+          </div>
+
+          <div class="field mt-4">
+            <label class="label" for="description">Descripción de la charla <span class="req">*</span></label>
+            <textarea class="input textarea" id="description" name="description" rows="5" maxlength="1500" aria-describedby="description-help description-error"></textarea>
+            <p class="help" id="description-help">
+              Cuéntanos de qué tratará tu charla, qué aprenderán los asistentes y cuál
+              será el enfoque principal.
+            </p>
+            <p class="error" id="description-error" hidden></p>
+          </div>
+
+          <!-- Modalidad -->
+          <div class="field mt-5">
+            <span class="label" id="modality-label">Modalidad <span class="req">*</span></span>
+            <div class="radio-row" role="radiogroup" aria-labelledby="modality-label" aria-describedby="modality-error">
+              {
+                PROPOSAL_MODALITIES.map((m) => (
+                  <label class="radio-pill">
+                    <input type="radio" name="modality" value={m.value} />
+                    <span>{m.label}</span>
+                  </label>
+                ))
+              }
+            </div>
+            <p class="error" id="modality-error" hidden></p>
+          </div>
+
+          <!-- Nivel -->
+          <div class="field mt-5">
+            <span class="label" id="level-label">Nivel de la charla <span class="req">*</span></span>
+            <div class="level-grid" role="radiogroup" aria-labelledby="level-label" aria-describedby="level-error">
+              {
+                TALK_LEVELS.map((lvl) => (
+                  <label class="level-card">
+                    <input type="radio" name="level" value={lvl.value} />
+                    <span class="level-title">{lvl.label}</span>
+                    <span class="level-desc">{lvl.description}</span>
+                  </label>
+                ))
+              }
+            </div>
+            <p class="error" id="level-error" hidden></p>
+          </div>
+        </fieldset>
+
+        <!-- Información adicional / idea -->
+        <fieldset class="fs">
+          <legend class="legend" id="additional-legend">¿Tienes alguna idea o algo más que quieras contarnos?</legend>
+          <div class="field">
+            <label class="sr-only" for="additionalIdea">Información adicional</label>
+            <textarea
+              class="input textarea"
+              id="additionalIdea"
+              name="additionalIdea"
+              rows="4"
+              maxlength="1500"
+              placeholder="Cuéntanos cualquier información adicional, idea o propuesta que consideres importante."
+              aria-describedby="additionalIdea-error"
+            ></textarea>
+            <p class="error" id="additionalIdea-error" hidden></p>
+          </div>
+        </fieldset>
+
+        <!-- Consentimiento -->
+        <div class="field consent">
+          <label class="consent-label">
+            <input type="checkbox" id="consent" name="consent" aria-describedby="consent-error" required />
+            <span>
+              Acepto que la información proporcionada sea utilizada para gestionar mi
+              propuesta y que el equipo de la comunidad pueda contactarme.
+            </span>
+          </label>
+          <p class="error" id="consent-error" hidden></p>
+        </div>
+
+        <!-- Error general de envío -->
+        <p id="form-error" role="alert" hidden class="submit-error"></p>
+
+        <!-- Botón -->
+        <div class="mt-7">
+          <button type="submit" id="submit-btn" class="submit-btn">
+            <span class="submit-label">Enviar propuesta</span>
+            <svg class="submit-icon" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fs {
+    border: none;
+    padding: 0;
+    margin: 0 0 1.75rem;
+  }
+  .legend {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f9fafb;
+    padding: 0;
+    margin-bottom: 0.9rem;
+  }
+  .field { display: flex; flex-direction: column; }
+  .label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--sbg-text);
+    margin-bottom: 0.4rem;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  .req { color: var(--sbg-orange); }
+  .input {
+    width: 100%;
+    background: var(--sbg-bg);
+    border: 1px solid var(--sbg-border);
+    border-radius: 0.6rem;
+    padding: 0.7rem 0.85rem;
+    color: var(--sbg-text);
+    font-size: 0.95rem;
+    font-family: 'Nunito Sans', sans-serif;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+  }
+  .input::placeholder { color: var(--sbg-text-subtle); }
+  .input:focus-visible {
+    outline: none;
+    border-color: var(--sbg-accent-border);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+  }
+  .textarea { resize: vertical; min-height: 6rem; line-height: 1.6; }
+  .input[aria-invalid='true'] {
+    border-color: var(--sbg-error);
+    box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.15);
+  }
+  .help {
+    margin: 0.4rem 0 0;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--sbg-text-subtle);
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  .error {
+    margin: 0.4rem 0 0;
+    font-size: 0.78rem;
+    color: var(--sbg-error);
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  /* Chips de tipo */
+  .chip-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip { position: relative; }
+  .chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--sbg-border);
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-family: 'Nunito Sans', sans-serif;
+    color: var(--sbg-text-muted);
+    cursor: pointer;
+    transition: all 180ms ease;
+  }
+  .chip input:checked + span {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(90deg, var(--sbg-orange), var(--sbg-accent));
+  }
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--sbg-accent);
+    outline-offset: 2px;
+  }
+
+  /* Radios de modalidad */
+  .radio-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .radio-pill { position: relative; }
+  .radio-pill input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .radio-pill span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--sbg-border);
+    border-radius: 0.6rem;
+    font-size: 0.85rem;
+    font-family: 'Nunito Sans', sans-serif;
+    color: var(--sbg-text-muted);
+    cursor: pointer;
+    transition: all 180ms ease;
+  }
+  .radio-pill input:checked + span {
+    color: #fff;
+    border-color: var(--sbg-accent-border);
+    background: var(--sbg-accent-subtle);
+  }
+  .radio-pill input:focus-visible + span {
+    outline: 2px solid var(--sbg-accent);
+    outline-offset: 2px;
+  }
+
+  /* Tarjetas de nivel */
+  .level-grid { display: grid; gap: 0.6rem; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .level-grid { grid-template-columns: 1fr 1fr; } }
+  .level-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--sbg-border);
+    border-radius: 0.7rem;
+    cursor: pointer;
+    transition: all 180ms ease;
+  }
+  .level-card input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .level-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--sbg-text);
+  }
+  .level-desc {
+    font-size: 0.76rem;
+    line-height: 1.45;
+    color: var(--sbg-text-subtle);
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  .level-card:hover { border-color: var(--sbg-accent-border); }
+  .level-card:has(input:checked) {
+    border-color: var(--sbg-accent-border);
+    background: var(--sbg-accent-subtle);
+  }
+  .level-card:has(input:focus-visible) {
+    outline: 2px solid var(--sbg-accent);
+    outline-offset: 2px;
+  }
+
+  /* Consentimiento */
+  .consent { margin-bottom: 0.25rem; }
+  .consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--sbg-text-muted);
+    font-family: 'Nunito Sans', sans-serif;
+    cursor: pointer;
+  }
+  .consent-label input {
+    margin-top: 0.15rem;
+    width: 1.15rem;
+    height: 1.15rem;
+    accent-color: var(--sbg-accent);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .submit-error {
+    margin: 1.25rem 0 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--sbg-error);
+    border-radius: 0.6rem;
+    background: rgba(220, 20, 60, 0.1);
+    color: #f3b6bf;
+    font-size: 0.85rem;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  /* Botón de envío */
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    min-height: 52px;
+    padding: 0.85rem 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(90deg, var(--sbg-orange), var(--sbg-accent));
+    border: none;
+    border-radius: 0.85rem;
+    cursor: pointer;
+    box-shadow: 0 10px 26px rgba(255, 153, 0, 0.22);
+    transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease;
+  }
+  .submit-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 32px rgba(255, 153, 0, 0.34);
+  }
+  .submit-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+  .submit-icon { flex-shrink: 0; }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .input, .chip span, .radio-pill span, .level-card, .submit-btn {
+      transition: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('astro:page-load', function () {
+    var section = document.getElementById('participate-form');
+    var form = document.getElementById('proposal-form');
+    if (!section || !form) return;
+
+    var endpoint = (section.getAttribute('data-endpoint') || '').trim();
+
+    var successBox = document.getElementById('form-success');
+    var resetBtn = document.getElementById('form-reset');
+    var submitBtn = document.getElementById('submit-btn');
+    var submitLabel = submitBtn.querySelector('.submit-label');
+    var formError = document.getElementById('form-error');
+    var talkFields = document.getElementById('talk-fields');
+    var talkLegend = document.getElementById('talk-legend');
+    var additionalLegend = document.getElementById('additional-legend');
+
+    // Tipos que requieren los campos de charla (título/descripción/modalidad/nivel).
+    var TALK_LIKE = ['TALK', 'WORKSHOP', 'TALLER'];
+
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function getType() {
+      var checked = form.querySelector('input[name="type"]:checked');
+      return checked ? checked.value : 'TALK';
+    }
+
+    function setType(type) {
+      var input = form.querySelector('input[name="type"][value="' + type + '"]');
+      if (input) {
+        input.checked = true;
+        applyTypeVisibility();
+      }
+    }
+
+    // Muestra/oculta los campos de charla según el tipo seleccionado.
+    function applyTypeVisibility() {
+      var type = getType();
+      var isTalkLike = TALK_LIKE.indexOf(type) !== -1;
+      if (talkFields) talkFields.hidden = !isTalkLike;
+
+      // Ajusta textos según el tipo.
+      if (talkLegend) {
+        talkLegend.textContent =
+          type === 'WORKSHOP' || type === 'TALLER'
+            ? 'Sobre tu propuesta'
+            : 'Sobre tu charla';
+      }
+      if (additionalLegend) {
+        additionalLegend.textContent =
+          isTalkLike
+            ? '¿Tienes alguna idea o algo más que quieras contarnos?'
+            : type === 'VOLUNTEER'
+              ? 'Cuéntanos cómo te gustaría ayudar'
+              : 'Cuéntanos tu idea';
+      }
+    }
+
+    function showError(id, message) {
+      var el = document.getElementById(id + '-error');
+      var input = document.getElementById(id);
+      if (el) {
+        el.textContent = message;
+        el.hidden = false;
+      }
+      if (input) input.setAttribute('aria-invalid', 'true');
+    }
+
+    function clearError(id) {
+      var el = document.getElementById(id + '-error');
+      var input = document.getElementById(id);
+      if (el) {
+        el.textContent = '';
+        el.hidden = true;
+      }
+      if (input) input.removeAttribute('aria-invalid');
+    }
+
+    function value(name) {
+      var el = form.querySelector('[name="' + name + '"]');
+      return el ? el.value.trim() : '';
+    }
+
+    var REQUIRED_MSG = 'Este campo es obligatorio.';
+
+    function validate() {
+      var ok = true;
+      var type = getType();
+      var isTalkLike = TALK_LIKE.indexOf(type) !== -1;
+      var firstInvalid = null;
+
+      // Datos personales (siempre obligatorios).
+      ['firstName', 'lastName'].forEach(function (id) {
+        if (!value(id)) {
+          showError(id, REQUIRED_MSG);
+          ok = false;
+          if (!firstInvalid) firstInvalid = document.getElementById(id);
+        } else {
+          clearError(id);
+        }
+      });
+
+      // Correo.
+      var email = value('email');
+      if (!email) {
+        showError('email', REQUIRED_MSG);
+        ok = false;
+        if (!firstInvalid) firstInvalid = document.getElementById('email');
+      } else if (!EMAIL_RE.test(email)) {
+        showError('email', 'Ingresa un correo electrónico válido.');
+        ok = false;
+        if (!firstInvalid) firstInvalid = document.getElementById('email');
+      } else {
+        clearError('email');
+      }
+
+      // Campos de charla (solo si el tipo lo requiere).
+      if (isTalkLike) {
+        ['title', 'description'].forEach(function (id) {
+          if (!value(id)) {
+            showError(id, REQUIRED_MSG);
+            ok = false;
+            if (!firstInvalid) firstInvalid = document.getElementById(id);
+          } else {
+            clearError(id);
+          }
+        });
+
+        if (!form.querySelector('input[name="modality"]:checked')) {
+          showError('modality', 'Selecciona una modalidad.');
+          ok = false;
+        } else {
+          clearError('modality');
+        }
+
+        if (!form.querySelector('input[name="level"]:checked')) {
+          showError('level', 'Selecciona un nivel.');
+          ok = false;
+        } else {
+          clearError('level');
+        }
+      } else {
+        clearError('title');
+        clearError('description');
+        clearError('modality');
+        clearError('level');
+      }
+
+      // Consentimiento.
+      var consent = document.getElementById('consent');
+      if (!consent.checked) {
+        showError('consent', 'Debes aceptar para enviar tu propuesta.');
+        ok = false;
+        if (!firstInvalid) firstInvalid = consent;
+      } else {
+        clearError('consent');
+      }
+
+      if (firstInvalid && typeof firstInvalid.focus === 'function') {
+        firstInvalid.focus();
+      }
+      return ok;
+    }
+
+    function buildPayload() {
+      var type = getType();
+      var isTalkLike = TALK_LIKE.indexOf(type) !== -1;
+      var modalityEl = form.querySelector('input[name="modality"]:checked');
+      var levelEl = form.querySelector('input[name="level"]:checked');
+      return {
+        type: type,
+        firstName: value('firstName'),
+        lastName: value('lastName'),
+        email: value('email'),
+        title: isTalkLike ? value('title') : null,
+        description: isTalkLike ? value('description') : null,
+        modality: isTalkLike && modalityEl ? modalityEl.value : null,
+        level: isTalkLike && levelEl ? Number(levelEl.value) : null,
+        additionalIdea: value('additionalIdea') || null,
+      };
+    }
+
+    function setLoading(loading) {
+      submitBtn.disabled = loading;
+      submitLabel.textContent = loading ? 'Enviando propuesta...' : 'Enviar propuesta';
+    }
+
+    function showSubmitError(message) {
+      formError.textContent = message;
+      formError.hidden = false;
+    }
+
+    function sendProposal(payload) {
+      // Sin endpoint configurado: se simula el envío para poder probar la UX.
+      if (!endpoint) {
+        return new Promise(function (resolve) {
+          setTimeout(resolve, 900);
+        });
+      }
+      return fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).then(function (res) {
+        if (!res.ok) {
+          var err = new Error('server');
+          err.name = 'ServerError';
+          throw err;
+        }
+      });
+    }
+
+    // Envío del formulario.
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      formError.hidden = true;
+
+      if (!validate()) return;
+
+      setLoading(true);
+
+      sendProposal(buildPayload())
+        .then(function () {
+          form.hidden = true;
+          if (successBox) {
+            successBox.hidden = false;
+            successBox.focus && successBox.focus();
+            successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        })
+        .catch(function (err) {
+          setLoading(false);
+          if (err && err.name === 'ServerError') {
+            showSubmitError(
+              'Ocurrió un error procesando tu propuesta. Intenta nuevamente más tarde.'
+            );
+          } else {
+            showSubmitError(
+              'No pudimos enviar tu propuesta. Intenta nuevamente.'
+            );
+          }
+        });
+    });
+
+    // Reset tras un envío exitoso.
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () {
+        form.reset();
+        // Limpia errores y estados.
+        form.querySelectorAll('[aria-invalid="true"]').forEach(function (el) {
+          el.removeAttribute('aria-invalid');
+        });
+        form.querySelectorAll('.error').forEach(function (el) {
+          el.hidden = true;
+          el.textContent = '';
+        });
+        formError.hidden = true;
+        setLoading(false);
+        applyTypeVisibility();
+        if (successBox) successBox.hidden = true;
+        form.hidden = false;
+        form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    // Actualiza la visibilidad al cambiar el tipo.
+    form.querySelectorAll('input[name="type"]').forEach(function (radio) {
+      radio.addEventListener('change', applyTypeVisibility);
+    });
+
+    // Escucha la selección desde las tarjetas / sección de idea.
+    document.addEventListener('participate:select', function (e) {
+      var type = (e && e.detail && e.detail.type) || 'TALK';
+      // Si estaba en éxito, restaura el formulario.
+      if (successBox && !successBox.hidden) {
+        successBox.hidden = true;
+        form.hidden = false;
+        setLoading(false);
+      }
+      setType(type);
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Enfoca el primer campo tras el scroll.
+      setTimeout(function () {
+        var first = document.getElementById('firstName');
+        if (first) first.focus();
+      }, 400);
+    });
+
+    // Estado inicial.
+    applyTypeVisibility();
+  });
+</script>
