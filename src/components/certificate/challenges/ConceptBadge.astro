@@ -1,0 +1,13 @@
+---
+/**
+ * ConceptBadge — Badge para un concepto de aprendizaje (ej. "Serverless", "IaC").
+ * Color morado acento del sitio.
+ */
+interface Props {
+  concept: string;
+}
+const { concept } = Astro.props;
+---
+<span class="ch-concept-badge">
+  {concept}
+</span>

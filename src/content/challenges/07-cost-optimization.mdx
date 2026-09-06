@@ -1,0 +1,113 @@
+---
+challengeId: 7
+slug: cost-optimization
+title: AWS Cost Optimization Challenge
+description: Analiza y reduce los costos de una arquitectura AWS existente usando Pricing Calculator, Cost Explorer y Budgets, refactorizando los recursos con AWS CDK.
+difficulty: Intermedio
+duration: 3–4 horas
+services: ["Pricing Calculator", "Cost Explorer", "Budgets", "EC2", "S3", "RDS"]
+concepts: ["Rightsizing", "Trade-offs", "Cost optimization"]
+order: 7
+sessionDate: "2026-10-15"
+---
+
+## Objetivo
+
+Analizar una arquitectura AWS con costos elevados, identificar oportunidades de optimización y refactorizar los recursos mediante **AWS CDK** para reducir el gasto mensual sin comprometer la funcionalidad.
+
+## Contexto
+
+Una startup tiene una arquitectura que cuesta $8,000 USD/mes. El presupuesto fue recortado a $3,000. Debes analizar cada componente, identificar el desperdicio y proponer (e implementar en CDK) una arquitectura optimizada.
+
+**Arquitectura actual (costosa):**
+- 5 instancias `m5.xlarge` On-Demand corriendo 24/7 (carga real: 15% CPU promedio).
+- 10TB en S3 Standard (80% de los archivos no se acceden hace más de 6 meses).
+- Instancia RDS `db.r5.2xlarge` Multi-AZ (query más pesada: 200ms, uso del 20%).
+
+## Requisitos
+
+- Analizar el costo actual usando **AWS Pricing Calculator**.
+- Identificar oportunidades de **rightsizing**: cambiar tipos de instancia según uso real.
+- Configurar **lifecycle policies en S3** para mover datos fríos a clases de menor costo.
+- Cambiar instancias On-Demand por **Reserved Instances o Savings Plans** donde aplique.
+- Configurar **AWS Budgets** para alertar cuando el gasto supere un umbral.
+- Actualizar el stack CDK con la arquitectura optimizada.
+
+## Servicios AWS
+
+| Servicio | Rol en la optimización |
+|---|---|
+| **Pricing Calculator** | Estimar costos antes de desplegar |
+| **Cost Explorer** | Analizar y visualizar el gasto actual |
+| **Budgets** | Alertas de gasto y pronóstico |
+| **EC2** | Rightsizing e instancias reservadas |
+| **S3** | Lifecycle policies para datos fríos |
+| **RDS** | Rightsizing de base de datos |
+
+## Infrastructure as Code (AWS CDK)
+
+```bash
+$ cdk init app --language typescript
+$ cdk synth
+$ cdk deploy
+```
+
+Fragmento clave — Budget con alarma:
+
+```typescript
+// lib/cost-stack.ts
+import * as budgets from 'aws-cdk-lib/aws-budgets';
+
+new budgets.CfnBudget(this, 'MonthlyCostBudget', {
+  budget: {
+    budgetType: 'COST',
+    timeUnit: 'MONTHLY',
+    budgetLimit: { amount: 3000, unit: 'USD' },
+  },
+  notificationsWithSubscribers: [{
+    notification: {
+      notificationType: 'ACTUAL',
+      comparisonOperator: 'GREATER_THAN',
+      threshold: 80, // Alerta al 80% del presupuesto
+    },
+    subscribers: [{ subscriptionType: 'EMAIL', address: 'equipo@ejemplo.com' }],
+  }],
+});
+```
+
+## Entregables
+
+- [ ] Análisis de costos documentado (costo actual vs. costo optimizado).
+- [ ] Stack CDK actualizado con instancias de menor tamaño (rightsizing).
+- [ ] Lifecycle policies en S3 para datos de más de 90 días → S3-IA, más de 180 días → S3 Glacier.
+- [ ] Budget configurado con alertas al 80% y 100% del umbral.
+- [ ] Estimación en Pricing Calculator del costo mensual esperado post-optimización.
+
+## Criterios de Éxito
+
+1. La arquitectura optimizada cuesta menos de $3,000 USD/mes según el Pricing Calculator.
+2. Las lifecycle policies de S3 están activas en el stack CDK.
+3. El Budget de AWS está configurado y enviando alertas al correo del equipo.
+4. Las instancias EC2 mantienen un rendimiento aceptable con el tipo reducido.
+
+## Boss Fight
+
+> **¡Doble recorte de presupuesto!**
+
+**Fase 1:** El presupuesto baja de $8,000 a $3,000. (Ya lo resolviste.)
+
+**Fase 2 — Recorte sorpresa:** El CFO anuncia un recorte adicional. El presupuesto máximo es ahora **$1,500 USD/mes**.
+
+**¿Qué cambia?**
+- Debes evaluar qué componentes pueden eliminarse temporalmente sin impactar el core del negocio.
+- Considera reemplazar EC2 con **AWS Lambda** para cargas de trabajo intermitentes.
+- Evalúa usar **RDS t3.micro** con Single-AZ para desarrollo/staging.
+- Documenta los trade-offs: ¿qué funcionalidad se pierde? ¿qué riesgo se asume?
+
+## Cleanup
+
+```bash
+$ cdk destroy
+```
+
+> ⚠️ Los Budgets no generan costos directos, pero recuerda eliminar los recursos EC2 y RDS para detener el cobro por hora.

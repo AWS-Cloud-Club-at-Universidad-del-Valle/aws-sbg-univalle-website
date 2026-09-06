@@ -1,0 +1,111 @@
+---
+/**
+ * ChallengeCard — Tarjeta de reto para la página hub.
+ * Muestra número, dificultad, título, descripción,
+ * duración y los badges de servicios AWS.
+ */
+import ServiceBadge from './ServiceBadge.astro';
+
+interface Props {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  difficulty: string;
+  duration: string;
+  services: string[];
+  /** Índice de animación escalonada (0-based). */
+  index?: number;
+}
+
+const {
+  id,
+  slug,
+  title,
+  description,
+  difficulty,
+  duration,
+  services,
+  index = 0,
+} = Astro.props;
+
+const difficultyColor: Record<string, string> = {
+  'Básico':      'var(--sbg-accent-light)',
+  'Intermedio':  'var(--sbg-orange)',
+  'Avanzado':    '#f87171',
+};
+const color = difficultyColor[difficulty] ?? 'var(--sbg-text-muted)';
+---
+
+<a
+  href={`/certificate/challenges/${slug}`}
+  class="ch-card group"
+  data-animate
+  style={`transition-delay: ${index * 60}ms;`}
+>
+  <!-- Cursor glow -->
+  <div aria-hidden="true" class="ch-card__glow"></div>
+
+  <!-- Header: número + dificultad -->
+  <div class="ch-card__header">
+    <span class="ch-card__number">
+      {id.toString().padStart(2, '0')}
+    </span>
+    <span class="ch-card__difficulty" style={`color:${color};`}>
+      {difficulty}
+    </span>
+  </div>
+
+  <!-- Título -->
+  <h3 class="ch-card__title">{title}</h3>
+
+  <!-- Descripción -->
+  <p class="ch-card__desc">{description}</p>
+
+  <!-- Footer: duración + servicios -->
+  <div class="ch-card__footer">
+    <span class="ch-card__duration">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+      {duration}
+    </span>
+    <div class="ch-card__services">
+      {services.slice(0, 4).map((s) => <ServiceBadge service={s} />)}
+      {services.length > 4 && (
+        <span class="ch-service-badge ch-service-badge--more">+{services.length - 4}</span>
+      )}
+    </div>
+  </div>
+
+  <!-- CTA arrow -->
+  <span class="ch-card__cta" aria-hidden="true">
+    Ver reto
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+  </span>
+</a>
+
+<script is:inline>
+document.addEventListener('astro:page-load', function () {
+  document.querySelectorAll('.ch-card').forEach(function (card) {
+    var glow = card.querySelector('.ch-card__glow');
+    if (!glow) return;
+    card.addEventListener('mousemove', function (e) {
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      glow.style.background =
+        'radial-gradient(320px circle at ' + x + 'px ' + y + 'px, rgba(255,153,0,0.07) 0%, transparent 70%)';
+      glow.style.opacity = '1';
+    });
+    card.addEventListener('mouseleave', function () {
+      glow.style.opacity = '0';
+    });
+  });
+});
+</script>

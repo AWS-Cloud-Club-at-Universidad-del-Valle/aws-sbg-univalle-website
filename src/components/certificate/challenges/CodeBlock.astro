@@ -1,0 +1,52 @@
+---
+/**
+ * CodeBlock — Bloque de código con scroll horizontal en móvil,
+ * etiqueta de lenguaje y botón de copia.
+ */
+interface Props {
+  lang?: string;
+  title?: string;
+  code: string;
+}
+const { lang = 'bash', title, code } = Astro.props;
+const id = `cb-${Math.random().toString(36).slice(2, 8)}`;
+---
+<div class="ch-codeblock">
+  <div class="ch-codeblock__header">
+    <span class="ch-codeblock__lang">{lang}</span>
+    {title && <span class="ch-codeblock__title">{title}</span>}
+    <button
+      class="ch-codeblock__copy"
+      type="button"
+      aria-label="Copiar código"
+      data-target={id}
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      Copiar
+    </button>
+  </div>
+  <pre class="ch-codeblock__pre"><code id={id} class={`language-${lang}`}>{code}</code></pre>
+</div>
+
+<script is:inline>
+document.addEventListener('astro:page-load', function () {
+  document.querySelectorAll('.ch-codeblock__copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var targetId = btn.getAttribute('data-target');
+      var el = document.getElementById(targetId);
+      if (!el) return;
+      navigator.clipboard.writeText(el.textContent || '').then(function () {
+        btn.textContent = '✓ Copiado';
+        setTimeout(function () {
+          btn.innerHTML =
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar';
+        }, 2000);
+      });
+    });
+  });
+});
+</script>

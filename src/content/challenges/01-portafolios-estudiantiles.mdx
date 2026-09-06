@@ -1,0 +1,109 @@
+---
+challengeId: 1
+slug: portafolios-estudiantiles
+title: Plataforma de Portafolios Estudiantiles
+description: Diseña y despliega una plataforma cloud estática para portafolios estudiantiles usando AWS CDK, combinando almacenamiento de objetos, CDN global y base de datos serverless.
+difficulty: Básico
+duration: 3–4 horas
+services: ["S3", "CloudFront", "DynamoDB", "IAM"]
+concepts: ["Object Storage", "Serverless", "IaC"]
+order: 1
+sessionDate: "2026-09-19"
+---
+
+## Objetivo
+
+Diseñar y desplegar mediante **AWS CDK** una plataforma cloud que permita a estudiantes publicar sus portafolios de forma estática, con distribución global y almacenamiento seguro.
+
+## Contexto
+
+La Universidad del Valle necesita una plataforma económica y escalable donde los estudiantes puedan subir sus portafolios (HTML, CSS, imágenes, PDFs). El sitio debe cargar rápido desde cualquier país y los archivos sensibles de algunos estudiantes deben permanecer privados.
+
+## Requisitos
+
+- Bucket S3 para almacenar los archivos estáticos del portafolio.
+- Distribución CloudFront para servir el contenido con baja latencia globalmente.
+- Tabla DynamoDB para registrar metadatos de cada portafolio (estudiante, fecha, URL).
+- Roles IAM con mínimo privilegio: el stack de CDK debe definir quién puede escribir en S3 y leer en DynamoDB.
+- Todo el stack debe desplegarse con un solo `cdk deploy`.
+
+## Servicios AWS
+
+| Servicio | Rol en el reto |
+|---|---|
+| **S3** | Almacena archivos estáticos del portafolio |
+| **CloudFront** | CDN global que sirve los archivos con caché |
+| **DynamoDB** | Guarda metadatos de cada portafolio |
+| **IAM** | Controla los permisos de acceso |
+
+## Infrastructure as Code (AWS CDK)
+
+Inicializa tu proyecto CDK en TypeScript y define los recursos:
+
+```bash
+$ cdk init app --language typescript
+$ cdk synth
+$ cdk deploy
+```
+
+Estructura de constructs sugerida:
+
+```typescript
+// lib/portfolio-stack.ts
+import * as cdk from 'aws-cdk-lib';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+
+export class PortfolioStack extends cdk.Stack {
+  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // S3 bucket privado (acceso solo vía CloudFront)
+    const bucket = new s3.Bucket(this, 'PortfolioBucket', {
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+    });
+
+    // DynamoDB para metadatos
+    const table = new dynamodb.Table(this, 'PortfoliosTable', {
+      partitionKey: { name: 'studentId', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+    });
+  }
+}
+```
+
+## Entregables
+
+- [ ] Stack CDK desplegado exitosamente (`cdk deploy` sin errores).
+- [ ] Bucket S3 creado con acceso público bloqueado.
+- [ ] Distribución CloudFront apuntando al bucket como origen.
+- [ ] Tabla DynamoDB con al menos un ítem de prueba.
+- [ ] Roles IAM definidos en el stack (no creados manualmente).
+- [ ] URL de CloudFront funcional que sirve un archivo de prueba.
+
+## Criterios de Éxito
+
+1. Acceder al portafolio desde la URL de CloudFront devuelve el contenido correcto.
+2. Intentar acceder directamente al bucket S3 devuelve un error 403 (acceso denegado).
+3. `cdk synth` genera el template sin errores.
+4. La tabla DynamoDB existe con la clave de partición correcta.
+
+## Boss Fight
+
+> **¡Alerta de requerimiento nuevo!** El cliente decide que algunos archivos del portafolio deben ser **privados** (solo accesibles con un enlace firmado) y que el tráfico debe optimizarse para usuarios en **América Latina, Europa y Asia simultáneamente**.
+
+**¿Qué cambia?**
+- Debes configurar **S3 Signed URLs** o **CloudFront Signed URLs** para los archivos privados.
+- Debes ajustar la distribución de CloudFront para usar **Price Class 200** (América + Europa + Asia).
+- El stack CDK debe soportar ambos tipos de archivo (público y privado) sin romper lo existente.
+
+## Cleanup
+
+Cuando termines el reto, elimina todos los recursos para evitar costos:
+
+```bash
+$ cdk destroy
+```
+
+> ⚠️ **Importante:** S3 no elimina buckets con contenido. Vacía el bucket manualmente antes de ejecutar `cdk destroy`, o configura `autoDeleteObjects: true` en tu construct.

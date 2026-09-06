@@ -1,0 +1,227 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ServiceBadge from '@/components/certificate/challenges/ServiceBadge.astro';
+import ConceptBadge from '@/components/certificate/challenges/ConceptBadge.astro';
+import ChallengeNavigation from '@/components/certificate/challenges/ChallengeNavigation.astro';
+
+export async function getStaticPaths() {
+  const challenges = await getCollection('challenges');
+  const sorted = challenges.sort((a, b) => a.data.order - b.data.order);
+  return sorted.map((challenge, index) => ({
+    params: { slug: challenge.data.slug },
+    props: {
+      challenge,
+      prev: sorted[index - 1] ?? null,
+      next: sorted[index + 1] ?? null,
+    },
+  }));
+}
+
+interface Props {
+  challenge: CollectionEntry<'challenges'>;
+  prev: CollectionEntry<'challenges'> | null;
+  next: CollectionEntry<'challenges'> | null;
+}
+
+const { challenge, prev, next } = Astro.props;
+const { Content } = await render(challenge);
+const { challengeId, title, description, difficulty, services, concepts, sessionDate } = challenge.data;
+
+function formatSessionDate(dateStr: string): string {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+  return date.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+const difficultyColor: Record<string, string> = {
+  'Básico':     '#4ade80',
+  'Intermedio': 'var(--sbg-orange)',
+  'Avanzado':   '#f87171',
+};
+const color = difficultyColor[difficulty] ?? 'var(--sbg-text-muted)';
+
+const tocSections = [
+  { id: 'objetivo',          label: 'Objetivo' },
+  { id: 'contexto',          label: 'Contexto' },
+  { id: 'requisitos',        label: 'Requisitos' },
+  { id: 'servicios-aws',     label: 'Servicios' },
+  { id: 'infrastructure-as-code-aws-cdk', label: 'IaC (CDK)' },
+  { id: 'entregables',       label: 'Entregables' },
+  { id: 'criterios-de-xito', label: 'Criterios de Éxito' },
+  { id: 'boss-fight',        label: 'Boss Fight' },
+  { id: 'cleanup',           label: 'Cleanup' },
+];
+---
+
+<BaseLayout
+  title={`Reto ${challengeId}: ${title}`}
+  description={description}
+>
+  <!-- Header del reto -->
+  <section class="relative overflow-hidden py-16 lg:py-20">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[55vh]"
+      style="background:radial-gradient(ellipse 55% 45% at 30% 0%,rgba(255,153,0,0.07) 0%,transparent 65%);"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.015]"
+      style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:40px 40px;"></div>
+
+    <div class="container-sbg relative z-10">
+      <ChallengeNavigation
+        current={{ slug: challenge.data.slug, title, id: challengeId }}
+        prev={prev ? { slug: prev.data.slug, title: prev.data.title, id: prev.data.challengeId } : undefined}
+        next={next ? { slug: next.data.slug, title: next.data.title, id: next.data.challengeId } : undefined}
+      />
+
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <span class="ch-reto-num">Reto {challengeId.toString().padStart(2, '0')}</span>
+        <span class="ch-difficulty-badge" style={`color:${color}; border-color:${color}40; background:${color}10;`}>
+          {difficulty}
+        </span>
+        <span class="ch-duration-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          {formatSessionDate(sessionDate)}
+        </span>
+      </div>
+
+      <h1 class="hero-animate hero-animate-delay-1 mt-4 text-[2.2rem] leading-[1.08] tracking-tight sm:text-[2.8rem] lg:text-[3.2rem]">
+        {title}
+      </h1>
+      <p class="hero-animate hero-animate-delay-2 mt-4 max-w-2xl text-base leading-[1.8] text-[var(--sbg-text-muted)]"
+        style="font-family:'Nunito Sans',sans-serif;">
+        {description}
+      </p>
+
+      <div class="mt-6 flex flex-col gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="code-label mr-1"># servicios</span>
+          {services.map((s) => <ServiceBadge service={s} />)}
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="code-label mr-1"># conceptos</span>
+          {concepts.map((c) => <ConceptBadge concept={c} />)}
+        </div>
+      </div>
+
+      <!-- Botón de entrega (habilitado desde sessionDate) -->
+      <div class="mt-8">
+        <a
+          id="submit-btn"
+          href="https://forms.gle/PC6ju9YcfSd6XDsp7"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-session-date={sessionDate}
+          class="ch-submit-btn"
+          aria-disabled="true"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/>
+          </svg>
+          <span id="submit-label">Entregar proyecto</span>
+        </a>
+        <p id="submit-hint" class="mt-2 text-[11px] text-[var(--sbg-text-subtle)]"
+          style="font-family:'Nunito Sans',sans-serif;">
+          Disponible desde el {formatSessionDate(sessionDate)}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Layout: TOC lateral + contenido -->
+  <div class="container-sbg pb-24">
+    <div class="ch-detail-layout">
+      <!-- TOC sticky (desktop) -->
+      <aside class="ch-toc" aria-label="Tabla de contenidos">
+        <p class="ch-toc__heading code-label"># índice</p>
+        <nav>
+          <ul class="ch-toc__list">
+            {tocSections.map((section) => (
+              <li>
+                <a href={`#${section.id}`} class="ch-toc__link">{section.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Contenido MDX -->
+      <article class="ch-content prose-challenge" id="challenge-content">
+        <Content />
+      </article>
+    </div>
+
+    <!-- Navegación inferior -->
+    <div class="mt-16">
+      <ChallengeNavigation
+        current={{ slug: challenge.data.slug, title, id: challengeId }}
+        prev={prev ? { slug: prev.data.slug, title: prev.data.title, id: prev.data.challengeId } : undefined}
+        next={next ? { slug: next.data.slug, title: next.data.title, id: next.data.challengeId } : undefined}
+      />
+    </div>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+document.addEventListener('astro:page-load', function () {
+  // ── TOC highlight ──
+  var links = document.querySelectorAll('.ch-toc__link');
+  if (links.length) {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            links.forEach(function (l) { l.classList.remove('is-active'); });
+            var active = document.querySelector('.ch-toc__link[href="#' + entry.target.id + '"]');
+            if (active) active.classList.add('is-active');
+          }
+        });
+      },
+      { rootMargin: '-10% 0px -80% 0px' }
+    );
+    document.querySelectorAll('.prose-challenge h2[id]').forEach(function (h) { observer.observe(h); });
+  }
+
+  // ── Botón de entrega ──
+  var btn = document.getElementById('submit-btn');
+  var hint = document.getElementById('submit-hint');
+  var label = document.getElementById('submit-label');
+  if (!btn) return;
+
+  var sessionDateStr = btn.getAttribute('data-session-date'); // YYYY-MM-DD
+  if (!sessionDateStr) return;
+
+  var parts = sessionDateStr.split('-').map(Number);
+  var sessionDate = new Date(parts[0], parts[1] - 1, parts[2]);
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  function enableBtn() {
+    btn.removeAttribute('aria-disabled');
+    btn.classList.remove('ch-submit-btn--disabled');
+    btn.classList.add('ch-submit-btn--enabled');
+    if (hint) hint.hidden = true;
+    if (label) label.textContent = 'Entregar proyecto';
+  }
+
+  function disableBtn() {
+    btn.setAttribute('aria-disabled', 'true');
+    btn.classList.add('ch-submit-btn--disabled');
+    btn.classList.remove('ch-submit-btn--enabled');
+    btn.addEventListener('click', function(e) { e.preventDefault(); }, { once: false });
+  }
+
+  if (today >= sessionDate) {
+    enableBtn();
+  } else {
+    disableBtn();
+    // Recalcula a medianoche por si el usuario deja la pestaña abierta
+    var msUntilMidnight = new Date(today.getTime() + 86400000).getTime() - Date.now();
+    setTimeout(function () {
+      var todayCheck = new Date();
+      todayCheck.setHours(0, 0, 0, 0);
+      if (todayCheck >= sessionDate) enableBtn();
+    }, msUntilMidnight);
+  }
+});
+</script>

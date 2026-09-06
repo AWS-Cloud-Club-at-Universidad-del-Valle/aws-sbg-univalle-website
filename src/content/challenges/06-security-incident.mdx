@@ -1,0 +1,107 @@
+---
+challengeId: 6
+slug: security-incident
+title: AWS Security Incident
+description: Asegura una infraestructura expuesta aplicando el principio de mínimo privilegio con IAM, auditoría con CloudTrail, monitoreo con CloudWatch y cierre de brechas de red en VPC.
+difficulty: Avanzado
+duration: 4–5 horas
+services: ["IAM", "CloudTrail", "CloudWatch", "VPC"]
+concepts: ["Least Privilege", "Monitoring", "Auditing"]
+order: 6
+sessionDate: "2026-10-08"
+---
+
+## Objetivo
+
+Responder a un incidente de seguridad en una infraestructura AWS mal configurada, aplicando controles de acceso, auditoría y monitoreo mediante **AWS CDK**.
+
+## Contexto
+
+El equipo recibe una alerta: una instancia EC2 fue modificada por un usuario que no debía tener ese permiso. Además, hay Security Groups con puertos abiertos innecesariamente. Tu misión es remediar la situación y evitar que vuelva a ocurrir.
+
+## Requisitos
+
+- **IAM**: revisar y corregir políticas con exceso de permisos. Aplicar mínimo privilegio.
+- **CloudTrail**: habilitar trail multi-región para auditar todas las llamadas a la API.
+- **CloudWatch**: crear alarmas para detectar cambios no autorizados en recursos críticos.
+- **VPC**: revisar y corregir Security Groups que tienen puertos innecesariamente abiertos.
+- Todo definido con CDK. El stack de seguridad debe poder desplegarse de forma independiente.
+
+## Servicios AWS
+
+| Servicio | Rol en la seguridad |
+|---|---|
+| **IAM** | Control de identidades y permisos |
+| **CloudTrail** | Auditoría de todas las llamadas API |
+| **CloudWatch** | Monitoreo y alarmas en tiempo real |
+| **VPC** | Aislamiento de red y control de tráfico |
+
+## Infrastructure as Code (AWS CDK)
+
+```bash
+$ cdk init app --language typescript
+$ cdk synth
+$ cdk deploy
+```
+
+Fragmento clave:
+
+```typescript
+// lib/security-stack.ts
+import * as cloudtrail from 'aws-cdk-lib/aws-cloudtrail';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as iam from 'aws-cdk-lib/aws-iam';
+
+// CloudTrail multi-región
+const trail = new cloudtrail.Trail(this, 'SecurityTrail', {
+  isMultiRegionTrail: true,
+  includeGlobalServiceEvents: true,
+  sendToCloudWatchLogs: true,
+});
+
+// Alarma: cambios en IAM
+const iamChangesAlarm = new cloudwatch.Alarm(this, 'IamChangesAlarm', {
+  metric: new cloudwatch.Metric({
+    namespace: 'CloudTrailMetrics',
+    metricName: 'IAMPolicyChanges',
+  }),
+  threshold: 1,
+  evaluationPeriods: 1,
+});
+```
+
+## Entregables
+
+- [ ] Trail de CloudTrail activo y enviando logs a CloudWatch Logs.
+- [ ] Política IAM corregida (sin permisos `*` innecesarios).
+- [ ] Al menos 2 alarmas de CloudWatch para eventos de seguridad críticos.
+- [ ] Security Groups revisados: solo los puertos necesarios están abiertos.
+- [ ] Reporte escrito de los hallazgos de seguridad y las correcciones aplicadas.
+
+## Criterios de Éxito
+
+1. CloudTrail registra correctamente las llamadas a la API (verificar en CloudWatch Logs).
+2. El usuario que causó el incidente ya no tiene permisos para modificar EC2.
+3. Las alarmas de CloudWatch se disparan cuando se simula un cambio no autorizado.
+4. Ningún Security Group tiene el puerto 22 abierto a `0.0.0.0/0`.
+
+## Boss Fight: Tres incidentes simultáneos
+
+> **¡El equipo de seguridad detecta tres brechas al mismo tiempo!**
+
+**Incidente 1 — Acceso excesivo:**
+Un desarrollador tiene acceso de administrador completo. Debes reducirlo a solo lectura/escritura en S3 y lectura en DynamoDB, sin permisos de borrado en ningún servicio.
+
+**Incidente 2 — Auditoría retroactiva:**
+El cliente quiere saber quién modificó una tabla de DynamoDB hace 3 días. Usa CloudTrail para encontrar el evento y documentar el hallazgo con: usuario, hora, IP y acción realizada.
+
+**Incidente 3 — Brecha de red:**
+Un Security Group tiene el puerto 3306 (MySQL) abierto a `0.0.0.0/0`. Debes cerrar esta brecha desde CDK y verificar que la base de datos ya no sea accesible desde internet.
+
+## Cleanup
+
+```bash
+$ cdk destroy
+```
+
+> ⚠️ Los logs de CloudTrail en S3 no se eliminan automáticamente. Vacía el bucket de logs antes de destruir el stack.
