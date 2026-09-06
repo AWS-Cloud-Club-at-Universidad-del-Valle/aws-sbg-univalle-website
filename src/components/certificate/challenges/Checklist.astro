@@ -1,0 +1,42 @@
+---
+/**
+ * Checklist — Lista visual de entregables con checkboxes decorativos.
+ * Acepta un array de ítems o usa el slot para contenido libre.
+ */
+interface Props {
+  items?: string[];
+  title?: string;
+}
+const { items, title = 'Entregables' } = Astro.props;
+---
+<div class="ch-checklist">
+  {title && (
+    <p class="ch-checklist__title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="9 11 12 14 22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+      {title}
+    </p>
+  )}
+  {items ? (
+    <ul class="ch-checklist__list">
+      {items.map((item) => (
+        <li class="ch-checklist__item">
+          <span class="ch-checklist__box" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <div class="ch-checklist__slot">
+      <slot />
+    </div>
+  )}
+</div>

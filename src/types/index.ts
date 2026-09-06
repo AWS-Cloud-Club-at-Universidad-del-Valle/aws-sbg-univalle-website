@@ -180,3 +180,132 @@ export interface ICoreTeamMember {
   /** URL de imagen de perfil opcional (HTTPS, futuro S3) */
   image?: string;
 }
+
+// ============================================
+// API de Eventos (backend REST)
+// ============================================
+
+/** Tipo de evento según la API. */
+export type ApiEventType = 'CHARLA' | 'WORKSHOP' | 'HACKATHON';
+
+/** Modalidad del evento según la API. */
+export type ApiEventModality = 'VIRTUAL' | 'PRESENCIAL' | 'HIBRIDO';
+
+/** Estado del evento según la API. */
+export type ApiEventStatus = 'UPCOMING' | 'COMPLETED';
+
+/** Item de evento en el listado (GET /events). */
+export interface IApiEventListItem {
+  id: string;
+  title: string;
+  /** Fecha en formato YYYY-MM-DD */
+  date: string;
+  /** Hora de inicio HH:mm */
+  startTime: string;
+  modality: ApiEventModality;
+  eventType: ApiEventType;
+  status: ApiEventStatus;
+  /** URL de imagen */
+  image?: string;
+}
+
+/** Metadatos de paginación (GET /events). */
+export interface IApiPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+/** Respuesta completa de GET /events. */
+export interface IApiEventsResponse {
+  items: IApiEventListItem[];
+  pagination: IApiPagination;
+}
+
+/** Detalle completo de un evento (GET /events/{id}). */
+export interface IApiEventDetail {
+  id: string;
+  title: string;
+  /** Descripción larga en formato markdown */
+  description: string;
+  image?: string;
+  eventType: ApiEventType;
+  modality: ApiEventModality;
+  status: ApiEventStatus;
+  /** Fecha en formato YYYY-MM-DD */
+  date: string;
+  /** Hora de inicio HH:mm */
+  startTime: string;
+  /** Hora de fin HH:mm */
+  endTime?: string;
+  timezone?: string;
+  location?: string;
+  /** URL de registro (Meetup u otra) */
+  registrationUrl?: string;
+  /** URL de la fuente original */
+  sourceUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/** Filtros/query params soportados por GET /events. */
+export interface IApiEventsQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+  type?: ApiEventType;
+  modality?: ApiEventModality;
+  status?: ApiEventStatus;
+  /** Fecha desde YYYY-MM-DD */
+  from?: string;
+  /** Fecha hasta YYYY-MM-DD */
+  to?: string;
+}
+
+// ============================================
+// Participa en la Comunidad
+// ============================================
+
+/** Tipo de propuesta que el backend debe poder identificar. */
+export type ProposalType = 'TALK' | 'WORKSHOP' | 'TALLER' | 'IDEA' | 'VOLUNTEER';
+
+/** Modalidad en la que se realizaría la actividad. */
+export type ProposalModality = 'VIRTUAL' | 'PRESENCIAL' | 'HIBRIDA';
+
+/** Nivel de la charla, inspirado en los niveles de AWS (100–400). */
+export type ProposalLevel = 100 | 200 | 300 | 400;
+
+/** Forma de participación mostrada como tarjeta. */
+export interface IParticipationWay {
+  /** Tipo de propuesta que se preselecciona al abrir el formulario. */
+  key: ProposalType;
+  /** Emoji o clave de icono representativo. */
+  icon: string;
+  /** Título corto: "Dar una charla". */
+  title: string;
+  /** Descripción breve de la forma de participación. */
+  description: string;
+  /** Texto del botón: "Postular" | "Proponer" | "Participar". */
+  actionLabel: string;
+  /** Color rgba para el efecto glow en hover. */
+  glowColor?: string;
+}
+
+/** Opción de modalidad para el formulario. */
+export interface IModalityOption {
+  value: ProposalModality;
+  label: string;
+}
+
+/** Nivel de charla con descripción de ayuda para el speaker. */
+export interface ITalkLevel {
+  /** Valor numérico del nivel (100, 200, 300, 400). */
+  value: ProposalLevel;
+  /** Etiqueta legible: "200 — Básico / Intermedio". */
+  label: string;
+  /** Descripción corta que ayuda a elegir el nivel correcto. */
+  description: string;
+}

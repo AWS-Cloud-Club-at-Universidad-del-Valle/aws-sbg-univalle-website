@@ -1,0 +1,462 @@
+---
+/**
+ * Página /events — Listado de eventos del AWS SBG Univalle.
+ *
+ * Dos vistas: Próximos (UPCOMING, asc) y Realizados (COMPLETED, desc).
+ * Filtros por tipo y modalidad, paginación y manejo de carga/error.
+ * Los datos se cargan en el cliente desde la API REST con caché (TTL).
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionDivider from '@/components/common/SectionDivider.astro';
+---
+
+<BaseLayout
+  title="Eventos"
+  description="Descubre los próximos eventos, workshops y hackathons del AWS Student Builder Group de la Universidad del Valle, y revisa los eventos realizados."
+>
+  <!-- Hero -->
+  <section aria-labelledby="events-hero-heading" class="relative overflow-hidden py-20 lg:py-28">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[60vh]"
+      style="background:radial-gradient(ellipse 55% 45% at 30% 0%,rgba(255,153,0,0.08) 0%,transparent 65%);"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.025]"
+      style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:36px 36px;"></div>
+
+    <div class="container-sbg relative z-10">
+      <div class="max-w-2xl">
+        <span class="hero-animate hero-animate-delay-1 code-label mb-4 inline-block"># eventos.comunidad</span>
+        <h1 id="events-hero-heading"
+          class="hero-animate hero-animate-delay-2 text-[2.4rem] leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.2rem]">
+          Eventos
+        </h1>
+        <p class="hero-animate hero-animate-delay-3 mt-5 max-w-lg text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
+          style="font-family:'Nunito Sans',sans-serif;">
+          Workshops, charlas y hackathons para aprender y construir en la nube.
+          Únete a nuestros próximos eventos o revisa lo que hemos hecho.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <section aria-labelledby="events-list-heading" class="relative py-12 lg:py-16">
+    <div class="container-sbg relative z-10">
+      <h2 id="events-list-heading" class="sr-only">Listado de eventos</h2>
+
+      <!-- Tabs: Próximos / Realizados -->
+      <div class="events-tabs" role="tablist" aria-label="Filtrar eventos por estado">
+        <button id="tab-upcoming" class="events-tab is-active" role="tab" aria-selected="true" data-status="UPCOMING">
+          Próximos eventos
+        </button>
+        <button id="tab-completed" class="events-tab" role="tab" aria-selected="false" data-status="COMPLETED">
+          Eventos realizados
+        </button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="events-filters" role="group" aria-label="Filtros de eventos">
+        <div class="events-filter">
+          <label for="filter-type" class="events-filter__label">Tipo</label>
+          <select id="filter-type" class="events-filter__select">
+            <option value="">Todos</option>
+            <option value="CHARLA">Charla</option>
+            <option value="WORKSHOP">Workshop</option>
+            <option value="HACKATHON">Hackathon</option>
+          </select>
+        </div>
+        <div class="events-filter">
+          <label for="filter-modality" class="events-filter__label">Modalidad</label>
+          <select id="filter-modality" class="events-filter__select">
+            <option value="">Todas</option>
+            <option value="PRESENCIAL">Presencial</option>
+            <option value="VIRTUAL">Virtual</option>
+            <option value="HIBRIDO">Híbrido</option>
+          </select>
+        </div>
+        <button id="filter-clear" class="events-filter__clear" type="button">Limpiar filtros</button>
+      </div>
+
+      <!-- Contenedor de resultados -->
+      <div id="events-status" class="events-status" role="status" aria-live="polite"></div>
+
+      <div id="events-grid" class="events-grid" aria-busy="true"></div>
+
+      <!-- Estado vacío -->
+      <div id="events-empty" class="events-empty" hidden>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <p>No hay eventos que coincidan con los filtros.</p>
+      </div>
+
+      <!-- Estado de error -->
+      <div id="events-error" class="events-error" hidden role="alert">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <p id="events-error-msg">No se pudieron cargar los eventos.</p>
+        <button id="events-retry" class="events-retry" type="button">Reintentar</button>
+      </div>
+
+      <!-- Paginación -->
+      <nav id="events-pagination" class="events-pagination" aria-label="Paginación de eventos" hidden>
+        <button id="page-prev" class="events-page-btn" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          Anterior
+        </button>
+        <span id="page-info" class="events-page-info"></span>
+        <button id="page-next" class="events-page-btn" type="button">
+          Siguiente
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .events-tabs {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    border: 1px solid var(--sbg-border);
+    border-radius: 0.75rem;
+    background: var(--sbg-bg-surface);
+    margin-bottom: 1.5rem;
+  }
+  .events-tab {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.55rem 1.1rem;
+    border-radius: 0.55rem;
+    color: var(--sbg-text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .events-tab:hover { color: #fff; }
+  .events-tab.is-active {
+    color: #fff;
+    background: linear-gradient(135deg, var(--sbg-orange), var(--sbg-accent));
+  }
+  .events-tab:focus-visible { outline: 2px solid var(--sbg-accent); outline-offset: 2px; }
+
+  .events-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .events-filter { display: flex; flex-direction: column; gap: 0.35rem; }
+  .events-filter__label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sbg-text-subtle);
+  }
+  .events-filter__select {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    min-height: 42px;
+    border-radius: 0.6rem;
+    border: 1px solid var(--sbg-border);
+    background: var(--sbg-bg-surface);
+    color: var(--sbg-text);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+  }
+  .events-filter__select:focus-visible { outline: 2px solid var(--sbg-accent); outline-offset: 2px; }
+  .events-filter__clear {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--sbg-text-muted);
+    background: transparent;
+    border: 1px solid var(--sbg-border);
+    border-radius: 0.6rem;
+    padding: 0.5rem 0.9rem;
+    min-height: 42px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .events-filter__clear:hover { color: #fff; border-color: var(--sbg-accent-border); }
+
+  .events-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--sbg-text-subtle);
+    margin-bottom: 1rem;
+    min-height: 1.2rem;
+  }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px) { .events-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .events-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .events-empty, .events-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--sbg-text-muted);
+    font-family: 'Nunito Sans', sans-serif;
+  }
+  .events-empty svg { color: var(--sbg-text-subtle); }
+  .events-error svg { color: var(--sbg-error); }
+  .events-retry {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--sbg-orange), var(--sbg-accent));
+    border: none;
+    border-radius: 0.6rem;
+    padding: 0.6rem 1.4rem;
+    min-height: 44px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .events-retry:hover { transform: translateY(-2px); }
+
+  .events-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .events-page-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--sbg-text);
+    background: var(--sbg-bg-surface);
+    border: 1px solid var(--sbg-border);
+    border-radius: 0.6rem;
+    padding: 0.6rem 1rem;
+    min-height: 44px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .events-page-btn:hover:not(:disabled) { border-color: var(--sbg-accent-border); color: #fff; }
+  .events-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .events-page-btn:focus-visible { outline: 2px solid var(--sbg-accent); outline-offset: 2px; }
+  .events-page-info {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--sbg-text-muted);
+  }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+  }
+</style>
+
+<script>
+  import { fetchEvents, EventsApiError } from '@/lib/eventsApi';
+  import { renderEventCard, renderEventCardSkeleton } from '@/lib/eventCard';
+  import type { ApiEventStatus, ApiEventType, ApiEventModality } from '@/types/index';
+
+  const PAGE_LIMIT = 12;
+
+  interface State {
+    status: ApiEventStatus;
+    page: number;
+    type: ApiEventType | '';
+    modality: ApiEventModality | '';
+  }
+
+  function initEventsPage() {
+    const grid = document.getElementById('events-grid');
+    const tabUpcoming = document.getElementById('tab-upcoming');
+    const tabCompleted = document.getElementById('tab-completed');
+    const filterType = document.getElementById('filter-type') as HTMLSelectElement | null;
+    const filterModality = document.getElementById('filter-modality') as HTMLSelectElement | null;
+    const filterClear = document.getElementById('filter-clear');
+    const statusEl = document.getElementById('events-status');
+    const emptyEl = document.getElementById('events-empty');
+    const errorEl = document.getElementById('events-error');
+    const errorMsg = document.getElementById('events-error-msg');
+    const retryBtn = document.getElementById('events-retry');
+    const pagination = document.getElementById('events-pagination');
+    const pagePrev = document.getElementById('page-prev') as HTMLButtonElement | null;
+    const pageNext = document.getElementById('page-next') as HTMLButtonElement | null;
+    const pageInfo = document.getElementById('page-info');
+
+    // Solo corre en la página de eventos
+    if (!grid || !tabUpcoming || !tabCompleted) return;
+
+    const state: State = { status: 'UPCOMING', page: 1, type: '', modality: '' };
+
+    function showSkeletons() {
+      if (!grid) return;
+      grid.setAttribute('aria-busy', 'true');
+      grid.innerHTML = Array.from({ length: 6 }).map(() => renderEventCardSkeleton()).join('');
+      if (emptyEl) emptyEl.hidden = true;
+      if (errorEl) errorEl.hidden = true;
+      if (pagination) pagination.hidden = true;
+    }
+
+    /** Fecha de hoy en formato YYYY-MM-DD (local). */
+    function todayStr(): string {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    async function load() {
+      showSkeletons();
+      if (statusEl) statusEl.textContent = 'Cargando eventos…';
+
+      try {
+        // Se piden TODOS los eventos (con filtros de tipo/modalidad) sin filtrar
+        // por status en la API: el status guardado puede estar desactualizado,
+        // así que la clasificación Próximos/Realizados se hace por fecha real.
+        const res = await fetchEvents({
+          page: 1,
+          limit: 100,
+          type: state.type || undefined,
+          modality: state.modality || undefined,
+        });
+
+        if (!grid) return;
+        grid.setAttribute('aria-busy', 'false');
+
+        const today = todayStr();
+
+        // Excluir cancelados y clasificar por fecha real.
+        const visible = res.items.filter((ev) => ev.status !== 'CANCELLED');
+        const classified = visible.filter((ev) =>
+          state.status === 'UPCOMING' ? ev.date >= today : ev.date < today
+        );
+
+        // Orden: Próximos ascendente (más cercano primero),
+        // Realizados descendente (más reciente primero).
+        classified.sort((a, b) => {
+          const cmp = a.date.localeCompare(b.date);
+          return state.status === 'UPCOMING' ? cmp : -cmp;
+        });
+
+        // Paginación en cliente
+        const total = classified.length;
+        const totalPages = Math.max(1, Math.ceil(total / PAGE_LIMIT));
+        if (state.page > totalPages) state.page = totalPages;
+        const start = (state.page - 1) * PAGE_LIMIT;
+        const pageItems = classified.slice(start, start + PAGE_LIMIT);
+
+        if (pageItems.length === 0) {
+          grid.innerHTML = '';
+          if (emptyEl) emptyEl.hidden = false;
+          if (statusEl) statusEl.textContent = '';
+          if (pagination) pagination.hidden = true;
+          return;
+        }
+
+        if (emptyEl) emptyEl.hidden = true;
+        grid.innerHTML = pageItems.map((item) => renderEventCard(item)).join('');
+
+        if (statusEl) {
+          statusEl.textContent = `${total} evento${total === 1 ? '' : 's'}`;
+        }
+
+        // Paginación
+        if (pagination && pageInfo && pagePrev && pageNext) {
+          if (totalPages > 1) {
+            pagination.hidden = false;
+            pageInfo.textContent = `Página ${state.page} de ${totalPages}`;
+            pagePrev.disabled = state.page <= 1;
+            pageNext.disabled = state.page >= totalPages;
+          } else {
+            pagination.hidden = true;
+          }
+        }
+      } catch (err) {
+        if (!grid) return;
+        grid.innerHTML = '';
+        grid.setAttribute('aria-busy', 'false');
+        if (statusEl) statusEl.textContent = '';
+        if (emptyEl) emptyEl.hidden = true;
+        if (pagination) pagination.hidden = true;
+        if (errorEl) {
+          errorEl.hidden = false;
+          if (errorMsg) {
+            errorMsg.textContent =
+              err instanceof EventsApiError
+                ? err.message
+                : 'Ocurrió un error inesperado al cargar los eventos.';
+          }
+        }
+      }
+    }
+
+    function setStatus(newStatus: ApiEventStatus) {
+      state.status = newStatus;
+      state.page = 1;
+      tabUpcoming!.classList.toggle('is-active', newStatus === 'UPCOMING');
+      tabUpcoming!.setAttribute('aria-selected', String(newStatus === 'UPCOMING'));
+      tabCompleted!.classList.toggle('is-active', newStatus === 'COMPLETED');
+      tabCompleted!.setAttribute('aria-selected', String(newStatus === 'COMPLETED'));
+      load();
+    }
+
+    tabUpcoming.addEventListener('click', () => setStatus('UPCOMING'));
+    tabCompleted.addEventListener('click', () => setStatus('COMPLETED'));
+
+    filterType?.addEventListener('change', () => {
+      state.type = (filterType.value as ApiEventType) || '';
+      state.page = 1;
+      load();
+    });
+    filterModality?.addEventListener('change', () => {
+      state.modality = (filterModality.value as ApiEventModality) || '';
+      state.page = 1;
+      load();
+    });
+    filterClear?.addEventListener('click', () => {
+      state.type = '';
+      state.modality = '';
+      state.page = 1;
+      if (filterType) filterType.value = '';
+      if (filterModality) filterModality.value = '';
+      load();
+    });
+
+    pagePrev?.addEventListener('click', () => {
+      if (state.page > 1) {
+        state.page -= 1;
+        load();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+    pageNext?.addEventListener('click', () => {
+      state.page += 1;
+      load();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    retryBtn?.addEventListener('click', () => load());
+
+    load();
+  }
+
+  document.addEventListener('astro:page-load', initEventsPage);
+</script>

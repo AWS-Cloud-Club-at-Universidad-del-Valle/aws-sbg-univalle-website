@@ -1,0 +1,102 @@
+---
+challengeId: 5
+slug: plataforma-datos-educativos
+title: Plataforma de Datos Educativos
+description: Construye un pipeline básico de datos para procesar y consultar información académica usando S3, Glue, Athena y opcionalmente QuickSight, todo con AWS CDK.
+difficulty: Avanzado
+duration: 5–6 horas
+services: ["S3", "Glue", "Athena", "QuickSight"]
+concepts: ["Data Lake", "ETL", "Data Analytics", "Serverless query"]
+order: 5
+sessionDate: "2026-10-03"
+---
+
+## Objetivo
+
+Construir un pipeline de datos serverless para ingestar, transformar y consultar datos académicos (calificaciones, asistencia, cursos) usando **AWS CDK** para aprovisionar toda la infraestructura analítica.
+
+## Contexto
+
+La Universidad del Valle quiere analizar patrones académicos de sus estudiantes: tasas de aprobación por asignatura, correlación entre asistencia y notas, materias con mayor reprobación. Los datos están en archivos CSV y se actualizan mensualmente.
+
+## Requisitos
+
+- **S3** (Data Lake): dos buckets — `raw-data` (datos crudos CSV) y `processed-data` (datos transformados en Parquet).
+- **AWS Glue**: Job ETL que transforma los CSV a formato Parquet y un Crawler que actualiza el catálogo.
+- **Athena**: configurado con un workgroup que guarda los resultados en S3.
+- **Glue Data Catalog**: base de datos y tablas generadas automáticamente por el Crawler.
+- **(Opcional) QuickSight**: dashboard visual de los datos procesados.
+- Todo el pipeline definido con CDK.
+
+## Servicios AWS
+
+| Servicio | Rol en el pipeline |
+|---|---|
+| **S3** | Almacén del Data Lake (raw + processed) |
+| **Glue** | ETL: transforma CSV → Parquet |
+| **Athena** | Consultas SQL serverless sobre Parquet |
+| **QuickSight** | Visualización (opcional) |
+
+## Infrastructure as Code (AWS CDK)
+
+```bash
+$ cdk init app --language typescript
+$ cdk synth
+$ cdk deploy
+```
+
+Fragmento clave:
+
+```typescript
+// lib/data-platform-stack.ts
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as glue from '@aws-cdk-lib/aws-glue-alpha'; // (o glue L1 constructs)
+import * as athena from 'aws-cdk-lib/aws-athena';
+
+const rawBucket = new s3.Bucket(this, 'RawDataBucket');
+const processedBucket = new s3.Bucket(this, 'ProcessedDataBucket');
+const athenaResults = new s3.Bucket(this, 'AthenaResultsBucket');
+
+const workgroup = new athena.CfnWorkGroup(this, 'AcademicWorkgroup', {
+  name: 'academic-analytics',
+  workGroupConfiguration: {
+    resultConfiguration: {
+      outputLocation: `s3://${athenaResults.bucketName}/results/`,
+    },
+  },
+});
+```
+
+## Entregables
+
+- [ ] Dos buckets S3 creados (`raw-data` y `processed-data`).
+- [ ] Job de Glue que transforma al menos un CSV de muestra a Parquet.
+- [ ] Crawler de Glue que actualiza el catálogo con el esquema de los datos.
+- [ ] Workgroup de Athena configurado con resultados en S3.
+- [ ] Al menos 3 queries SQL de ejemplo que respondan preguntas de negocio.
+- [ ] `cdk deploy` sin errores.
+
+## Criterios de Éxito
+
+1. El Glue Job procesa el CSV y genera archivos Parquet en `processed-data`.
+2. El Crawler descubre el esquema y lo registra en el Glue Data Catalog.
+3. Una query en Athena retorna resultados correctos sobre los datos procesados.
+4. Los buckets tienen las políticas de acceso correctas (Athena puede leer `processed-data`).
+
+## Boss Fight
+
+> **¡El volumen de datos pasa de 1GB a 100GB mensuales! El pipeline actual tarda demasiado.**
+
+**¿Qué cambia?**
+- El Glue Job necesita configuración de **DPU (Data Processing Units)** apropiada para el nuevo volumen.
+- Los datos deben particionarse en S3 por `year/month/` para que Athena solo escanee los datos necesarios.
+- Considera habilitar **Glue Job Bookmarks** para procesar solo los archivos nuevos en cada ejecución.
+- Calcula el costo estimado de Athena por query antes y después de la partición.
+
+## Cleanup
+
+```bash
+$ cdk destroy
+```
+
+> ⚠️ Recuerda vaciar los buckets S3 antes de ejecutar `cdk destroy`, o configura `autoDeleteObjects: true` en los constructs.

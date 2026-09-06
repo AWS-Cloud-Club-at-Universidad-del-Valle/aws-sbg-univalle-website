@@ -1,0 +1,107 @@
+---
+challengeId: 2
+slug: app-alta-demanda
+title: Aplicación Web de Alta Demanda
+description: Despliega una aplicación web en EC2 tolerante a fallos, con balanceo de carga y alta disponibilidad en múltiples zonas, todo definido con AWS CDK.
+difficulty: Intermedio
+duration: 4–5 horas
+services: ["EC2", "EBS", "ELB", "Auto Scaling", "VPC", "IAM"]
+concepts: ["Compute", "Escalabilidad horizontal", "Alta disponibilidad"]
+order: 2
+sessionDate: "2026-09-24"
+---
+
+## Objetivo
+
+Desplegar una aplicación web en **Amazon EC2** que sea tolerante a fallos, use balanceo de carga y esté distribuida en múltiples Availability Zones, aprovisionando toda la infraestructura con **AWS CDK**.
+
+## Contexto
+
+El grupo SBG necesita desplegar una aplicación web para un evento de alto tráfico. Se espera que cientos de usuarios accedan simultáneamente. La infraestructura debe sobrevivir la caída de al menos una zona de disponibilidad.
+
+## Requisitos
+
+- VPC con subnets públicas en al menos 2 Availability Zones.
+- Instancias EC2 con un servidor web básico (nginx o Apache).
+- Elastic Load Balancer (ALB) distribuyendo el tráfico entre las instancias.
+- Auto Scaling Group configurado con mínimo 2 instancias y máximo 6.
+- Security Groups correctamente configurados (solo el ALB acepta tráfico en puerto 80/443).
+- Volúmenes EBS para persistencia de datos de la aplicación.
+- Roles IAM con mínimo privilegio para las instancias EC2.
+
+## Servicios AWS
+
+| Servicio | Rol en el reto |
+|---|---|
+| **EC2** | Ejecuta la aplicación web |
+| **EBS** | Almacenamiento persistente para la app |
+| **ELB (ALB)** | Distribuye el tráfico entre instancias |
+| **Auto Scaling** | Escala automáticamente según demanda |
+| **VPC** | Red virtual aislada con subnets públicas |
+| **IAM** | Roles y permisos para las instancias |
+
+## Infrastructure as Code (AWS CDK)
+
+```bash
+$ cdk init app --language typescript
+$ cdk synth
+$ cdk deploy
+```
+
+Estructura sugerida:
+
+```typescript
+// lib/high-demand-stack.ts
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import * as autoscaling from 'aws-cdk-lib/aws-autoscaling';
+
+const vpc = new ec2.Vpc(this, 'AppVpc', { maxAzs: 2 });
+
+const asg = new autoscaling.AutoScalingGroup(this, 'AppASG', {
+  vpc,
+  instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
+  machineImage: ec2.MachineImage.latestAmazonLinux2(),
+  minCapacity: 2,
+  maxCapacity: 6,
+});
+
+const alb = new elbv2.ApplicationLoadBalancer(this, 'AppALB', {
+  vpc,
+  internetFacing: true,
+});
+```
+
+## Entregables
+
+- [ ] VPC con subnets en 2 AZs desplegada con CDK.
+- [ ] Auto Scaling Group con mínimo 2 instancias activas.
+- [ ] ALB distribuyendo tráfico correctamente (health checks verdes).
+- [ ] Acceso a la aplicación web desde la URL del ALB.
+- [ ] Security Group que bloquea acceso directo a EC2 (solo por ALB).
+- [ ] `cdk deploy` sin errores manuales.
+
+## Criterios de Éxito
+
+1. La URL del ALB responde con el contenido de la aplicación.
+2. Al terminar una instancia EC2 manualmente, el ALB redirige sin tiempo de inactividad perceptible.
+3. El Auto Scaling Group lanza una nueva instancia para reemplazar la terminada.
+4. Las instancias EC2 no son accesibles directamente desde internet (solo por el ALB).
+
+## Boss Fight
+
+> **¡El evento fue un éxito! El tráfico aumenta 10x en los próximos 30 minutos.**
+
+**¿Qué cambia?**
+- Debes configurar una **política de escalado basada en CPU** (si CPU > 60%, agrega instancias).
+- El Auto Scaling Group debe escalar hacia afuera sin intervención manual.
+- Opcional: configura **CloudWatch Alarms** en tu stack CDK para monitorear el evento de escala.
+- Verifica que el ALB no se convierte en el cuello de botella.
+
+## Cleanup
+
+```bash
+$ cdk destroy
+```
+
+> ⚠️ Los volúmenes EBS no se eliminan automáticamente si `removalPolicy` no está configurado. Revisa los recursos huérfanos en la consola de AWS.

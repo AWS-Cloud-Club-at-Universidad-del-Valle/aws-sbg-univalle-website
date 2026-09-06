@@ -1,0 +1,103 @@
+---
+challengeId: 8
+slug: architecture-challenge
+title: AWS Architecture Challenge (Final)
+description: Diseña una arquitectura completa evaluada bajo los 6 pilares del AWS Well-Architected Framework y despliégala íntegramente con AWS CDK.
+difficulty: Avanzado
+duration: 6–8 horas
+services: ["VPC", "EC2", "S3", "RDS", "DynamoDB", "ELB", "Auto Scaling", "IAM"]
+concepts: ["Well-Architected Framework"]
+order: 8
+sessionDate: "2026-10-22"
+---
+
+## Objetivo
+
+Diseñar una arquitectura AWS completa para un caso de uso real, implementarla con **AWS CDK** y evaluarla bajo los **6 pilares del AWS Well-Architected Framework**: Excelencia Operativa, Seguridad, Confiabilidad, Eficiencia del Rendimiento, Optimización de Costos y Sostenibilidad.
+
+## Contexto
+
+Este es el reto final. No hay una arquitectura prescrita. Tú eliges el caso de uso (plataforma educativa, e-commerce, app de eventos, sistema de reportes) y diseñas la solución más sólida posible. El criterio de evaluación no es solo "que funcione", sino que puedas **justificar cada decisión de diseño** bajo los pilares de Well-Architected.
+
+## Requisitos
+
+- Elección libre de servicios AWS, pero el stack mínimo debe incluir: VPC, al menos una capa de cómputo (EC2, Lambda o ECS), almacenamiento (S3 o RDS o DynamoDB) y control de acceso (IAM).
+- Toda la infraestructura definida con **AWS CDK** — ningún recurso creado manualmente.
+- Documento de arquitectura que evalúe la solución bajo los 6 pilares.
+- Diagrama de arquitectura (puede ser generado con draw.io, Lucidchart o cualquier herramienta).
+
+## Los 6 Pilares del Well-Architected Framework
+
+| Pilar | Pregunta clave |
+|---|---|
+| **Excelencia Operativa** | ¿Cómo operas y mejoras tus procesos? |
+| **Seguridad** | ¿Cómo proteges la información y los sistemas? |
+| **Confiabilidad** | ¿Cómo te recuperas de fallos? |
+| **Eficiencia del Rendimiento** | ¿Usas los recursos eficientemente? |
+| **Optimización de Costos** | ¿Evitas gastos innecesarios? |
+| **Sostenibilidad** | ¿Minimizas el impacto ambiental? |
+
+## Infrastructure as Code (AWS CDK)
+
+```bash
+$ cdk init app --language typescript
+$ cdk synth
+$ cdk deploy
+```
+
+Estructura sugerida para un proyecto real:
+
+```typescript
+// bin/app.ts
+import * as cdk from 'aws-cdk-lib';
+import { NetworkStack } from '../lib/network-stack';
+import { ComputeStack } from '../lib/compute-stack';
+import { StorageStack } from '../lib/storage-stack';
+import { SecurityStack } from '../lib/security-stack';
+
+const app = new cdk.App();
+const network = new NetworkStack(app, 'NetworkStack');
+const storage = new StorageStack(app, 'StorageStack');
+const security = new SecurityStack(app, 'SecurityStack');
+const compute = new ComputeStack(app, 'ComputeStack', {
+  vpc: network.vpc,
+  database: storage.database,
+});
+```
+
+> Nota cómo los stacks se componen y comparten recursos usando props, en vez de estar todo en un solo archivo.
+
+## Entregables
+
+- [ ] Diagrama de arquitectura completo y documentado.
+- [ ] Stack CDK organizado en módulos por dominio (red, cómputo, almacenamiento, seguridad).
+- [ ] `cdk deploy --all` exitoso sin recursos manuales.
+- [ ] Documento de evaluación Well-Architected (mínimo 2 puntos por pilar: qué se hizo bien y qué se puede mejorar).
+- [ ] Estimación de costos mensuales con Pricing Calculator.
+
+## Criterios de Éxito
+
+1. La aplicación es accesible y funcional en el ambiente desplegado.
+2. El stack CDK está modularizado (no un solo archivo con todo).
+3. El documento Well-Architected aborda los 6 pilares con evidencia técnica.
+4. `cdk synth` no produce warnings de seguridad de CDK Nag (o están justificados).
+
+## Boss Fight
+
+> **¡Escenario sorpresa del examinador!** (se revela en el momento de la evaluación)
+
+El examinador seleccionará **uno** de los siguientes escenarios al azar. Tu arquitectura debe ser capaz de responder:
+
+**Escenario A — Tráfico:** Tu aplicación recibe 50x el tráfico normal de forma repentina. ¿Cómo responde tu arquitectura? ¿Escala automáticamente? ¿Hay un punto único de fallo?
+
+**Escenario B — Presupuesto:** El presupuesto se recorta al 40% del actual. ¿Qué recursos eliminas primero? ¿Qué funcionalidad sacrificas? ¿Cómo lo implementas en CDK sin recrear todo?
+
+**Escenario C — Disponibilidad:** Una Availability Zone completa cae. ¿Sigue funcionando tu aplicación? ¿Qué datos podrían perderse? ¿Cuánto tarda la recuperación?
+
+## Cleanup
+
+```bash
+$ cdk destroy --all
+```
+
+> ⚠️ Con múltiples stacks, destruye en orden inverso al despliegue para evitar errores de dependencias. CDK maneja esto automáticamente con `--all`.

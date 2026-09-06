@@ -1,0 +1,106 @@
+---
+challengeId: 3
+slug: red-segura
+title: Diseño de una Red Segura en AWS
+description: Diseña y aprovisiona con AWS CDK una red virtual que separa componentes públicos y privados usando subnets, route tables, IGW y NAT Gateway.
+difficulty: Intermedio
+duration: 3–4 horas
+services: ["VPC", "Subnets", "Route Tables", "IGW", "NAT Gateway", "Security Groups"]
+concepts: ["Network isolation", "Routing", "Public/Private Subnets"]
+order: 3
+sessionDate: "2026-09-26"
+---
+
+## Objetivo
+
+Diseñar una arquitectura de red en AWS que aísle correctamente los componentes públicos (accesibles desde internet) de los privados (solo accesibles internamente), usando **AWS CDK** para definir toda la topología.
+
+## Contexto
+
+Una aplicación necesita separar su capa web (pública) de su capa de base de datos (privada). Nadie debe poder acceder a la base de datos desde internet, pero la base de datos sí debe poder descargar actualizaciones (salida a internet sin entrada).
+
+## Requisitos
+
+- VPC con CIDR `/16`.
+- 2 subnets **públicas** (una por AZ) con Internet Gateway.
+- 2 subnets **privadas** (una por AZ) con NAT Gateway para salida a internet.
+- Route Tables correctamente configuradas: pública apunta a IGW, privada apunta a NAT GW.
+- Security Groups diferenciados: web (permite 80/443 desde internet), db (solo permite desde el SG de web).
+- Todo definido mediante constructs de CDK, sin configuración manual en la consola.
+
+## Servicios AWS
+
+| Servicio | Rol en el reto |
+|---|---|
+| **VPC** | Red virtual aislada |
+| **Subnets** | Segmentos de red públicos y privados |
+| **Route Tables** | Controlan el flujo de tráfico |
+| **IGW** | Puerta de entrada/salida a internet |
+| **NAT Gateway** | Salida a internet para subnets privadas |
+| **Security Groups** | Firewall a nivel de instancia |
+
+## Infrastructure as Code (AWS CDK)
+
+```bash
+$ cdk init app --language typescript
+$ cdk synth
+$ cdk deploy
+```
+
+Fragmento clave:
+
+```typescript
+// lib/secure-network-stack.ts
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+
+const vpc = new ec2.Vpc(this, 'SecureVpc', {
+  maxAzs: 2,
+  subnetConfiguration: [
+    {
+      name: 'Public',
+      subnetType: ec2.SubnetType.PUBLIC,
+      cidrMask: 24,
+    },
+    {
+      name: 'Private',
+      subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+      cidrMask: 24,
+    },
+  ],
+});
+```
+
+> Con `PRIVATE_WITH_EGRESS`, CDK crea automáticamente el NAT Gateway.
+
+## Entregables
+
+- [ ] VPC con 4 subnets (2 públicas + 2 privadas) en 2 AZs.
+- [ ] Internet Gateway asociado a la VPC y ruteado desde subnets públicas.
+- [ ] NAT Gateway en subnet pública con ruta desde subnets privadas.
+- [ ] Security Group `web-sg` que permite entrada 80/443 desde `0.0.0.0/0`.
+- [ ] Security Group `db-sg` que solo permite entrada desde `web-sg`.
+- [ ] Diagrama de arquitectura (puede ser un boceto) que muestre la topología.
+
+## Criterios de Éxito
+
+1. Una instancia en la subnet privada puede hacer `curl https://aws.amazon.com` exitosamente.
+2. Una instancia en la subnet privada **no** puede ser alcanzada desde internet directamente.
+3. `cdk synth` genera el template con todos los recursos de red.
+4. Los Security Groups tienen las reglas mínimas necesarias (sin `0.0.0.0/0` en el SG de base de datos).
+
+## Boss Fight
+
+> **El equipo de seguridad detecta que el componente privado necesita descargar paquetes de internet, pero no debe recibir NINGUNA conexión entrante desde fuera.**
+
+**¿Qué cambia?**
+- Debes verificar que el NAT Gateway funciona correctamente para salida (egress-only).
+- Debes demostrar que no hay ninguna ruta que permita entrada directa desde internet a las subnets privadas.
+- Opcional: configura **VPC Flow Logs** en tu stack CDK para auditar el tráfico de red.
+
+## Cleanup
+
+```bash
+$ cdk destroy
+```
+
+> ⚠️ El NAT Gateway genera costos por hora aunque no haya tráfico. Elimínalo tan pronto como termines el reto.
