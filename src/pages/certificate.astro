@@ -389,6 +389,93 @@ const modules = [
   </section>
   <SectionDivider />
 
+  <!-- ── Reglamento de Vouchers ── -->
+  <section id="reglamento" aria-labelledby="reglamento-heading" class="relative py-20 lg:py-24 overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute top-0 right-0 h-[40vh] w-[40vw] opacity-20"
+      style="background:radial-gradient(ellipse at 80% 10%,rgba(255,153,0,0.05) 0%,transparent 65%);"></div>
+
+    <div class="container-sbg relative z-10">
+      <div class="mb-10" data-animate>
+        <span class="code-label mb-3 inline-block"># reglamento_vouchers</span>
+        <h2 id="reglamento-heading" class="text-[2rem] leading-[1.1] sm:text-[2.4rem]">
+          ¿Cómo obtengo mi <span class="text-[var(--sbg-orange)]">voucher</span>?
+        </h2>
+        <p class="mt-3 max-w-xl text-base leading-relaxed text-[var(--sbg-text-muted)]"
+          style="font-family:'Nunito Sans',sans-serif;">
+          Para solicitar un voucher de certificación AWS debes cumplir con todos los requisitos del programa. Así garantizamos un uso responsable y aumentamos tus probabilidades de aprobación.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px] lg:items-start" data-animate>
+
+        <!-- Requisitos -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold text-[var(--sbg-text-subtle)] uppercase tracking-widest mb-4"
+            style="font-family:'Space Mono',monospace;">Requisitos para solicitar un voucher</h3>
+          {[
+            { text: 'Ser miembro activo del AWS Student Builder Group Univalle.' },
+            { text: 'Haber participado en al menos 2 eventos organizados por el AWS SBG Univalle.' },
+            { text: 'Ser miembro del espacio AWS Certified en AWS Builder Center y haber interactuado con al menos una publicación.' },
+            { text: 'Haber completado al menos un curso oficial en AWS Skill Builder relacionado con la certificación que deseas presentar.' },
+            { text: 'Haber participado en un curso o sesión de preparación impartida por un AWS Training Builder Group (cuando exista disponibilidad en tu ciudad).' },
+            { text: 'Obtener una calificación mínima del 75 % en un examen de práctica correspondiente a la certificación.' },
+            { text: 'Presentar el examen dentro de las 4 semanas posteriores a recibir el voucher.' },
+            { text: 'Compartir con la comunidad el resultado y tu experiencia, independientemente de si aprobaste o no.' },
+          ].map((req, i) => (
+            <div class="flex items-start gap-3 rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-4 transition-all duration-200 hover:border-[var(--sbg-orange)]/20">
+              <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--sbg-orange-subtle)] text-[var(--sbg-orange)] mt-0.5">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
+              <p class="text-sm leading-relaxed text-[var(--sbg-text-muted)]"
+                style="font-family:'Nunito Sans',sans-serif;">{req.text}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Consideraciones -->
+        <div class="space-y-4">
+          <h3 class="text-xs font-bold text-[var(--sbg-text-subtle)] uppercase tracking-widest mb-4"
+            style="font-family:'Space Mono',monospace;">Consideraciones importantes</h3>
+
+          <div class="rounded-2xl border border-[var(--sbg-orange)]/20 bg-[var(--sbg-orange)]/5 p-5">
+            <p class="text-[11px] font-bold uppercase tracking-wider text-[var(--sbg-orange)] mb-2"
+              style="font-family:'Space Mono',monospace;">Disponibilidad limitada</p>
+            <p class="text-sm leading-relaxed text-[var(--sbg-text-muted)]"
+              style="font-family:'Nunito Sans',sans-serif;">
+              Cumplir los requisitos no garantiza automáticamente un voucher. La asignación está sujeta a la disponibilidad y los cupos otorgados por AWS al SBG Univalle.
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-5 space-y-3">
+            {[
+              'Los vouchers son de uso personal e intransferible.',
+              'La información proporcionada debe ser verificable y estar actualizada.',
+              'El SBG Univalle validará el cumplimiento de cada requisito antes de postular al miembro.',
+              'No presentar el examen en el plazo establecido puede afectar la posibilidad de solicitar futuros vouchers.',
+            ].map((item) => (
+              <div class="flex items-start gap-2.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sbg-accent-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0 mt-0.5">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <p class="text-sm leading-relaxed text-[var(--sbg-text-muted)]"
+                  style="font-family:'Nunito Sans',sans-serif;">{item}</p>
+              </div>
+            ))}
+          </div>
+
+          <p class="text-xs leading-relaxed text-[var(--sbg-text-subtle)] italic px-1"
+            style="font-family:'Nunito Sans',sans-serif;">
+            Este reglamento busca garantizar que los vouchers sean asignados a miembros que demuestren compromiso con su preparación, participación activa en la comunidad y disposición para contribuir al crecimiento de otros estudiantes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider />
+
   <!-- ── Retos Prácticos AWS CDK ── -->
   <section id="retos" aria-labelledby="retos-heading" class="relative py-20 lg:py-28 overflow-hidden">
     <div aria-hidden="true" class="pointer-events-none absolute top-0 left-1/4 h-[40vh] w-[40vw] opacity-20"
