@@ -18,8 +18,12 @@ import type {
 // Configuración global del sitio
 // ============================================
 
-/** URL base del CDN de assets (CloudFront → S3) */
-export const ASSETS_CDN_URL = 'https://d17sfh4fi052g2.cloudfront.net';
+/**
+ * URL base del CDN de assets. Sirve los objetos del bucket S3 privado
+ * `dev-sbg-univalle-frontend` a través de CloudFront (distribución
+ * E2MSLIBASFLWDX). El bucket permanece privado: solo CloudFront accede vía OAC.
+ */
+export const ASSETS_CDN_URL = 'https://d23d5d88jw9p2.cloudfront.net';
 
 export const SITE_CONFIG: ISiteConfig = {
   name: 'AWS Student Builder Group Universidad del Valle',
@@ -396,7 +400,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: '',
     linkedin: 'https://www.linkedin.com/in/juanhcontreras/',
     github: 'https://github.com/juanhcode',
-    image: `${ASSETS_CDN_URL}/members/Juan-Manuel-Hoyos-Contreras.jpeg`,
+    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Juan-Manuel-Hoyos-Contreras.jpeg`,
   },
   {
     name: 'Sebastián Cifuentes Flórez',
@@ -404,7 +408,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Marketing & Community Lead',
     linkedin: 'https://www.linkedin.com/in/sebastian-cifuentes-florez-65872b187/',
     github: 'https://github.com/SpecTr03',
-    image: `${ASSETS_CDN_URL}/members/Sebastián-Cifuentes-Flores.jpeg`,
+    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Sebastian-Cifuentes-Flores.jpeg`,
   },
   {
     name: 'Pablo Nicolás Marín González',
@@ -412,7 +416,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Partnerships & Academy Lead',
     linkedin: 'https://www.linkedin.com/in/pablo-nicolas-marin-gonzalez-33b8042a1/',
     github: 'https://github.com/Slylem0',
-    image: `${ASSETS_CDN_URL}/members/Pablo-Nicolás-Marín-González.jpeg`,
+    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Pablo-Nicolas-Marin-Gonzalez.jpeg`,
   },
   {
     name: 'Aura María Peláez',
@@ -420,7 +424,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Tech Lead',
     linkedin: 'https://www.linkedin.com/in/aura-maria-pelaez-luna-a0b4a33a8',
     github: 'https://github.com/aura2025',
-    image: `${ASSETS_CDN_URL}/members/Aura-María-Peláez.jpeg`,
+    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Aura-Maria-Pelaez.jpeg`,
   },
   {
     name: 'Miguel Ángel Sanclemente Mejía',
@@ -428,7 +432,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Logistics & Events Lead',
     linkedin: 'https://www.linkedin.com/in/miguel-sanclemente-mejia-1538073a6/',
     github: 'https://github.com/MiguelSanclemente',
-    image: `${ASSETS_CDN_URL}/members/Miguel-Ángel-Sanclemente-Mejía.jpeg`,
+    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Miguel-Angel-Sanclemente-Mejia.jpeg`,
   },
   {
     name: 'Jann Carlo Martinez',
@@ -436,7 +440,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Planning & Monitoring Lead',
     linkedin: 'https://www.linkedin.com/in/jann-carlo-martinez-cardona-b1578a2b8/',
     github: 'https://github.com/JannC23',
-    image: `${ASSETS_CDN_URL}/members/Jann-Carlo-Martinez.jpeg`,
+    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Jann-Carlo-Martinez.jpeg`,
   },
 ];
 
