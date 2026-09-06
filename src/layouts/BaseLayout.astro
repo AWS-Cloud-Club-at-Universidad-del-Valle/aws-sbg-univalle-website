@@ -17,7 +17,7 @@
  */
 
 import '@/styles/global.css';
-import { SITE_CONFIG, ASSETS_CDN_URL } from '@/lib/constants';
+import { SITE_CONFIG, ASSETS_CDN_URL, ASSETS_LOGOS_PATH } from '@/lib/constants';
 import { buildJsonLdOrganization } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
@@ -68,7 +68,7 @@ const jsonLd = buildJsonLdOrganization(SITE_CONFIG);
 const isHome = Astro.url.pathname === '/';
 
 // Favicon: logo del AWS SBG Univalle servido desde CloudFront (bucket privado).
-const faviconURL = `${ASSETS_CDN_URL}/dev-assets/dev-logos/aws_sbg_univalle.png`;
+const faviconURL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/aws_sbg_univalle.png`;
 ---
 
 <!doctype html>

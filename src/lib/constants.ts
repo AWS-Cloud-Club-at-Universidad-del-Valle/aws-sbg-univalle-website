@@ -19,11 +19,30 @@ import type {
 // ============================================
 
 /**
- * URL base del CDN de assets. Sirve los objetos del bucket S3 privado
- * `dev-sbg-univalle-frontend` a través de CloudFront (distribución
- * E2MSLIBASFLWDX). El bucket permanece privado: solo CloudFront accede vía OAC.
+ * Configuración del CDN de assets (CloudFront → bucket S3 privado, vía OAC).
+ *
+ * El dominio y las rutas cambian por entorno y se inyectan en build mediante
+ * variables PUBLIC_* (igual que PUBLIC_EVENTS_API_URL). El workflow de deploy
+ * define los valores según la rama:
+ *   - main    → distribución/bucket de producción
+ *   - develop → distribución/bucket de desarrollo
+ *
+ * El fallback por defecto apunta a PRODUCCIÓN, para que un build sin variables
+ * configuradas (p. ej. en main) sirva desde el entorno correcto.
+ *
+ * Prod:  https://d2zjot7yvduv1u.cloudfront.net  · members/ · prod-assets/prod-logos/
+ * Dev:   https://d23d5d88jw9p2.cloudfront.net   · dev-members/photos-members/ · dev-assets/dev-logos/
  */
-export const ASSETS_CDN_URL = 'https://d23d5d88jw9p2.cloudfront.net';
+export const ASSETS_CDN_URL: string =
+  import.meta.env.PUBLIC_ASSETS_CDN_URL ?? 'https://d2zjot7yvduv1u.cloudfront.net';
+
+/** Prefijo (key) de las fotos del Core Team dentro del bucket. */
+export const ASSETS_MEMBERS_PATH: string =
+  import.meta.env.PUBLIC_ASSETS_MEMBERS_PATH ?? 'members';
+
+/** Prefijo (key) de los logos dentro del bucket. */
+export const ASSETS_LOGOS_PATH: string =
+  import.meta.env.PUBLIC_ASSETS_LOGOS_PATH ?? 'prod-assets/prod-logos';
 
 export const SITE_CONFIG: ISiteConfig = {
   name: 'AWS Student Builder Group Universidad del Valle',
@@ -400,7 +419,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: '',
     linkedin: 'https://www.linkedin.com/in/juanhcontreras/',
     github: 'https://github.com/juanhcode',
-    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Juan-Manuel-Hoyos-Contreras.jpeg`,
+    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/Juan-Manuel-Hoyos-Contreras.jpeg`,
   },
   {
     name: 'Sebastián Cifuentes Flórez',
@@ -408,7 +427,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Marketing & Community Lead',
     linkedin: 'https://www.linkedin.com/in/sebastian-cifuentes-florez-65872b187/',
     github: 'https://github.com/SpecTr03',
-    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Sebastian-Cifuentes-Flores.jpeg`,
+    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/Sebastian-Cifuentes-Flores.jpeg`,
   },
   {
     name: 'Pablo Nicolás Marín González',
@@ -416,7 +435,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Partnerships & Academy Lead',
     linkedin: 'https://www.linkedin.com/in/pablo-nicolas-marin-gonzalez-33b8042a1/',
     github: 'https://github.com/Slylem0',
-    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Pablo-Nicolas-Marin-Gonzalez.jpeg`,
+    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/Pablo-Nicolas-Marin-Gonzalez.jpeg`,
   },
   {
     name: 'Aura María Peláez',
@@ -424,7 +443,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Tech Lead',
     linkedin: 'https://www.linkedin.com/in/aura-maria-pelaez-luna-a0b4a33a8',
     github: 'https://github.com/aura2025',
-    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Aura-Maria-Pelaez.jpeg`,
+    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/Aura-Maria-Pelaez.jpeg`,
   },
   {
     name: 'Miguel Ángel Sanclemente Mejía',
@@ -432,7 +451,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Logistics & Events Lead',
     linkedin: 'https://www.linkedin.com/in/miguel-sanclemente-mejia-1538073a6/',
     github: 'https://github.com/MiguelSanclemente',
-    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Miguel-Angel-Sanclemente-Mejia.jpeg`,
+    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/Miguel-Angel-Sanclemente-Mejia.jpeg`,
   },
   {
     name: 'Jann Carlo Martinez',
@@ -440,7 +459,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Planning & Monitoring Lead',
     linkedin: 'https://www.linkedin.com/in/jann-carlo-martinez-cardona-b1578a2b8/',
     github: 'https://github.com/JannC23',
-    image: `${ASSETS_CDN_URL}/dev-members/photos-members/Jann-Carlo-Martinez.jpeg`,
+    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/Jann-Carlo-Martinez.jpeg`,
   },
 ];
 

@@ -85,9 +85,14 @@ jobs:
       - name: Build site
         env:
           PUBLIC_EVENTS_API_URL: ${{ github.ref_name == 'main' && 'https://4fi9ot44ml.execute-api.us-east-1.amazonaws.com/prod' || 'https://orj83oh0pc.execute-api.us-east-1.amazonaws.com/dev' }}
+          # CDN de assets (imágenes) según la rama: prod en main, dev en develop.
+          PUBLIC_ASSETS_CDN_URL: ${{ github.ref_name == 'main' && 'https://d2zjot7yvduv1u.cloudfront.net' || 'https://d23d5d88jw9p2.cloudfront.net' }}
+          PUBLIC_ASSETS_MEMBERS_PATH: ${{ github.ref_name == 'main' && 'members' || 'dev-members/photos-members' }}
+          PUBLIC_ASSETS_LOGOS_PATH: ${{ github.ref_name == 'main' && 'prod-assets/prod-logos' || 'dev-assets/dev-logos' }}
         run: |
           echo "Iniciando build..."
           echo "API de Eventos: ${PUBLIC_EVENTS_API_URL}"
+          echo "CDN de assets:  ${PUBLIC_ASSETS_CDN_URL}"
           npm run build
           echo "Build completado. Archivos generados en /dist."
 
