@@ -18,8 +18,8 @@ import type {
 // Configuración global del sitio
 // ============================================
 
-/** URL base del CDN de assets (CloudFront → S3) */
-export const ASSETS_CDN_URL = 'https://d17sfh4fi052g2.cloudfront.net';
+/** URL base del CDN de assets (CloudFront → S3 prod-sbg-univalle-frontend) */
+export const ASSETS_CDN_URL = 'https://d2zjot7yvduv1u.cloudfront.net';
 
 export const SITE_CONFIG: ISiteConfig = {
   name: 'AWS Student Builder Group Universidad del Valle',
