@@ -1,6 +1,11 @@
 ---
+import { ASSETS_CDN_URL, ASSETS_LOGOS_PATH } from '@/lib/constants';
+
 interface Props { class?: string; }
 const { class: className = '' } = Astro.props;
+
+/** Logo oficial de AWS servido desde CloudFront (dominio y ruta según entorno). */
+const awsLogoURL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/logo_oficial_aws.png`;
 ---
 
 <section
@@ -28,7 +33,7 @@ const { class: className = '' } = Astro.props;
   <!-- Logo AWS — visible solo en mobile/tablet (la columna derecha está oculta) -->
   <div class="hero-animate hero-animate-delay-1 aws-logo-wrapper aws-logo-mobile">
     <img
-      src="https://d23d5d88jw9p2.cloudfront.net/dev-assets/dev-logos/logo_oficial_aws.png"
+      src={awsLogoURL}
       alt="AWS"
       class="aws-logo"
       loading="eager"
@@ -100,7 +105,7 @@ const { class: className = '' } = Astro.props;
         <!-- Logo AWS — encima de la tarjeta interactiva, solo visible en desktop -->
         <div class="aws-logo-wrapper aws-logo-desktop">
           <img
-            src="https://d23d5d88jw9p2.cloudfront.net/dev-assets/dev-logos/logo_oficial_aws.png"
+            src={awsLogoURL}
             alt=""
             class="aws-logo pointer-events-auto"
             loading="eager"
