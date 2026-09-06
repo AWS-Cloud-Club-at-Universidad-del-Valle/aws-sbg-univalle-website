@@ -1,0 +1,22 @@
+---
+/**
+ * BossFight — Caja de alerta llamativa para el requerimiento sorpresa.
+ * Se usa dentro de los MDX como <BossFight>.
+ */
+interface Props {
+  title?: string;
+}
+const { title = '¡Boss Fight!' } = Astro.props;
+---
+<div class="ch-boss-fight" role="alert">
+  <div class="ch-boss-fight__header">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+    </svg>
+    <span class="ch-boss-fight__title">{title}</span>
+  </div>
+  <div class="ch-boss-fight__body">
+    <slot />
+  </div>
+</div>

@@ -1,0 +1,13 @@
+---
+/**
+ * ServiceBadge — Badge para un servicio AWS (ej. "S3", "Lambda").
+ * Color naranja AWS, estilo code-label del sitio.
+ */
+interface Props {
+  service: string;
+}
+const { service } = Astro.props;
+---
+<span class="ch-service-badge">
+  {service}
+</span>
