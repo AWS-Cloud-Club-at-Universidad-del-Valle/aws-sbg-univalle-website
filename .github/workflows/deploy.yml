@@ -85,14 +85,9 @@ jobs:
       - name: Build site
         env:
           PUBLIC_EVENTS_API_URL: ${{ github.ref_name == 'main' && 'https://4fi9ot44ml.execute-api.us-east-1.amazonaws.com/prod' || 'https://orj83oh0pc.execute-api.us-east-1.amazonaws.com/dev' }}
-          # CDN de assets (imágenes) según la rama: prod en main, dev en develop.
-          PUBLIC_ASSETS_CDN_URL: ${{ github.ref_name == 'main' && 'https://d2zjot7yvduv1u.cloudfront.net' || 'https://d23d5d88jw9p2.cloudfront.net' }}
-          PUBLIC_ASSETS_MEMBERS_PATH: ${{ github.ref_name == 'main' && 'members' || 'dev-members/photos-members' }}
-          PUBLIC_ASSETS_LOGOS_PATH: ${{ github.ref_name == 'main' && 'prod-assets/prod-logos' || 'dev-assets/dev-logos' }}
         run: |
           echo "Iniciando build..."
           echo "API de Eventos: ${PUBLIC_EVENTS_API_URL}"
-          echo "CDN de assets:  ${PUBLIC_ASSETS_CDN_URL}"
           npm run build
           echo "Build completado. Archivos generados en /dist."
 
@@ -128,10 +123,10 @@ jobs:
       - name: Sync hashed assets to S3 (cache 1 year)
         run: |
           echo "Subiendo assets a:"
-          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/_astro/"
+          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/app/_astro/"
 
           aws s3 sync dist/_astro/ \
-            "s3://${{ secrets.AWS_BUCKET_NAME }}/_astro/" \
+            "s3://${{ secrets.AWS_BUCKET_NAME }}/app/_astro/" \
             --cache-control "public, max-age=31536000, immutable" \
             --no-progress
 
@@ -141,10 +136,10 @@ jobs:
       - name: Sync HTML and root files to S3 (no-cache)
         run: |
           echo "Subiendo archivos del sitio a:"
-          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/"
+          echo "s3://${{ secrets.AWS_BUCKET_NAME }}/app/"
 
           aws s3 sync dist/ \
-            "s3://${{ secrets.AWS_BUCKET_NAME }}/" \
+            "s3://${{ secrets.AWS_BUCKET_NAME }}/app/" \
             --cache-control "no-cache, no-store, must-revalidate" \
             --exclude "_astro/*" \
             --delete \
