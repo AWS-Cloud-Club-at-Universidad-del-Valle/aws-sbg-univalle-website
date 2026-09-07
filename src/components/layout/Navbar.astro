@@ -11,7 +11,7 @@ const { class: className = '' } = Astro.props;
 const currentPath = Astro.url.pathname;
 
 /** Logo del SBG servido desde CloudFront (dominio y ruta según entorno). */
-const sbgLogoURL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/aws_sbg_univalle.png`;
+const sbgLogoURL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/logo_oficial_aws.png`;
 
 // Icons for each nav link
 const navIcons: Record<string, string> = {
@@ -30,7 +30,7 @@ const navIcons: Record<string, string> = {
   <a href="/" aria-label="AWS SBG Univalle" class="flex items-center gap-2.5">
     <div class="flex h-8 w-8 items-center justify-center rounded-lg overflow-hidden bg-[var(--sbg-bg-elevated)] shadow-md shadow-[rgba(255,153,0,0.15)]">
       <img
-        src={sbgLogoURL}
+        src="https://d17sfh4fi052g2.cloudfront.net/logos/logo_aws_sbg_univalle.jpeg"
         alt="Logo AWS SBG Univalle"
         class="h-full w-full object-cover"
         loading="eager"
@@ -88,7 +88,7 @@ const navIcons: Record<string, string> = {
     <a href="/" class="flex flex-col items-center gap-2 group focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded-lg" aria-label="AWS SBG Univalle - Inicio">
       <div class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all duration-300 group-hover:scale-105">
         <img
-          src={sbgLogoURL}
+          src="https://d17sfh4fi052g2.cloudfront.net/logos/logo_aws_sbg_univalle.jpeg"
           alt="Logo AWS SBG Univalle"
           class="h-full w-full object-cover"
           loading="eager"
