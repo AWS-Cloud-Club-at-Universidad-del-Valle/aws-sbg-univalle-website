@@ -53,10 +53,10 @@ export const SITE_CONFIG: ISiteConfig = {
   logo: '/images/logo-sbg.svg',
   ogImage: '/images/og-default.png',
   social: {
-    instagram: 'https://instagram.com/awssbgunivalle',
+    instagram: 'https://www.instagram.com/awsbuildergroup.univalle/',
     linkedin: 'https://www.linkedin.com/company/aws-studentbuildergroupunivalle/',
-    github: 'https://github.com/aws-sbg-univalle',
-    whatsapp: 'https://wa.me/573000000000',
+    github: 'https://github.com/AWS-Cloud-Club-at-Universidad-del-Valle',
+    whatsapp: 'https://whatsapp.com/channel/0029VbBm0RJKgsNn6Ze7bU19',
     youtube: 'https://www.youtube.com/@awscloudunivalle',
     email: 'mailto:aws.cloud.club@correounivalle.edu.co',
   },
