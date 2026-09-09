@@ -179,6 +179,8 @@ export interface ICoreTeamMember {
   github: string;
   /** URL de imagen de perfil opcional (HTTPS, futuro S3) */
   image?: string;
+  /** Username público en AWS Builder Center (sin @). La URL se construye con BUILDER_CENTER_PROFILE_BASE. */
+  builderCenter?: string;
 }
 
 // ============================================

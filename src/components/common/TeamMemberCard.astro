@@ -7,6 +7,7 @@
  * Fotografías servidas desde CloudFront/S3.
  */
 import type { ICoreTeamMember } from '@/types/index';
+import { BUILDER_CENTER_PROFILE_BASE } from '@/lib/constants';
 
 interface Props {
   member: ICoreTeamMember;
@@ -15,6 +16,11 @@ interface Props {
 }
 
 const { member, glowColor = 'rgba(139,92,246,0.35)', class: className } = Astro.props;
+
+/** URL del perfil de Builder Center, si el miembro tiene username. */
+const builderCenterURL = member.builderCenter
+  ? `${BUILDER_CENTER_PROFILE_BASE}${member.builderCenter}`
+  : null;
 
 
 function getInitials(name: string): string {
@@ -66,7 +72,7 @@ const hasImage = member.image && member.image.trim().length > 0;
     {member.area && <span class="card-area-badge">{member.area}</span>}
 
     <div class="social-links-wrapper">
-      {(member.linkedin || member.github) && (
+      {(member.linkedin || member.github || builderCenterURL) && (
         <div class="social-links">
           {member.linkedin && (
             <a href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`LinkedIn de ${member.name}`} class="social-link">
@@ -82,6 +88,16 @@ const hasImage = member.image && member.image.trim().length > 0;
                 <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
               </svg>
               <span class="sr-only">(abre en nueva pestaña)</span>
+            </a>
+          )}
+          {builderCenterURL && (
+            <a href={builderCenterURL} target="_blank" rel="noopener noreferrer" aria-label={`Perfil de ${member.name} en AWS Builder Center`} class="social-link social-link--aws">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <path d="M6.76 10.27c0 .3.03.54.09.72.06.18.15.37.27.58.04.07.06.13.06.18 0 .08-.05.16-.15.24l-.5.33a.38.38 0 0 1-.2.07c-.08 0-.16-.04-.24-.11a2.5 2.5 0 0 1-.29-.38 6.3 6.3 0 0 1-.25-.48c-.62.73-1.4 1.1-2.34 1.1-.67 0-1.2-.2-1.59-.58a2 2 0 0 1-.59-1.53c0-.66.23-1.2.7-1.6.47-.42 1.1-.63 1.9-.63.26 0 .53.02.82.06.28.04.58.1.89.17v-.57c0-.6-.13-1.02-.37-1.26-.25-.24-.68-.36-1.3-.36-.28 0-.57.03-.87.1a6.4 6.4 0 0 0-.87.28 2.3 2.3 0 0 1-.28.1.5.5 0 0 1-.13.03c-.11 0-.17-.08-.17-.25v-.4c0-.13.02-.22.06-.28a.6.6 0 0 1 .23-.17c.28-.14.62-.27 1.02-.37.4-.1.82-.15 1.27-.15.97 0 1.68.22 2.13.66.45.44.67 1.11.67 2.01v2.65zm-3.23 1.21c.26 0 .53-.05.81-.14.28-.1.53-.27.74-.5.13-.15.22-.32.27-.5.05-.19.08-.41.08-.68v-.33a6.5 6.5 0 0 0-.71-.13 5.9 5.9 0 0 0-.73-.05c-.52 0-.9.1-1.16.31-.25.2-.38.5-.38.87 0 .35.09.61.27.79.18.18.44.27.79.27zm6.39.86c-.15 0-.25-.03-.32-.08-.07-.05-.13-.16-.18-.31L7.68 5.65a1.4 1.4 0 0 1-.07-.32c0-.13.06-.2.19-.2h.78c.16 0 .27.03.33.08.07.05.12.16.17.31l1.36 5.36 1.26-5.36c.04-.16.09-.26.16-.31a.57.57 0 0 1 .34-.08h.63c.16 0 .27.03.34.08.07.05.13.16.16.31l1.28 5.42 1.4-5.42c.05-.16.11-.26.17-.31a.55.55 0 0 1 .33-.08h.74c.13 0 .2.06.2.2 0 .04 0 .08-.02.13a1.16 1.16 0 0 1-.05.2l-1.95 6.3c-.05.16-.11.26-.18.31a.54.54 0 0 1-.32.08h-.68c-.16 0-.27-.03-.34-.08-.07-.06-.13-.16-.16-.32l-1.25-5.22-1.24 5.21c-.04.16-.09.26-.16.32-.07.05-.19.08-.34.08h-.68zm10.24.21c-.42 0-.84-.05-1.24-.15-.4-.1-.72-.2-.93-.32a.58.58 0 0 1-.25-.23.58.58 0 0 1-.05-.23v-.42c0-.17.06-.25.18-.25a.4.4 0 0 1 .14.03l.19.08c.26.11.54.2.84.26.3.06.6.09.9.09.48 0 .85-.08 1.1-.25.26-.17.39-.41.39-.72a.65.65 0 0 0-.18-.47c-.12-.13-.35-.24-.68-.35l-.98-.3c-.5-.16-.86-.39-1.08-.69a1.6 1.6 0 0 1-.34-.98c0-.28.06-.53.18-.75.12-.21.28-.4.49-.55.2-.15.44-.26.72-.34.28-.08.57-.11.88-.11.15 0 .31.01.46.03.16.02.3.05.44.08l.4.1c.13.04.23.08.3.12.1.06.17.12.21.19.04.06.06.15.06.26v.39c0 .17-.06.26-.18.26a.83.83 0 0 1-.3-.1 3.6 3.6 0 0 0-1.5-.3c-.44 0-.78.07-1.01.22-.24.14-.35.36-.35.66 0 .2.07.36.2.49.14.13.39.26.75.37l.96.3c.5.16.85.38 1.06.66.21.28.31.6.31.96 0 .29-.06.55-.18.78-.12.23-.29.43-.5.59-.22.16-.47.28-.77.36-.31.09-.63.13-.98.13z"/>
+                <path d="M21.7 18.5c-2.62 1.94-6.42 2.97-9.7 2.97-4.58 0-8.72-1.7-11.85-4.52-.25-.22-.03-.53.27-.36 3.38 1.96 7.55 3.15 11.86 3.15 2.9 0 6.1-.6 9.03-1.85.44-.19.81.29.38.61z"/>
+                <path d="M22.79 17.26c-.34-.43-2.22-.2-3.06-.1-.26.03-.3-.19-.06-.35 1.5-1.06 3.97-.75 4.26-.4.29.36-.08 2.84-1.49 4.02-.21.18-.42.08-.32-.15.32-.78 1.02-2.52.67-3.02z"/>
+              </svg>
+              <span class="sr-only">AWS Builder Center (abre en nueva pestaña)</span>
             </a>
           )}
         </div>
@@ -153,7 +169,7 @@ const hasImage = member.image && member.image.trim().length > 0;
     transition: color 200ms ease-out, background 200ms ease-out;
   }
   .social-link:hover { color: var(--sbg-accent-light); background: rgba(139, 92, 246, 0.1); }
-  .social-link:hover { color: var(--sbg-accent-light); background: rgba(139, 92, 246, 0.1); }
+  .social-link--aws:hover { color: var(--sbg-orange); background: rgba(255, 153, 0, 0.12); }
   .sr-only {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
     overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
