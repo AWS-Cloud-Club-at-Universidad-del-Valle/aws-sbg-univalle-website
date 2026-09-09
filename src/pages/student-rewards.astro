@@ -1,0 +1,443 @@
+---
+/**
+ * Página /student-rewards — AWS Builder Center · Student Rewards.
+ *
+ * Presenta los beneficios que estudiantes y profesores desbloquean en AWS
+ * Builder Center: Skill Builder Premium, créditos AWS y voucher de certificación.
+ * Incluye pasos para comenzar, sistema de badges y CTAs a registro/verificación.
+ *
+ * Solo frontend. Enlaces configurables desde constants.ts.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionDivider from '@/components/common/SectionDivider.astro';
+import {
+  BUILDER_CENTER_SIGNUP_URL,
+  STUDENT_REWARDS_URL,
+  STUDENT_REWARDS_TOTAL_VALUE,
+  STUDENT_REWARDS_HIGHLIGHT,
+  STUDENT_REWARDS_STEPS,
+  STUDENT_REWARDS_TIERS,
+  STUDENT_REWARDS_BADGE_ACTIONS,
+  STUDENT_REWARDS_BENEFITS,
+  COMMUNITY_EMAIL,
+} from '@/lib/constants';
+
+const highlight = STUDENT_REWARDS_HIGHLIGHT;
+const maxBadges = STUDENT_REWARDS_TIERS[STUDENT_REWARDS_TIERS.length - 1].badges;
+
+// Iconos evocativos para "por qué vale la pena" (uno distinto por beneficio).
+const benefitIcons = ['card', 'book', 'coins', 'certificate'];
+
+// Desglose de valor para la tarjeta resumen del hero.
+const valueBreakdown = [
+  { label: 'Skill Builder Premium', value: '$449' },
+  { label: 'Créditos AWS', value: '$30' },
+  { label: 'Voucher de examen', value: '$100' },
+];
+---
+
+<BaseLayout
+  title="Student Rewards"
+  description="Estudiantes y profesores de Univalle: desbloquea hasta $579 en beneficios con AWS Builder Center. 1 año de Skill Builder Premium, créditos AWS y un voucher de certificación Foundational."
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="relative overflow-hidden py-24 lg:py-28">
+    <!-- Glows de fondo -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[70vh]"
+      style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(255,153,0,0.10) 0%,transparent 65%);"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute bottom-0 right-0 h-[55vh] w-[55vw]"
+      style="background:radial-gradient(ellipse at 80% 100%,rgba(139,92,246,0.12) 0%,transparent 60%);"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.02]"
+      style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:40px 40px;"></div>
+
+    <!-- Formas flotantes -->
+    <div aria-hidden="true" class="pointer-events-none absolute top-20 left-10 h-3 w-3 rounded-full opacity-20"
+      style="background:var(--sbg-orange);animation:float-circle 7s ease-in-out infinite;"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute hidden lg:block top-1/3 right-[46%] h-3 w-3 opacity-15"
+      style="background:var(--sbg-accent);animation:float-rhombus 9s ease-in-out infinite 1.5s;"></div>
+
+    <div class="container-sbg relative z-10">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+        <!-- Columna izquierda: mensaje -->
+        <div>
+          <!-- Marca Builder Center -->
+          <div class="hero-animate hero-animate-delay-1 mb-5 inline-flex items-center gap-2.5 rounded-full border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] px-4 py-1.5">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--sbg-orange)" aria-hidden="true">
+              <path d="M6.76 10.27c0 .3.03.54.09.72.06.18.15.37.27.58.04.07.06.13.06.18 0 .08-.05.16-.15.24l-.5.33a.38.38 0 0 1-.2.07c-.08 0-.16-.04-.24-.11a2.5 2.5 0 0 1-.29-.38 6.3 6.3 0 0 1-.25-.48c-.62.73-1.4 1.1-2.34 1.1-.67 0-1.2-.2-1.59-.58a2 2 0 0 1-.59-1.53c0-.66.23-1.2.7-1.6.47-.42 1.1-.63 1.9-.63.26 0 .53.02.82.06.28.04.58.1.89.17v-.57c0-.6-.13-1.02-.37-1.26-.25-.24-.68-.36-1.3-.36-.28 0-.57.03-.87.1a6.4 6.4 0 0 0-.87.28 2.3 2.3 0 0 1-.28.1.5.5 0 0 1-.13.03c-.11 0-.17-.08-.17-.25v-.4c0-.13.02-.22.06-.28a.6.6 0 0 1 .23-.17c.28-.14.62-.27 1.02-.37.4-.1.82-.15 1.27-.15.97 0 1.68.22 2.13.66.45.44.67 1.11.67 2.01v2.65zm-3.23 1.21c.26 0 .53-.05.81-.14.28-.1.53-.27.74-.5.13-.15.22-.32.27-.5.05-.19.08-.41.08-.68v-.33a6.5 6.5 0 0 0-.71-.13 5.9 5.9 0 0 0-.73-.05c-.52 0-.9.1-1.16.31-.25.2-.38.5-.38.87 0 .35.09.61.27.79.18.18.44.27.79.27zm6.39.86c-.15 0-.25-.03-.32-.08-.07-.05-.13-.16-.18-.31L7.68 5.65a1.4 1.4 0 0 1-.07-.32c0-.13.06-.2.19-.2h.78c.16 0 .27.03.33.08.07.05.12.16.17.31l1.36 5.36 1.26-5.36c.04-.16.09-.26.16-.31a.57.57 0 0 1 .34-.08h.63c.16 0 .27.03.34.08.07.05.13.16.16.31l1.28 5.42 1.4-5.42c.05-.16.11-.26.17-.31a.55.55 0 0 1 .33-.08h.74c.13 0 .2.06.2.2 0 .04 0 .08-.02.13a1.16 1.16 0 0 1-.05.2l-1.95 6.3c-.05.16-.11.26-.18.31a.54.54 0 0 1-.32.08h-.68c-.16 0-.27-.03-.34-.08-.07-.06-.13-.16-.16-.32l-1.25-5.22-1.24 5.21c-.04.16-.09.26-.16.32-.07.05-.19.08-.34.08h-.68zm10.24.21c-.42 0-.84-.05-1.24-.15-.4-.1-.72-.2-.93-.32a.58.58 0 0 1-.25-.23.58.58 0 0 1-.05-.23v-.42c0-.17.06-.25.18-.25a.4.4 0 0 1 .14.03l.19.08c.26.11.54.2.84.26.3.06.6.09.9.09.48 0 .85-.08 1.1-.25.26-.17.39-.41.39-.72a.65.65 0 0 0-.18-.47c-.12-.13-.35-.24-.68-.35l-.98-.3c-.5-.16-.86-.39-1.08-.69a1.6 1.6 0 0 1-.34-.98c0-.28.06-.53.18-.75.12-.21.28-.4.49-.55.2-.15.44-.26.72-.34.28-.08.57-.11.88-.11.15 0 .31.01.46.03.16.02.3.05.44.08l.4.1c.13.04.23.08.3.12.1.06.17.12.21.19.04.06.06.15.06.26v.39c0 .17-.06.26-.18.26a.83.83 0 0 1-.3-.1 3.6 3.6 0 0 0-1.5-.3c-.44 0-.78.07-1.01.22-.24.14-.35.36-.35.66 0 .2.07.36.2.49.14.13.39.26.75.37l.96.3c.5.16.85.38 1.06.66.21.28.31.6.31.96 0 .29-.06.55-.18.78-.12.23-.29.43-.5.59-.22.16-.47.28-.77.36-.31.09-.63.13-.98.13z"/>
+              <path d="M21.7 18.5c-2.62 1.94-6.42 2.97-9.7 2.97-4.58 0-8.72-1.7-11.85-4.52-.25-.22-.03-.53.27-.36 3.38 1.96 7.55 3.15 11.86 3.15 2.9 0 6.1-.6 9.03-1.85.44-.19.81.29.38.61z"/>
+              <path d="M22.79 17.26c-.34-.43-2.22-.2-3.06-.1-.26.03-.3-.19-.06-.35 1.5-1.06 3.97-.75 4.26-.4.29.36-.08 2.84-1.49 4.02-.21.18-.42.08-.32-.15.32-.78 1.02-2.52.67-3.02z"/>
+            </svg>
+            <span class="text-xs font-bold tracking-wide text-[var(--sbg-text)]" style="font-family:'Space Mono',monospace;">AWS Builder Center</span>
+          </div>
+
+          <h1 class="hero-animate hero-animate-delay-2 text-[2.4rem] leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.4rem]">
+            Desbloquea hasta <span class="text-[var(--sbg-orange)]">{STUDENT_REWARDS_TOTAL_VALUE}</span> en beneficios
+          </h1>
+          <p class="hero-animate hero-animate-delay-3 mt-6 max-w-xl text-base leading-[1.8] text-[var(--sbg-text-muted)] sm:text-lg"
+            style="font-family:'Nunito Sans',sans-serif;">
+            La nueva función <strong class="text-white">Student Rewards</strong> ya está disponible
+            para <strong class="text-white">cualquier estudiante y profesor de la Universidad del Valle</strong>.
+            Verifícate, completa tu perfil y empieza a construir con recursos premium, créditos AWS y un camino directo a tu primera certificación.
+          </p>
+
+          <!-- ¿Para quién? -->
+          <div class="hero-animate hero-animate-delay-3 mt-6 flex flex-wrap items-center gap-2.5">
+            {['Estudiantes de Univalle', 'Profesores de Univalle'].map((who) => (
+              <span class="inline-flex items-center gap-2 rounded-full border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] px-4 py-2 text-xs font-semibold text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--sbg-orange)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                {who}
+              </span>
+            ))}
+          </div>
+
+          <!-- CTAs -->
+          <div class="hero-animate hero-animate-delay-4 mt-9 flex flex-wrap items-center gap-3">
+            <a href={BUILDER_CENTER_SIGNUP_URL} target="_blank" rel="noopener noreferrer"
+              class="group inline-flex min-h-[52px] items-center gap-2.5 rounded-2xl bg-gradient-to-r from-[var(--sbg-orange)] to-[var(--sbg-accent)] px-8 text-[0.95rem] font-bold text-white shadow-xl shadow-[rgba(255,153,0,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-[rgba(255,153,0,0.4)] focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-4"
+              style="font-family:'Space Mono',monospace;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              Unirme a Builder Center
+            </a>
+            <a href={STUDENT_REWARDS_URL} target="_blank" rel="noopener noreferrer"
+              class="inline-flex min-h-[52px] items-center gap-2 rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] px-7 text-[0.9rem] font-bold text-[var(--sbg-text)] transition-all duration-200 hover:border-[var(--sbg-accent-border)] hover:text-white focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)]"
+              style="font-family:'Space Mono',monospace;">
+              Ver Student Rewards
+            </a>
+          </div>
+
+          <p class="hero-animate hero-animate-delay-5 mt-4 text-xs text-[var(--sbg-text-subtle)]" style="font-family:'Nunito Sans',sans-serif;">
+            Sin tarjeta de crédito · La verificación toma solo unos minutos
+          </p>
+        </div>
+
+        <!-- Columna derecha: tarjeta resumen de valor -->
+        <div class="hero-animate hero-animate-delay-4 relative">
+          <!-- glow detrás de la tarjeta -->
+          <div aria-hidden="true" class="pointer-events-none absolute -inset-4 rounded-[2rem] opacity-60"
+            style="background:radial-gradient(ellipse at 50% 30%,rgba(255,153,0,0.12) 0%,transparent 70%);"></div>
+
+          <div class="value-card relative overflow-hidden rounded-3xl border border-[var(--sbg-orange)]/25 bg-[var(--sbg-bg-surface)] p-8">
+            <!-- patrón de puntos interno -->
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.03]"
+              style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:22px 22px;"></div>
+
+            <div class="relative">
+              <span class="code-label"># valor_total</span>
+              <div class="mt-2 flex items-end gap-2">
+                <span class="text-6xl font-bold leading-none text-[var(--sbg-orange)]" style="font-family:'Space Mono',monospace;">{STUDENT_REWARDS_TOTAL_VALUE}</span>
+                <span class="mb-1 text-xs text-[var(--sbg-text-subtle)] uppercase tracking-widest" style="font-family:'Space Mono',monospace;">USD</span>
+              </div>
+              <p class="mt-2 text-sm text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">en beneficios acumulables</p>
+
+              <!-- desglose -->
+              <div class="mt-6 space-y-3 border-t border-[var(--sbg-border)] pt-6">
+                {valueBreakdown.map((item) => (
+                  <div class="flex items-center justify-between gap-4">
+                    <span class="flex items-center gap-2.5 text-sm text-[var(--sbg-text)]" style="font-family:'Nunito Sans',sans-serif;">
+                      <span class="h-1.5 w-1.5 rounded-full bg-[var(--sbg-orange)]"></span>
+                      {item.label}
+                    </span>
+                    <span class="text-sm font-bold text-white" style="font-family:'Space Mono',monospace;">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <!-- ===================== BENEFICIO PRINCIPAL ===================== -->
+  <section class="relative py-16 lg:py-24 overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0"
+      style="background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(255,153,0,0.05) 0%,transparent 65%);"></div>
+
+    <div class="container-sbg relative z-10">
+      <div data-animate
+        class="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-[var(--sbg-orange)]/20 bg-gradient-to-br from-[var(--sbg-orange)]/[0.08] via-[var(--sbg-bg-surface)] to-[var(--sbg-accent)]/[0.06] p-8 sm:p-12">
+        <!-- círculos decorativos -->
+        <div aria-hidden="true" class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-20"
+          style="background:radial-gradient(circle,var(--sbg-orange) 0%,transparent 70%);"></div>
+
+        <span class="code-label mb-4 inline-block relative"># beneficio_principal</span>
+        <div class="relative flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+          <div class="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--sbg-orange)] to-[var(--sbg-accent)] shadow-2xl shadow-[rgba(255,153,0,0.3)]">
+            <!-- Skill Builder: rayo dentro de escudo/libro -->
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              <path d="M13 6l-3 5h3l-1 5" stroke="white" stroke-width="1.6"/>
+            </svg>
+            <span class="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white text-[var(--sbg-orange)] shadow-md">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+          <div>
+            <div class="flex items-baseline gap-3">
+              <span class="text-[2.6rem] leading-none font-bold text-[var(--sbg-orange)]" style="font-family:'Space Mono',monospace;">{highlight.value}</span>
+              <span class="text-xs text-[var(--sbg-text-subtle)] uppercase tracking-widest" style="font-family:'Space Mono',monospace;">de valor</span>
+            </div>
+            <h2 class="mt-2 text-xl sm:text-2xl text-white">{highlight.title}</h2>
+            <p class="mt-2 text-sm leading-relaxed text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
+              {highlight.description}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PASOS ===================== -->
+  <section class="relative py-16 lg:py-24 overflow-hidden">
+    <div class="container-sbg relative z-10">
+      <div class="mb-12 max-w-2xl" data-animate>
+        <span class="code-label mb-3 inline-block"># empieza_en_3_pasos</span>
+        <h2 class="text-[2rem] leading-[1.1] sm:text-[2.6rem]">
+          Comienza en <span class="text-[var(--sbg-orange)]">3 pasos</span>
+        </h2>
+        <p class="mt-3 text-base leading-relaxed text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
+          Ya seas <strong class="text-white">estudiante o profesor</strong> de la Universidad del Valle, el proceso es el mismo y toma solo unos minutos.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {STUDENT_REWARDS_STEPS.map((step, idx) => (
+          <div data-animate class="step-card group relative overflow-hidden rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--sbg-accent-border)] hover:shadow-2xl hover:shadow-[rgba(0,0,0,0.4)]"
+            style={`transition-delay:${idx * 90}ms;`}>
+            <!-- número marca de agua -->
+            <span aria-hidden="true" class="pointer-events-none absolute -right-2 -top-4 text-[5rem] font-bold leading-none text-white/[0.03]" style="font-family:'Space Mono',monospace;">{step.number}</span>
+            <!-- Conector (desktop) -->
+            {idx < STUDENT_REWARDS_STEPS.length - 1 && (
+              <div aria-hidden="true" class="pointer-events-none absolute right-[-14px] top-12 hidden md:block text-[var(--sbg-orange)]/40">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            )}
+            <div class="relative flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--sbg-orange)] to-[var(--sbg-accent)] text-white shadow-lg shadow-[rgba(255,153,0,0.25)]">
+              <span class="text-lg font-bold" style="font-family:'Space Mono',monospace;">{step.number}</span>
+            </div>
+            <h3 class="relative mt-5 text-base font-bold text-white" style="font-family:'Space Mono',monospace;">{step.title}</h3>
+            <p class="relative mt-2 text-sm leading-relaxed text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">{step.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3" data-animate>
+        <a href={STUDENT_REWARDS_URL} target="_blank" rel="noopener noreferrer"
+          class="inline-flex min-h-[48px] items-center gap-2 rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-elevated)] px-6 text-sm font-bold text-[var(--sbg-text-muted)] transition-all duration-200 hover:border-[var(--sbg-orange)]/30 hover:text-white focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)]"
+          style="font-family:'Space Mono',monospace;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sbg-orange)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          Verificar mi estatus
+        </a>
+      </div>
+
+      <!-- Nota de soporte -->
+      <div data-animate class="mt-6 flex items-start gap-3 rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)]/60 p-4 sm:p-5">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--sbg-accent-subtle)] text-[var(--sbg-accent-light)]">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </span>
+        <p class="text-sm leading-relaxed text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
+          ¿Tienes algún problema con la verificación o el registro? Escríbenos a{' '}
+          <a href={`mailto:${COMMUNITY_EMAIL}`} class="font-semibold text-[var(--sbg-accent-light)] underline underline-offset-2 hover:text-[var(--sbg-accent)]">{COMMUNITY_EMAIL}</a>
+          {' '}y te ayudamos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <!-- ===================== BADGES ===================== -->
+  <section class="relative py-16 lg:py-24 overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-[40vh]"
+      style="background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(139,92,246,0.07) 0%,transparent 70%);"></div>
+
+    <div class="container-sbg relative z-10">
+      <div class="mb-12 max-w-2xl" data-animate>
+        <span class="code-label mb-3 inline-block"># gana_badges</span>
+        <h2 class="text-[2rem] leading-[1.1] sm:text-[2.6rem]">
+          Sigue construyendo, <span class="text-[var(--sbg-accent-light)]">gana más</span>
+        </h2>
+        <p class="mt-3 text-base leading-relaxed text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
+          A medida que participas en Builder Center, ganas badges que desbloquean recompensas acumulables.
+        </p>
+      </div>
+
+      <!-- Ruta de tiers -->
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {STUDENT_REWARDS_TIERS.map((tier, idx) => (
+          <div data-animate
+            class="tier-card group relative overflow-hidden rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--sbg-accent-border)] hover:shadow-2xl hover:shadow-[rgba(0,0,0,0.4)]"
+            style={`transition-delay:${idx * 90}ms;`}>
+            <!-- nivel + valor -->
+            <div class="mb-5 flex items-center justify-between">
+              <span class="rounded-md bg-[var(--sbg-accent-subtle)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--sbg-accent-light)]" style="font-family:'Space Mono',monospace;">Nivel {idx + 1}</span>
+              <span class="rounded-lg bg-[var(--sbg-orange)]/12 px-2.5 py-1 text-xs font-bold text-[var(--sbg-orange)]" style="font-family:'Space Mono',monospace;">{tier.value}</span>
+            </div>
+
+            <!-- medalla con número de badges -->
+            <div class="relative flex h-20 w-20 items-center justify-center">
+              <!-- anillo -->
+              <svg class="absolute inset-0" width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                <circle cx="40" cy="40" r="36" stroke="var(--sbg-border)" stroke-width="3"/>
+                <circle cx="40" cy="40" r="36" stroke="url(#tierGrad)" stroke-width="3" stroke-linecap="round"
+                  stroke-dasharray={`${Math.round((tier.badges / maxBadges) * 226)} 226`} transform="rotate(-90 40 40)"/>
+                <defs>
+                  <linearGradient id="tierGrad" x1="0" y1="0" x2="80" y2="80">
+                    <stop offset="0%" stop-color="var(--sbg-accent)"/>
+                    <stop offset="100%" stop-color="var(--sbg-orange)"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="flex flex-col items-center">
+                <span class="text-2xl font-bold text-white" style="font-family:'Space Mono',monospace;">{tier.badges}</span>
+                <span class="text-[9px] text-[var(--sbg-text-subtle)] uppercase tracking-widest" style="font-family:'Space Mono',monospace;">badges</span>
+              </div>
+            </div>
+
+            <!-- recompensa con icono -->
+            <div class="mt-5 flex items-start gap-3">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--sbg-accent-subtle)] text-[var(--sbg-accent-light)]">
+                {tier.icon === 'certificate' ? (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="8" r="6"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/>
+                  </svg>
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>
+                  </svg>
+                )}
+              </span>
+              <p class="text-sm leading-relaxed text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">{tier.reward}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Cómo se ganan -->
+      <div data-animate class="mt-10 rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)]/60 p-7 sm:p-8">
+        <h3 class="text-sm font-bold text-[var(--sbg-text-muted)] uppercase tracking-[0.15em]" style="font-family:'Space Mono',monospace;">
+          ¿Cómo se ganan los badges?
+        </h3>
+        <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {STUDENT_REWARDS_BADGE_ACTIONS.map((action, i) => (
+            <div class="flex items-center gap-3 rounded-xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-elevated)] px-4 py-3.5">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--sbg-accent-subtle)] text-[var(--sbg-accent-light)]">
+                {i === 0 && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                )}
+                {i === 1 && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                )}
+                {i === 2 && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                )}
+              </span>
+              <span class="text-xs font-semibold text-[var(--sbg-text)]" style="font-family:'Nunito Sans',sans-serif;">{action}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <!-- ===================== POR QUÉ IMPORTA ===================== -->
+  <section class="relative py-16 lg:py-24 overflow-hidden">
+    <div class="container-sbg relative z-10">
+      <div class="mb-12 max-w-2xl" data-animate>
+        <span class="code-label mb-3 inline-block"># por_que_importa</span>
+        <h2 class="text-[2rem] leading-[1.1] sm:text-[2.6rem]">
+          Por qué <span class="text-[var(--sbg-orange)]">vale la pena</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        {STUDENT_REWARDS_BENEFITS.map((benefit, idx) => (
+          <div data-animate
+            class="group flex items-start gap-4 rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--sbg-accent-border)]"
+            style={`transition-delay:${idx * 70}ms;`}>
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--sbg-orange)]/12 text-[var(--sbg-orange)] transition-transform duration-300 group-hover:scale-110">
+              {benefitIcons[idx] === 'card' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              )}
+              {benefitIcons[idx] === 'book' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              )}
+              {benefitIcons[idx] === 'coins' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>
+              )}
+              {benefitIcons[idx] === 'certificate' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8.21 13.89 7 23l5-3 5 3-1.21-9.12"/></svg>
+              )}
+            </div>
+            <p class="pt-1 text-sm leading-relaxed text-[var(--sbg-text)]" style="font-family:'Nunito Sans',sans-serif;">{benefit}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  <!-- ===================== CTA FINAL ===================== -->
+  <section class="relative py-20 lg:py-28 overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0"
+      style="background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(255,153,0,0.07) 0%,transparent 60%);"></div>
+    <div aria-hidden="true" class="pointer-events-none absolute top-10 right-[15%] h-3 w-3 rounded-full opacity-20"
+      style="background:var(--sbg-orange);animation:float-circle 6s ease-in-out infinite;"></div>
+
+    <div class="container-sbg relative z-10">
+      <div data-animate class="relative mx-auto max-w-2xl overflow-hidden rounded-3xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-surface)] p-10 text-center sm:p-14">
+        <div aria-hidden="true" class="pointer-events-none absolute -left-16 -bottom-16 h-48 w-48 rounded-full opacity-15"
+          style="background:radial-gradient(circle,var(--sbg-accent) 0%,transparent 70%);"></div>
+
+        <span class="code-label mb-3 inline-block relative"># empieza_ahora</span>
+        <h2 class="relative text-[1.9rem] leading-[1.1] sm:text-[2.4rem]">
+          Empieza a construir <span class="text-[var(--sbg-orange)]">hoy</span>
+        </h2>
+        <p class="relative mx-auto mt-4 max-w-lg text-base leading-[1.8] text-[var(--sbg-text-muted)]" style="font-family:'Nunito Sans',sans-serif;">
+          Solo toma unos minutos. Verifícate, completa tu perfil y desbloquea Skill Builder Premium, créditos AWS y tu voucher de certificación.
+        </p>
+        <div class="relative mt-9 flex flex-wrap items-center justify-center gap-3">
+          <a href={BUILDER_CENTER_SIGNUP_URL} target="_blank" rel="noopener noreferrer"
+            class="group inline-flex min-h-[52px] items-center gap-2.5 rounded-2xl bg-gradient-to-r from-[var(--sbg-orange)] to-[var(--sbg-accent)] px-8 text-[0.95rem] font-bold text-white shadow-xl shadow-[rgba(255,153,0,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-[rgba(255,153,0,0.4)] focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-4"
+            style="font-family:'Space Mono',monospace;">
+            Unirme a Builder Center
+          </a>
+          <a href={STUDENT_REWARDS_URL} target="_blank" rel="noopener noreferrer"
+            class="inline-flex min-h-[52px] items-center gap-2 rounded-2xl border border-[var(--sbg-border)] bg-[var(--sbg-bg-elevated)] px-7 text-[0.9rem] font-bold text-[var(--sbg-text)] transition-all duration-200 hover:border-[var(--sbg-accent-border)] hover:text-white focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)]"
+            style="font-family:'Space Mono',monospace;">
+            Verificar estudiante
+          </a>
+        </div>
+
+        <!-- Disclaimer -->
+        <p class="relative mx-auto mt-8 max-w-lg text-[11px] leading-relaxed text-[var(--sbg-text-subtle)]" style="font-family:'Nunito Sans',sans-serif;">
+          La verificación de estudiante no está disponible actualmente en algunos países y regiones.
+          Consulta los requisitos y la disponibilidad en la
+          <a href={STUDENT_REWARDS_URL} target="_blank" rel="noopener noreferrer" class="text-[var(--sbg-accent-light)] underline underline-offset-2 hover:text-[var(--sbg-accent)]">página oficial de Student Rewards</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .value-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .value-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+  @media (prefers-reduced-motion: reduce) {
+    .value-card { transition: none; }
+    .value-card:hover { transform: none; }
+  }
+</style>

@@ -44,6 +44,13 @@ export const ASSETS_MEMBERS_PATH: string =
 export const ASSETS_LOGOS_PATH: string =
   import.meta.env.PUBLIC_ASSETS_LOGOS_PATH ?? 'prod-assets/prod-logos';
 
+/**
+ * Base para construir la URL de un perfil público en AWS Builder Center.
+ * La URL final es `${BUILDER_CENTER_PROFILE_BASE}${username}`.
+ * Si el formato de perfil cambia, se ajusta aquí en un solo lugar.
+ */
+export const BUILDER_CENTER_PROFILE_BASE = 'https://builder.aws.com/community/@';
+
 export const SITE_CONFIG: ISiteConfig = {
   name: 'AWS Student Builder Group Universidad del Valle',
   shortName: 'AWS SBG Univalle',
@@ -70,6 +77,7 @@ export const NAV_LINKS: INavLink[] = [
   { href: '/', label: 'Inicio' },
   { href: '/about', label: 'Nosotros' },
   { href: '/certificate', label: 'Certifícate' },
+  { href: '/student-rewards', label: 'Rewards' },
   { href: '/events', label: 'Eventos' },
   { href: '/resources', label: 'Recursos' },
   { href: '/participate', label: 'Participa' },
@@ -81,8 +89,8 @@ export const NAV_LINKS: INavLink[] = [
 // ============================================
 
 export const STATS: IStat[] = [
-  { value: 150, suffix: '+', label: 'Miembros activos', icon: 'users' },
-  { value: 30, suffix: '+', label: 'Eventos realizados', icon: 'calendar' },
+  { value: 922, suffix: '', label: 'Miembros activos', icon: 'users' },
+  { value: 27, suffix: '', label: 'Eventos realizados', icon: 'calendar' },
   { value: 15, suffix: '+', label: 'Proyectos en la nube', icon: 'cloud' },
   { value: 8, suffix: '', label: 'Semestres de historia', icon: 'award' },
 ];
@@ -419,6 +427,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: '',
     linkedin: 'https://www.linkedin.com/in/juanhcontreras/',
     github: 'https://github.com/juanhcode',
+    builderCenter: 'juanhoyos',
     image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/juan.jpeg`,
   },
   {
@@ -435,6 +444,7 @@ export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
     area: 'Partnerships & Academy Lead',
     linkedin: 'https://www.linkedin.com/in/pablo-nicolas-marin-gonzalez-33b8042a1/',
     github: 'https://github.com/Slylem0',
+    builderCenter: 'pablitonicolas',
     image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/pablo.jpeg`,
   },
   {
@@ -481,7 +491,7 @@ export const PROPOSALS_ENDPOINT =
 export const PARTICIPATION_WAYS: IParticipationWay[] = [
   {
     key: 'TALK',
-    icon: '🎤',
+    icon: 'mic',
     title: 'Dar una charla',
     description:
       'Comparte tus conocimientos y experiencias sobre cloud, desarrollo, IA, DevOps, datos o seguridad con la comunidad.',
@@ -490,7 +500,7 @@ export const PARTICIPATION_WAYS: IParticipationWay[] = [
   },
   {
     key: 'WORKSHOP',
-    icon: '🛠️',
+    icon: 'tools',
     title: 'Proponer un workshop',
     description:
       'Propón una actividad práctica para aprender construyendo, orientada a AWS, cloud, automatización u otros temas.',
@@ -499,7 +509,7 @@ export const PARTICIPATION_WAYS: IParticipationWay[] = [
   },
   {
     key: 'TALLER',
-    icon: '📚',
+    icon: 'book',
     title: 'Proponer un taller',
     description:
       'Comparte una actividad educativa, formativa o introductoria pensada para quienes están comenzando.',
@@ -508,7 +518,7 @@ export const PARTICIPATION_WAYS: IParticipationWay[] = [
   },
   {
     key: 'VOLUNTEER',
-    icon: '🙋',
+    icon: 'hand',
     title: 'Ser voluntario',
     description:
       'Ayúdanos a organizar y desarrollar nuestros eventos presenciales: logística, registro, apoyo a speakers y más.',
@@ -548,4 +558,92 @@ export const TALK_LEVELS: ITalkLevel[] = [
     description:
       'Contenido altamente avanzado, especializado o enfocado en escenarios complejos.',
   },
+];
+
+// ============================================
+// Student Rewards — Página /student-rewards
+// AWS Builder Center · beneficios para estudiantes
+// ============================================
+
+/** Enlace único de registro en AWS Builder Center (cuenta del grupo). */
+export const BUILDER_CENTER_SIGNUP_URL = 'https://bit.ly/45y5hpA';
+
+/** Página oficial de Student Rewards. También usada para la verificación de estudiante. */
+export const STUDENT_REWARDS_URL = 'https://builder.aws.com/student-rewards';
+
+/** Valor total aproximado desbloqueable (USD). */
+export const STUDENT_REWARDS_TOTAL_VALUE = '$579';
+
+/** Beneficio principal al verificarse y completar el perfil. */
+export interface IRewardHighlight {
+  value: string;
+  title: string;
+  description: string;
+}
+
+export const STUDENT_REWARDS_HIGHLIGHT: IRewardHighlight = {
+  value: '$449',
+  title: '1 año de Skill Builder Premium',
+  description:
+    'Al verificar tu estatus de estudiante y completar tu perfil, recibes acceso Premium a AWS Skill Builder durante 12 meses, sin tarjeta de crédito.',
+};
+
+/** Pasos para comenzar. */
+export interface IRewardStep {
+  number: number;
+  title: string;
+  description: string;
+}
+
+export const STUDENT_REWARDS_STEPS: IRewardStep[] = [
+  {
+    number: 1,
+    title: 'Verifica tu estatus de estudiante',
+    description:
+      'Valida con SheerID usando tu nombre, universidad y correo. La mayoría de verificaciones se completan en minutos.',
+  },
+  {
+    number: 2,
+    title: 'Completa tu perfil de Builder Center',
+    description: 'Agrega tu foto y la sección "about" para activar tus beneficios.',
+  },
+  {
+    number: 3,
+    title: 'Recibe tu primer beneficio',
+    description: 'Un año de acceso Premium a AWS Skill Builder ($449 de valor).',
+  },
+];
+
+/** Recompensas por badges acumulados. */
+export interface IRewardTier {
+  badges: number;
+  reward: string;
+  value: string;
+  icon: string; // clave de icono
+}
+
+export const STUDENT_REWARDS_TIERS: IRewardTier[] = [
+  { badges: 7, reward: '$10 en créditos AWS', value: '$10', icon: 'coins' },
+  { badges: 14, reward: '$20 adicionales en créditos AWS', value: '$20', icon: 'coins' },
+  {
+    badges: 21,
+    reward: 'Voucher de examen AWS Foundational Certification',
+    value: '$100',
+    icon: 'certificate',
+  },
+];
+
+/** Formas de ganar badges. */
+export const STUDENT_REWARDS_BADGE_ACTIONS: string[] = [
+  'Publica artículos en Builder Center',
+  'Comenta contenido de la comunidad',
+  'Mantén rachas de actividad',
+];
+
+/** Razones por las que vale la pena participar. */
+export const STUDENT_REWARDS_BENEFITS: string[] = [
+  'No necesitas tarjeta de crédito para unirte a AWS Builder Center',
+  'Acceso a recursos de aprendizaje premium',
+  'Créditos AWS para construir tus proyectos',
+  'Un camino claro para obtener una certificación Foundational de AWS',
 ];
