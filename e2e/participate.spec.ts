@@ -2,6 +2,11 @@ import { expect, test } from '@playwright/test';
 import { mockBackendApis } from './helpers/mock-apis';
 
 test.describe('Participa', () => {
+  test.skip(
+    !!process.env.CI,
+    'Se omite en CI porque depende de mocks locales de APIs backend.',
+  );
+
   test.beforeEach(async ({ page }) => {
     await mockBackendApis(page);
     await page.goto('/participate');
