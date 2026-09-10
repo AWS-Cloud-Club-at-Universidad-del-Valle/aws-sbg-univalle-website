@@ -3,7 +3,7 @@
  * BaseLayout — Layout raíz de todas las páginas del sitio.
  *
  * Responsabilidades:
- * - Inyectar head completo: charset, viewport, SEO, preloads de fuentes
+ * - Inyectar head completo: charset, viewport, SEO
  * - Renderizar skip link como primer elemento interactivo del body
  * - Proveer estructura: Navbar → main#main-content → slot → Footer
  *
@@ -17,8 +17,8 @@
  */
 
 import '@/styles/global.css';
-import { SITE_CONFIG, ASSETS_CDN_URL, ASSETS_LOGOS_PATH } from '@/lib/constants';
-import { buildJsonLdOrganization } from '@/lib/utils';
+import { SITE_CONFIG, SBG_LOGO_URL } from '@/lib/constants';
+import { buildJsonLdOrganization, toAbsoluteUrl } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar.astro';
 import Footer from '@/components/layout/Footer.astro';
 import { ClientRouter } from 'astro:transitions';
@@ -57,18 +57,18 @@ const fullTitle =
     ? title
     : `${title} | ${SITE_NAME}`;
 
-// URL canónica absoluta
+// URL canónica absoluta (mismo dominio que astro.config site / sitemap)
 const canonicalURL = canonical ?? new URL(Astro.url.pathname, SITE_URL).href;
 
-// Imagen OG absoluta
-const ogImageURL = ogImage.startsWith('http') ? ogImage : `${SITE_URL}${ogImage}`;
+// Imagen OG absoluta (acepta ruta relativa o URL de CloudFront)
+const ogImageURL = toAbsoluteUrl(SITE_URL, ogImage);
+const ogImageAlt = `${SITE_NAME} — AWS Student Builder Group Universidad del Valle`;
 
 // JSON-LD Organization (solo en homepage por ahora)
 const jsonLd = buildJsonLdOrganization(SITE_CONFIG);
 const isHome = Astro.url.pathname === '/';
 
-// Favicon: logo del AWS SBG Univalle servido desde CloudFront (bucket privado).
-const faviconURL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/aws_sbg_univalle.png`;
+const faviconURL = SBG_LOGO_URL;
 ---
 
 <!doctype html>
@@ -78,18 +78,21 @@ const faviconURL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/aws_sbg_univalle.png`
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#1a1d23" />
+    <meta name="author" content={SITE_CONFIG.name} />
 
     <!-- Primarios SEO -->
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:type" content={ogType} />
@@ -101,27 +104,12 @@ const faviconURL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/aws_sbg_univalle.png`
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- Favicon: logo del AWS SBG Univalle (CloudFront) -->
     <link rel="icon" type="image/png" href={faviconURL} />
     <link rel="shortcut icon" type="image/png" href={faviconURL} />
     <link rel="apple-touch-icon" href={faviconURL} />
-
-    <!-- Preloads de fuentes críticas (reduce CLS y FOUT) -->
-    <link
-      rel="preload"
-      href="/fonts/plus-jakarta-sans-700.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/inter-400.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
 
     <!-- JSON-LD Organization (solo en homepage) -->
     {

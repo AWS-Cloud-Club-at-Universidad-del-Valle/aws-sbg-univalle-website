@@ -83,6 +83,14 @@ export function getInitials(name: string): string {
 // ============================================
 
 /**
+ * Convierte una ruta relativa en URL absoluta. Si ya es http(s), la deja igual.
+ */
+export function toAbsoluteUrl(baseUrl: string, pathOrUrl: string): string {
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+  return new URL(pathOrUrl, baseUrl).href;
+}
+
+/**
  * Construye el objeto JSON-LD para schema.org/Organization.
  *
  * Precondición: config.url comienza con 'https://'
@@ -97,7 +105,7 @@ export function buildJsonLdOrganization(config: ISiteConfig): Record<string, unk
     '@type': 'Organization',
     name: config.name,
     url: config.url,
-    logo: `${config.url}${config.logo}`,
+    logo: toAbsoluteUrl(config.url, config.logo),
     description: config.description,
     sameAs,
   };
