@@ -45,6 +45,12 @@ export const ASSETS_LOGOS_PATH: string =
   import.meta.env.PUBLIC_ASSETS_LOGOS_PATH ?? 'prod-assets/prod-logos';
 
 /**
+ * Logo oficial del SBG en CloudFront (mismo archivo que el favicon).
+ * Debe ser URL absoluta: no hay assets locales en public/images/.
+ */
+export const SBG_LOGO_URL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/aws_sbg_univalle.png`;
+
+/**
  * Base para construir la URL de un perfil público en AWS Builder Center.
  * La URL final es `${BUILDER_CENTER_PROFILE_BASE}${username}`.
  * Si el formato de perfil cambia, se ajusta aquí en un solo lugar.
@@ -54,11 +60,12 @@ export const BUILDER_CENTER_PROFILE_BASE = 'https://builder.aws.com/community/@'
 export const SITE_CONFIG: ISiteConfig = {
   name: 'AWS Student Builder Group Universidad del Valle',
   shortName: 'AWS SBG Univalle',
-  url: 'https://sbg.univalle.edu.co',
+  /** Debe coincidir con `site` en astro.config.mjs y con el Sitemap de robots.txt. */
+  url: 'https://awsunivalle.dev',
   description:
     'Comunidad estudiantil de tecnología cloud AWS en la Universidad del Valle, Colombia. Aprende, construye y conecta con los mejores builders.',
-  logo: '/images/logo-sbg.svg',
-  ogImage: '/images/og-default.png',
+  logo: SBG_LOGO_URL,
+  ogImage: SBG_LOGO_URL,
   social: {
     instagram: 'https://www.instagram.com/awsbuildergroup.univalle/',
     linkedin: 'https://www.linkedin.com/company/aws-studentbuildergroupunivalle/',
