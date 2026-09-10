@@ -4,7 +4,10 @@
  * Dark theme consistente, 4 columnas desktop, apilado mobile.
  */
 
-import { SITE_CONFIG, NAV_LINKS } from '@/lib/constants';
+import { SITE_CONFIG, NAV_LINKS, ASSETS_CDN_URL, ASSETS_LOGOS_PATH } from '@/lib/constants';
+
+/** Logo del SBG servido desde CloudFront (dominio y ruta según entorno). */
+const sbgLogoURL = `${ASSETS_CDN_URL}/${ASSETS_LOGOS_PATH}/aws_sbg_univalle.png`;
 
 const currentYear = new Date().getFullYear();
 
@@ -56,10 +59,13 @@ const quickResources = [
           aria-label={`${SITE_CONFIG.shortName} — Página principal`}
           class="inline-flex items-center gap-3 focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded-lg"
         >
-          <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--sbg-accent)] shadow-md shadow-[rgba(255,153,0,0.2)]">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M3 17L7 7L11 14L15 10L19 17" stroke="#0d0d0d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+          <div class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[var(--sbg-bg-elevated)] shadow-md shadow-[rgba(255,153,0,0.2)]">
+            <img
+              src={sbgLogoURL}
+              alt="Logo AWS SBG Univalle"
+              class="h-full w-full object-cover"
+              loading="lazy"
+            />
           </div>
           <div>
             <span class="block text-sm font-black leading-none text-white">AWS SBG</span>
@@ -210,12 +216,12 @@ const quickResources = [
       <p class="text-xs text-[var(--sbg-text-muted)]">
         Parte del programa{' '}
         <a
-          href="https://aws.amazon.com/developer/community/usergroups/"
+          href="https://builder.aws.com/community/student-builder-groups"
           target="_blank"
           rel="noopener noreferrer"
           class="text-[var(--sbg-text-muted)] underline underline-offset-4 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-[var(--sbg-accent)] focus-visible:rounded"
         >
-          AWS User Groups
+          AWS Student Builder Groups
           <span class="sr-only">(abre en nueva pestaña)</span>
         </a>
       </p>
