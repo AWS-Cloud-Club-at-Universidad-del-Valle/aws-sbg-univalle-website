@@ -30,8 +30,9 @@ function getInitials(name: string): string {
   return (first + last).toUpperCase();
 }
 
-const initials = getInitials(member.name);
-const hasImage = member.image && member.image.trim().length > 0;
+const initials = member.comingSoon ? '' : getInitials(member.name);
+const hasImage = !member.comingSoon && member.image && member.image.trim().length > 0;
+const isComingSoon = member.comingSoon === true;
 ---
 
 <article
@@ -49,6 +50,19 @@ const hasImage = member.image && member.image.trim().length > 0;
     style={`box-shadow: 0 0 30px ${glowColor.replace('0.35', '0.1')}, inset 0 0 20px ${glowColor.replace('0.35', '0.05')};`}
   ></div>
 
+  {isComingSoon ? (
+    <div class="relative z-10 coming-soon">
+      <div class="coming-soon-avatar" aria-hidden="true">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <span class="coming-soon-badge">Próximamente</span>
+      <h3 class="card-name">Nuevo integrante</h3>
+      <p class="coming-soon-text">Estamos sumando nuevas personas al Core Team. ¡Muy pronto conocerás a quién se une!</p>
+    </div>
+  ) : (
+  <Fragment>
   <!-- Photo area -->
   <div class="relative z-10 card-photo-wrapper">
     {hasImage ? (
@@ -104,6 +118,8 @@ const hasImage = member.image && member.image.trim().length > 0;
       )}
     </div>
   </div>
+  </Fragment>
+  )}
 
   <!-- Bottom accent line -->
   <div
@@ -174,6 +190,51 @@ const hasImage = member.image && member.image.trim().length > 0;
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
     overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
   }
+  /* Tarjeta "próximamente" */
+  .coming-soon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    padding: 2.5rem 1.5rem;
+    min-height: 100%;
+    justify-content: center;
+  }
+  .coming-soon-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 9999px;
+    color: var(--sbg-text-subtle);
+    border: 2px dashed var(--sbg-border);
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 0.25rem;
+  }
+  .coming-soon-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 9999px;
+    background: var(--sbg-accent-subtle);
+    color: var(--sbg-accent-light);
+  }
+  .coming-soon .card-name {
+    color: var(--sbg-text-muted);
+  }
+  .coming-soon-text {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--sbg-text-subtle);
+    font-family: 'Nunito Sans', sans-serif;
+    max-width: 15rem;
+    margin: 0;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .team-card { transition: none; }
     .team-card:hover { transform: none; }

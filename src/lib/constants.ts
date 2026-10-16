@@ -96,8 +96,8 @@ export const NAV_LINKS: INavLink[] = [
 // ============================================
 
 export const STATS: IStat[] = [
-  { value: 922, suffix: '', label: 'Miembros activos', icon: 'users' },
-  { value: 27, suffix: '', label: 'Eventos realizados', icon: 'calendar' },
+  { value: 1343, suffix: '', label: 'Miembros activos', icon: 'users' },
+  { value: 34, suffix: '+', label: 'Eventos realizados', icon: 'calendar' },
   { value: 15, suffix: '+', label: 'Proyectos en la nube', icon: 'cloud' },
   { value: 8, suffix: '', label: 'Semestres de historia', icon: 'award' },
 ];
@@ -429,55 +429,20 @@ export const ABOUT_SOCIAL_LINKS: ISocialLink[] = [
 
 export const CORE_TEAM_MEMBERS: ICoreTeamMember[] = [
   {
-    name: 'Juan Manuel Hoyos Contreras',
+    name: 'Pablo Nicolás Marín González',
     role: 'Leader',
     area: '',
-    linkedin: 'https://www.linkedin.com/in/juanhcontreras/',
-    github: 'https://github.com/juanhcode',
-    builderCenter: 'juanhoyos',
-    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/juan.jpeg`,
-  },
-  {
-    name: 'Sebastián Cifuentes Flórez',
-    role: '',
-    area: 'Marketing & Community Lead',
-    linkedin: 'https://www.linkedin.com/in/sebastian-cifuentes-florez-65872b187/',
-    github: 'https://github.com/SpecTr03',
-    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/cifuentes.jpeg`,
-  },
-  {
-    name: 'Pablo Nicolás Marín González',
-    role: '',
-    area: 'Partnerships & Academy Lead',
     linkedin: 'https://www.linkedin.com/in/pablo-nicolas-marin-gonzalez-33b8042a1/',
     github: 'https://github.com/Slylem0',
     builderCenter: 'pablitonicolas',
     image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/pablo.jpeg`,
   },
-  {
-    name: 'Aura María Peláez',
-    role: '',
-    area: 'Tech Lead',
-    linkedin: 'https://www.linkedin.com/in/aura-maria-pelaez-luna-a0b4a33a8',
-    github: 'https://github.com/aura2025',
-    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/aura.jpeg`,
-  },
-  {
-    name: 'Miguel Ángel Sanclemente Mejía',
-    role: '',
-    area: 'Logistics & Events Lead',
-    linkedin: 'https://www.linkedin.com/in/miguel-sanclemente-mejia-1538073a6/',
-    github: 'https://github.com/MiguelSanclemente',
-    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/miguel.jpeg`,
-  },
-  {
-    name: 'Jann Carlo Martinez',
-    role: '',
-    area: 'Planning & Monitoring Lead',
-    linkedin: 'https://www.linkedin.com/in/jann-carlo-martinez-cardona-b1578a2b8/',
-    github: 'https://github.com/JannC23',
-    image: `${ASSETS_CDN_URL}/${ASSETS_MEMBERS_PATH}/jann.jpeg`,
-  },
+  // Próximos integrantes del Core Team (se revelarán pronto).
+  { name: '', role: '', area: '', linkedin: '', github: '', comingSoon: true },
+  { name: '', role: '', area: '', linkedin: '', github: '', comingSoon: true },
+  { name: '', role: '', area: '', linkedin: '', github: '', comingSoon: true },
+  { name: '', role: '', area: '', linkedin: '', github: '', comingSoon: true },
+  { name: '', role: '', area: '', linkedin: '', github: '', comingSoon: true },
 ];
 
 // ============================================
