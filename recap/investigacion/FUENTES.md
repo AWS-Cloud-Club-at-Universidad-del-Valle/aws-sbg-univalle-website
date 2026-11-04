@@ -112,3 +112,24 @@ Fuente: páginas públicas de Meetup de cada grupo, consultadas el 3-nov-2026. U
 | https://www.tiktok.com/@awscloudclub.univalle | Sin datos sin JavaScript ni sesión | Ninguna |
 
 El perfil https://co.linkedin.com/in/hectorocampo abrió, pero solo muestra que compartió la publicación del lanzamiento oficial. No aporta cifras.
+
+## 8. Comparación con SBG de Latinoamérica (agregado el 4-nov-2026)
+
+Fuente: la página pública de Meetup de cada uno de los **92 SBG de Latinoamérica** listados en [dondeaprendoaws.com](https://dondeaprendoaws.com/comunidades/estudiantes/), en 7 países (México 37, Colombia 14, Bolivia 10, Chile 9, Ecuador 9, Perú 7 y Argentina 6). Datos con corte al 3-nov-2026. Instantánea: `instantaneas/sbg_latam_2026-11-03.json` (generada por `scripts/ranking_latam.py`). Nivel: fuente oficial (Meetup) sobre un universo de fuente pública.
+
+| Indicador | Univalle | Puesto | Líder |
+|---|---:|---|---|
+| Eventos por mes desde la creación (grupos con 6 meses o más, 62) | 3,12 | **1.º de 62** | Segundo: EAN, 2,13 |
+| Eventos por mes desde la creación (los 92) | 3,12 | **1.º de 92** | Segundo: TecNM Veracruz, 2,77 |
+| Valoraciones de eventos | 183 | **1.º de 92** | Segundo: U. Distrital, 180 |
+| Eventos pasados | 36 | 2.º de 92 | EAN, 37 |
+| Miembros | 1.408 | 5.º de 92 | U. Distrital, 2.951 |
+
+**"La comunidad con más eventos realizados de toda LATAM" no es verificable y no se usa**: EAN tiene 37 eventos pasados y Univalle 36. Lo verificable es "1.º de LATAM en eventos por mes" y "1.º en valoraciones", siempre dentro de este universo y con su fecha de corte.
+
+## 9. Cumbre de Liderazgo Andina AWS 2026 (agregado el 4-nov-2026)
+
+| Afirmación | Fuente | Nivel |
+|---|---|---|
+| El grupo fue invitado a la Cumbre de Liderazgo Andina AWS 2026 en Bogotá | Líder del grupo | Confirmada por el líder |
+| Fechas del 11 al 15 de noviembre de 2026 y 3 integrantes participantes | Solicitud de apoyo económico a Bienestar Universitario (archivo del equipo, no público; contiene datos personales y no se cita) | Confirmada por el líder |

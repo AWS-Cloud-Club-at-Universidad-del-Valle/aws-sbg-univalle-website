@@ -258,6 +258,32 @@ def main():
         },
     }
 
+    latam = cargar("sbg_latam_2026-11-03.json")
+    yo = next(g for g in latam["grupos"] if g["urlname"] == "aws-sbg-at-university-of-the-valle")
+    r = latam["rankings"]
+    metricas["comparacion_sbg_latam"] = {
+        "fecha_corte": latam["fecha_corte"],
+        "universo": latam["universo"],
+        "grupos_total": len(latam["grupos"]),
+        "paises": latam["paises"],
+        "metodo": "Datos públicos de la página de Meetup de cada grupo, consultados el mismo día. Ritmo = eventos pasados / meses desde la creación del grupo en Meetup. El ranking de ritmo principal solo incluye grupos con al menos 6 meses de vida.",
+        "univalle": {k: yo[k] for k in ("miembros", "eventos", "eventos_por_mes", "calificacion", "valoraciones", "creado")},
+        "puesto_eventos": r["eventos"]["puesto"],
+        "puesto_miembros": r["miembros"]["puesto"],
+        "puesto_valoraciones": r["valoraciones"]["puesto"],
+        "puesto_ritmo_todos": r["eventos_por_mes"]["puesto"],
+        "puesto_ritmo_6_meses": r["eventos_por_mes_grupos_6_meses"]["puesto"],
+        "grupos_6_meses": r["eventos_por_mes_grupos_6_meses"]["universo"],
+        "top5": {k: v["top5"] for k, v in r.items()},
+        "fuente": "investigacion/instantaneas/sbg_latam_2026-11-03.json (Meetup) y https://dondeaprendoaws.com/comunidades/estudiantes/",
+    }
+    metricas["hitos_confirmados_por_lider"]["cumbre_andina"] = {
+        "texto": "Invitados a la Cumbre de Liderazgo Andina AWS 2026 en Bogotá",
+        "fecha": "2026-11-11 a 2026-11-15",
+        "participantes": 3,
+        "respaldo": "Solicitud de apoyo económico a Bienestar Universitario (archivo del equipo, no público)",
+    }
+
     (RAIZ / "investigacion" / "eventos.json").write_text(json.dumps({
         "_descripcion": "Eventos del AWS SBG Univalle publicados en Meetup. Generado por recap/scripts/construir_datos.py.",
         "fecha_corte": FECHA_CORTE,

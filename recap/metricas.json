@@ -518,6 +518,12 @@
       "texto": "Hackathon de AWS",
       "fecha": "Diciembre de 2026, por confirmar",
       "estado": "En preparación"
+    },
+    "cumbre_andina": {
+      "texto": "Invitados a la Cumbre de Liderazgo Andina AWS 2026 en Bogotá",
+      "fecha": "2026-11-11 a 2026-11-15",
+      "participantes": 3,
+      "respaldo": "Solicitud de apoyo económico a Bienestar Universitario (archivo del equipo, no público)"
     }
   },
   "reconocimientos": {
@@ -546,5 +552,172 @@
       "fecha_corte": "2026-11-03",
       "nivel": "fuente pública"
     }
+  },
+  "comparacion_sbg_latam": {
+    "fecha_corte": "2026-11-03",
+    "universo": "92 AWS Student Builder Groups de Latinoamérica con página en Meetup, listados en dondeaprendoaws.com",
+    "grupos_total": 92,
+    "paises": [
+      "AR",
+      "BO",
+      "CL",
+      "CO",
+      "EC",
+      "MX",
+      "PE"
+    ],
+    "metodo": "Datos públicos de la página de Meetup de cada grupo, consultados el mismo día. Ritmo = eventos pasados / meses desde la creación del grupo en Meetup. El ranking de ritmo principal solo incluye grupos con al menos 6 meses de vida.",
+    "univalle": {
+      "miembros": 1408,
+      "eventos": 36,
+      "eventos_por_mes": 3.12,
+      "calificacion": 4.86,
+      "valoraciones": 183,
+      "creado": "2025-11-17"
+    },
+    "puesto_eventos": 2,
+    "puesto_miembros": 5,
+    "puesto_valoraciones": 1,
+    "puesto_ritmo_todos": 1,
+    "puesto_ritmo_6_meses": 1,
+    "grupos_6_meses": 62,
+    "top5": {
+      "eventos": [
+        {
+          "nombre": "AWS SBG at EAN University",
+          "pais": "CO",
+          "valor": 37
+        },
+        {
+          "nombre": "AWS SBG at University of the Valle",
+          "pais": "CO",
+          "valor": 36
+        },
+        {
+          "nombre": "AWS SBG at National University of Engineering",
+          "pais": "PE",
+          "valor": 26
+        },
+        {
+          "nombre": "AWS SBG at Francisco Jose de Caldas District Univ. - Bogota",
+          "pais": "CO",
+          "valor": 23
+        },
+        {
+          "nombre": "AWS SBG at National Polytechnic Institute - Zacatenco Campus",
+          "pais": "MX",
+          "valor": 23
+        }
+      ],
+      "miembros": [
+        {
+          "nombre": "AWS SBG at Francisco Jose de Caldas District Univ. - Bogota",
+          "pais": "CO",
+          "valor": 2951
+        },
+        {
+          "nombre": "AWS SBG at National University of Engineering",
+          "pais": "PE",
+          "valor": 1970
+        },
+        {
+          "nombre": "AWS SBG at National Polytechnic Institute - Zacatenco Campus",
+          "pais": "MX",
+          "valor": 1874
+        },
+        {
+          "nombre": "AWS SBG at  National Autonomous University of Mexico",
+          "pais": "MX",
+          "valor": 1719
+        },
+        {
+          "nombre": "AWS SBG at University of the Valle",
+          "pais": "CO",
+          "valor": 1408
+        }
+      ],
+      "valoraciones": [
+        {
+          "nombre": "AWS SBG at University of the Valle",
+          "pais": "CO",
+          "valor": 183
+        },
+        {
+          "nombre": "AWS SBG at Francisco Jose de Caldas District Univ. - Bogota",
+          "pais": "CO",
+          "valor": 180
+        },
+        {
+          "nombre": "AWS SBG at National Polytechnic Institute - Zacatenco Campus",
+          "pais": "MX",
+          "valor": 141
+        },
+        {
+          "nombre": "AWS SBG at  National Autonomous University of Mexico",
+          "pais": "MX",
+          "valor": 125
+        },
+        {
+          "nombre": "AWS SBG at National University of Engineering",
+          "pais": "PE",
+          "valor": 96
+        }
+      ],
+      "eventos_por_mes": [
+        {
+          "nombre": "AWS SBG at University of the Valle",
+          "pais": "CO",
+          "valor": 3.12
+        },
+        {
+          "nombre": "AWS SBG at TecNM - Technological Institute of Veracruz",
+          "pais": "MX",
+          "valor": 2.77
+        },
+        {
+          "nombre": "AWS SBG at Central Unit of Valle del Cauca - Sede Principal",
+          "pais": "CO",
+          "valor": 2.68
+        },
+        {
+          "nombre": "AWS SBG at EAN University",
+          "pais": "CO",
+          "valor": 2.13
+        },
+        {
+          "nombre": "AWS SBG at Tech Inst of Higher Studies of Jocotitlan",
+          "pais": "MX",
+          "valor": 2.08
+        }
+      ],
+      "eventos_por_mes_grupos_6_meses": [
+        {
+          "nombre": "AWS SBG at University of the Valle",
+          "pais": "CO",
+          "valor": 3.12
+        },
+        {
+          "nombre": "AWS SBG at EAN University",
+          "pais": "CO",
+          "valor": 2.13
+        },
+        {
+          "nombre": "AWS SBG at National Polytechnic Institute - Zacatenco Campus",
+          "pais": "MX",
+          "valor": 1.99
+        },
+        {
+          "nombre": "AWS SBG at Private University of the Valley - Sucre Campus",
+          "pais": "BO",
+          "valor": 1.65
+        },
+        {
+          "nombre": "AWS SBG at National University of Engineering",
+          "pais": "PE",
+          "valor": 1.48
+        }
+      ]
+    },
+    "fuente": "investigacion/instantaneas/sbg_latam_2026-11-03.json (Meetup) y https://dondeaprendoaws.com/comunidades/estudiantes/"
   }
 }

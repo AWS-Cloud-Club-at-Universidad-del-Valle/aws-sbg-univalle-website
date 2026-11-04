@@ -16,6 +16,9 @@ Lo que falta para cerrar el recap con datos completos. Ninguno bloquea los entre
 10. **Datos de contacto para prensa y patrocinio**. Se usó el correo público del grupo (aws.cloud.club@correounivalle.edu.co).
 11. **Permiso para usar logos** de AWS, Universidad del Valle, UCEVA, Icesi, IEEE y demás aliados. Los entregables usan solo el logo del SBG y nombres en texto.
 
+12. **Invitación oficial a la Cumbre de Liderazgo Andina AWS 2026** (correo o carta), para citarla con fuente. También el aval del Director del Plan para la solicitud de apoyo ante Bienestar.
+13. **No usar la frase "la comunidad con más eventos de toda LATAM"**: con datos públicos, EAN tiene 37 eventos y Univalle 36. Usar "1.º de LATAM en eventos por mes" (ver FUENTES.md §8).
+
 ## Mejoras sugeridas para el sitio (fuera de este PR)
 
 - Actualizar `STATS` en `src/lib/constants.ts` (922 miembros y 27 eventos) o leer las cifras de `recap/metricas.json`.

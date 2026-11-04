@@ -133,3 +133,8 @@ Menciones: sitio propio construido sobre AWS con CDK; 12 repos públicos con ret
 - **Diciembre de 2026: Hackathon de AWS**, con fecha por confirmar. Sería el primer hackathon del grupo; el sitio ya lo promete como beneficio para los miembros.
 
 Ninguno de los dos está publicado todavía en Meetup.
+
+## 11. Actualización 4-nov-2026: Latinoamérica y Cumbre Andina
+
+- Entre los **92 SBG de Latinoamérica** del directorio (7 países), Univalle es **1.º en eventos por mes** (3,12; el segundo con 6 meses o más es EAN, con 2,13, un 46 % menos) y **1.º en valoraciones** (183). Es 2.º en eventos totales (EAN tiene 37) y 5.º en miembros. Detalle en FUENTES.md §8.
+- **Invitación a la Cumbre de Liderazgo Andina AWS 2026** (Bogotá, 11 al 15 de noviembre, 3 integrantes). Confirmada por el líder.
