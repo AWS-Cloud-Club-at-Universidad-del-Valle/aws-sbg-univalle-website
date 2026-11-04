@@ -1,0 +1,92 @@
+---
+/**
+ * RecapHero — Portada de /recap con la narrativa central y las cifras clave.
+ *
+ * Contiene el único <h1> de la página. Los contadores muestran el valor final
+ * en el HTML (funcionan sin JS) y se animan solo si no hay reduced-motion.
+ */
+import { metricas, fmtInt, fmt, fechaCorta, FECHA_CORTE, EVENTOS_TULUA } from '@/lib/recap';
+import { SBG_LOGO_URL } from '@/lib/constants';
+
+const com = metricas.comunidad;
+const ev = metricas.eventos;
+
+const contadores = [
+  { valor: com.miembros_meetup.valor, dec: 0, label: 'miembros en Meetup', nota: 'Meetup' },
+  { valor: ev.total, dec: 0, label: 'eventos publicados', nota: `${ev.presenciales} presenciales · ${ev.virtuales} virtuales` },
+  { valor: ev.confirmaciones_total, dec: 0, label: 'confirmaciones', nota: 'RSVP, no asistencia real' },
+  { valor: com.calificacion_meetup.valor, dec: 2, label: 'de calificación', nota: `${com.calificacion_meetup.valoraciones} valoraciones` },
+];
+---
+
+<section aria-labelledby="recap-hero-heading" class="recap-hero relative overflow-hidden pt-20 pb-12 lg:pt-24 lg:pb-16">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(139,92,246,0.16) 0%,transparent 60%),radial-gradient(ellipse 50% 45% at 95% 30%,rgba(255,153,0,0.10) 0%,transparent 60%);"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.03]" style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:32px 32px;"></div>
+
+  <div class="container-sbg relative z-10">
+    <div class="flex items-center gap-3 hero-animate hero-animate-delay-1">
+      <img src={SBG_LOGO_URL} alt="" width="40" height="40" class="h-10 w-10 rounded-lg" loading="eager" decoding="async" />
+      <span class="code-label"># recap · nov 2025 → nov 2026</span>
+    </div>
+
+    <h1 id="recap-hero-heading" class="hero-animate hero-animate-delay-2 mt-6 max-w-4xl text-[2.3rem] leading-[1.06] tracking-tight sm:text-5xl lg:text-[4rem]">
+      De Cali a Tuluá,<br />
+      <span class="recap-gradient-text">y de Tuluá a Las Vegas.</span>
+    </h1>
+
+    <p class="hero-animate hero-animate-delay-3 mt-6 max-w-2xl text-base leading-[1.8] sm:text-lg">
+      Un año del primer AWS Student Builder Group del Valle del Cauca. Organizamos {ev.total} eventos, y {EVENTOS_TULUA} de los {ev.presenciales} presenciales fueron en Tuluá, una sede regional. Corrimos un reto de certificación con cupos llenos. Nuestro líder viaja a AWS re:Invent con beca.
+      Y el año cierra en Tuluá, construyendo.
+    </p>
+
+    <div class="hero-animate hero-animate-delay-4 mt-8 flex flex-wrap gap-3">
+      <a href="#lo-que-viene" class="recap-btn recap-btn--primary">Ver lo que viene en diciembre</a>
+      <a href="#logros" class="recap-btn recap-btn--ghost">Logros con fuentes</a>
+    </div>
+
+    <ul class="hero-animate hero-animate-delay-5 mt-12 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4" aria-label="Cifras principales">
+      {contadores.map((c) => (
+        <li class="recap-stat">
+          <span class="recap-stat__value" data-count={c.valor} data-dec={c.dec}>{c.dec ? fmt(c.valor, c.dec) : fmtInt(c.valor)}</span>
+          <span class="recap-stat__label">{c.label}</span>
+          <span class="recap-stat__note">{c.nota}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-4 text-xs text-[var(--sbg-text-subtle)]">
+      Cifras públicas de Meetup al {fechaCorta(FECHA_CORTE)}. Las confirmaciones son respuestas «Asistiré», no asistencia real.
+    </p>
+  </div>
+</section>
+
+<script>
+  function initCounters() {
+    const els = document.querySelectorAll<HTMLElement>('[data-count]');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || !('IntersectionObserver' in window)) return;
+    const run = (el: HTMLElement) => {
+      const target = Number(el.dataset.count);
+      const dec = Number(el.dataset.dec ?? 0);
+      const f = new Intl.NumberFormat('es-CO', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+      const final = el.textContent;
+      const t0 = performance.now();
+      const dur = 1400;
+      const step = (t: number) => {
+        const p = Math.min(1, (t - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = f.format(target * eased);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = final;
+      };
+      requestAnimationFrame(step);
+    };
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { run(e.target as HTMLElement); io.unobserve(e.target); }
+      }),
+      { threshold: 0.4 }
+    );
+    els.forEach((el) => io.observe(el));
+  }
+  document.addEventListener('astro:page-load', initCounters);
+</script>

@@ -1,0 +1,146 @@
+---
+/**
+ * RecapTimeline — Línea de tiempo desde noviembre de 2025.
+ *
+ * Sin JS se ven todos los meses en lista. Con JS se convierte en pestañas
+ * (patrón WAI-ARIA Tabs: flechas, Inicio y Fin) con una barra de actividad por mes.
+ */
+import { HITOS, metricas, mesCorto, mesLargo, fechaCorta } from '@/lib/recap';
+
+const porMes = new Map(metricas.eventos.por_mes.map((m) => [m.mes, m]));
+const meses: string[] = [];
+for (let d = new Date(2025, 10, 1); d <= new Date(2026, 11, 1); d.setMonth(d.getMonth() + 1)) {
+  meses.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
+}
+const maxEventos = Math.max(...metricas.eventos.por_mes.map((m) => m.eventos));
+const inicial = '2026-10';
+const nivelTexto = { oficial: 'Fuente oficial', publica: 'Fuente pública', lider: 'Confirmado por el líder' } as const;
+
+function etiquetaFecha(f: string) {
+  return f.length === 7 ? mesLargo(f) : fechaCorta(f);
+}
+---
+
+<section id="linea-de-tiempo" aria-labelledby="timeline-heading" class="container-sbg py-14 lg:py-20">
+  <span class="code-label"># linea_de_tiempo</span>
+  <h2 id="timeline-heading" class="mt-3 text-3xl sm:text-4xl">Un año, mes a mes</h2>
+  <p class="mt-3 max-w-2xl">
+    Desde el aval de AWS en noviembre de 2025 hasta lo que viene en diciembre de 2026. La altura de cada barra muestra cuántos eventos se hicieron ese mes.
+  </p>
+
+  <div class="recap-timeline mt-8" data-timeline>
+    <div role="tablist" aria-label="Meses" class="recap-timeline__tabs" data-tablist hidden>
+      {meses.map((m) => {
+        const datos = porMes.get(m);
+        const n = datos?.eventos ?? 0;
+        const tieneHitos = HITOS.some((h) => h.mes === m);
+        const futuro = m > metricas.fecha_corte.slice(0, 7);
+        return (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${m}`}
+            aria-controls={`panel-${m}`}
+            aria-selected={m === inicial ? 'true' : 'false'}
+            tabindex={m === inicial ? 0 : -1}
+            class:list={['recap-timeline__tab', { 'is-future': futuro, 'has-hitos': tieneHitos }]}
+          >
+            <span class="recap-timeline__bar" aria-hidden="true">
+              <span style={`height:${n ? Math.max(10, (n / maxEventos) * 100) : 4}%`}></span>
+            </span>
+            <span class="recap-timeline__month">{mesCorto(m)}</span>
+            <span class="sr-only">, {n} eventos{tieneHitos ? ', con hitos' : ''}</span>
+          </button>
+        );
+      })}
+    </div>
+
+    <div class="recap-timeline__panels">
+      {meses.map((m) => {
+        const hitos = HITOS.filter((h) => h.mes === m);
+        const datos = porMes.get(m);
+        const futuro = m > metricas.fecha_corte.slice(0, 7);
+        return (
+          <div role="tabpanel" id={`panel-${m}`} aria-labelledby={`tab-${m}`} class="recap-timeline__panel" data-panel={m} tabindex="0">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="text-xl">{mesLargo(m).replace(/^./, (c) => c.toUpperCase())}</h3>
+              <p class="text-sm text-[var(--sbg-text-subtle)]">
+                {futuro
+                  ? 'Próximamente'
+                  : `${datos?.eventos ?? 0} eventos · ${datos?.virtuales ?? 0} virtuales · ${datos?.presenciales ?? 0} presenciales · ${datos?.confirmaciones ?? 0} confirmaciones`}
+              </p>
+            </div>
+            {hitos.length ? (
+              <ol class="mt-5 grid gap-3 sm:grid-cols-2">
+                {hitos.map((h) => (
+                  <li class:list={['recap-hito', { 'recap-hito--futuro': h.futuro }]}>
+                    <span class="recap-hito__fecha">{etiquetaFecha(h.fecha)}</span>
+                    <span class="recap-hito__titulo">{h.titulo}</span>
+                    <span class="recap-hito__detalle">{h.detalle}</span>
+                    <span class="recap-hito__meta">
+                      <span class={`recap-nivel recap-nivel--${h.nivel}`}>{nivelTexto[h.nivel]}</span>
+                      {h.url && (
+                        <a href={h.url} target="_blank" rel="noopener noreferrer" class="recap-link">
+                          Ver fuente<span class="sr-only"> de «{h.titulo}» (abre en nueva pestaña)</span>
+                        </a>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p class="mt-4 text-sm">
+                {m === '2026-08'
+                  ? 'Receso intersemestral: no hubo eventos publicados.'
+                  : m === '2026-11'
+                    ? 'Mes en curso: preparación de la Watch Party y la hackathon.'
+                    : (datos?.eventos ?? 0) > 0
+                      ? 'Mes de charlas y talleres. Están todos en el explorador de eventos.'
+                      : 'Preparación del grupo: equipo, canales y primeros contenidos.'}
+              </p>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<script>
+  function initTimeline() {
+    document.querySelectorAll<HTMLElement>('[data-timeline]').forEach((root) => {
+      const list = root.querySelector<HTMLElement>('[data-tablist]');
+      if (!list || root.dataset.ready) return;
+      root.dataset.ready = '1';
+      list.hidden = false;
+      root.classList.add('is-tabs');
+      const tabs = Array.from(list.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+      const select = (tab: HTMLButtonElement, focus = false) => {
+        tabs.forEach((t) => {
+          const on = t === tab;
+          t.setAttribute('aria-selected', String(on));
+          t.tabIndex = on ? 0 : -1;
+        });
+        panels.forEach((p) => (p.hidden = p.id !== tab.getAttribute('aria-controls')));
+        if (focus) tab.focus();
+        tab.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'auto' });
+      };
+      const current = tabs.find((t) => t.getAttribute('aria-selected') === 'true') ?? tabs[0];
+      panels.forEach((p) => (p.hidden = p.id !== current.getAttribute('aria-controls')));
+      list.scrollLeft = current.offsetLeft - list.clientWidth / 2 + current.clientWidth / 2;
+      tabs.forEach((t, i) => {
+        t.addEventListener('click', () => select(t));
+        t.addEventListener('keydown', (e) => {
+          let j = -1;
+          if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+          if (e.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+          if (e.key === 'Home') j = 0;
+          if (e.key === 'End') j = tabs.length - 1;
+          if (j >= 0) { e.preventDefault(); select(tabs[j], true); }
+        });
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initTimeline);
+</script>
