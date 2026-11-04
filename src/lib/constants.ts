@@ -86,6 +86,7 @@ export const NAV_LINKS: INavLink[] = [
   { href: '/certificate', label: 'Certifícate' },
   { href: '/student-rewards', label: 'Rewards' },
   { href: '/events', label: 'Eventos' },
+  { href: '/recap', label: 'Recap 2026' },
   { href: '/resources', label: 'Recursos' },
   { href: '/participate', label: 'Participa' },
   { href: '/contact', label: 'Contacto' },
