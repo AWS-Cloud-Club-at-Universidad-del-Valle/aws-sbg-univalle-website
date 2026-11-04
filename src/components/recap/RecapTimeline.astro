@@ -91,12 +91,12 @@ function etiquetaFecha(f: string) {
             ) : (
               <p class="mt-4 text-sm">
                 {m === '2026-08'
-                  ? 'Receso intersemestral: no hubo eventos publicados.'
+                  ? 'No hubo eventos publicados este mes.'
                   : m === '2026-11'
                     ? 'Mes en curso: preparación de la Watch Party y la hackathon.'
                     : (datos?.eventos ?? 0) > 0
                       ? 'Mes de charlas y talleres. Están todos en el explorador de eventos.'
-                      : 'Preparación del grupo: equipo, canales y primeros contenidos.'}
+                      : 'Sin eventos publicados. El grupo ya existía en Meetup y preparaba su lanzamiento.'}
               </p>
             )}
           </div>

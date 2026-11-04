@@ -78,9 +78,9 @@ Lectura: **la carrera profesional es lo que más convoca en virtual** (481 confi
 | Eventos por mes: feb–jul 2026 | 16 eventos en 6 meses (2,7 por mes) |
 | Eventos por mes: sep–oct 2026 | 20 eventos en 2 meses (10 por mes) |
 
-Agosto no tuvo eventos (vacaciones intersemestrales). Noviembre aún no tiene eventos publicados.
+Agosto no tuvo eventos publicados (la causa no está documentada en las fuentes públicas). Noviembre aún no tiene eventos publicados.
 
-Los primeros tres meses (nov 2025 – ene 2026) fueron de preparación: no hay eventos, pero sí creación del grupo y del GitHub. Las cifras de miembros no tienen histórico público. Meetup no publica la serie, así que no se puede graficar la curva de miembros sin una exportación del organizador (ver PENDIENTES.md).
+Entre noviembre de 2025 y enero de 2026 no hay eventos publicados: el grupo ya existía en Meetup y el lanzamiento llegó el 28 de febrero. No hay un histórico público de miembros, porque Meetup no publica la serie, así que no se puede graficar la curva de miembros sin una exportación del organizador (ver PENDIENTES.md).
 
 ## 6. Personas públicas relevantes
 
