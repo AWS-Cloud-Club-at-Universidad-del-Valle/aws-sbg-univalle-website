@@ -1,5 +1,6 @@
 ---
 import MeetupLink from './MeetupLink.astro';
+import SectionDivider from '@/components/common/SectionDivider.astro';
 import { KIROTHON } from '@/lib/constants';
 
 const steps = [
@@ -18,55 +19,57 @@ const rubric = [
 ] as const;
 ---
 
-<div class="kirothon">
-  <header class="dark">
-    <div class="frame hero">
-      <div>
-        <p class="label accent">Meetup de lanzamiento</p>
-        <h1>Kirothon</h1>
-        <p class="tagline">La hackathon de <strong class="accent">Kiro</strong> en Tuluá.</p>
-        <p class="organizer">Organiza AWS Student Builder Group Univalle.</p>
-        <dl class="hero-facts">
+<div>
+  <header class="relative overflow-hidden pt-20 pb-12 lg:pt-24 lg:pb-16">
+    <div aria-hidden="true" class="hero-glow pointer-events-none absolute inset-0"></div>
+    <div class="container-sbg relative grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+      <div class="hero-animate hero-animate-delay-1">
+        <p class="code-label launch-label mb-4">Meetup de lanzamiento</p>
+        <h1 class="text-[2.4rem] leading-[1.08] tracking-tight sm:text-5xl lg:text-[4rem]">Kirothon</h1>
+        <p class="mt-5 text-lg leading-relaxed sm:text-xl">La hackathon de <strong class="text-[var(--sbg-accent-light)]">Kiro</strong> en Tuluá.</p>
+        <p class="mt-2">Organiza AWS Student Builder Group Univalle.</p>
+      </div>
+
+      <div class="recap-card hero-animate hero-animate-delay-2 gap-5">
+        <dl class="grid gap-4 sm:grid-cols-2">
           <div>
-            <dt class="label">Cuándo</dt>
+            <dt class="code-label mb-1">Cuándo</dt>
             <dd><time datetime={KIROTHON.date}>{KIROTHON.dateLabel}</time><br />{KIROTHON.hours}</dd>
           </div>
           <div>
-            <dt class="label">Dónde</dt>
+            <dt class="code-label mb-1">Dónde</dt>
             <dd>Universidad del Valle, Sede Tuluá<br />Villa Campestre · Presencial</dd>
           </div>
         </dl>
-        <MeetupLink />
+        <div><MeetupLink /></div>
       </div>
-      <picture class="cover">
-        <source media="(max-width: 639px)" srcset="/kirothon/post-meetup-1080x1350.png" width="1080" height="1350" />
-        <img src={KIROTHON.cover} width="1200" height="675" alt="Afiche del meetup de lanzamiento de la Kirothon, con los datos del encuentro y los logos de AWS y del grupo estudiantil." />
-      </picture>
     </div>
   </header>
 
-  <section class="frame band" aria-labelledby="specs-title">
-    <h2 id="specs-title">¿Qué es Kiro?</h2>
-    <p class="intro">Kiro es un IDE agéntico que trabaja con <strong>specs</strong>. Antes de generar código, convierte tu idea en un plan de tres pasos.</p>
-    <ol class="steps">
+  <SectionDivider />
+
+  <section class="container-sbg py-12 lg:py-16" aria-labelledby="specs-title">
+    <h2 id="specs-title" class="text-2xl sm:text-3xl">¿Qué es Kiro?</h2>
+    <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Kiro es un IDE agéntico que trabaja con <strong>specs</strong>. Antes de generar código, convierte tu idea en un plan de tres pasos.</p>
+    <ol class="mt-6 grid gap-4 sm:grid-cols-3">
       {steps.map(([name, description], index) => (
-        <li class="card">
-          <span class="step-number" aria-hidden="true">0{index + 1}</span>
-          <h3>{name}</h3>
-          <p>{description}</p>
+        <li class="recap-card">
+          <span class="code-label mb-2 text-[var(--sbg-orange)]" aria-hidden="true">0{index + 1}</span>
+          <h3 class="recap-card__title">{name}</h3>
+          <p class="mt-2">{description}</p>
         </li>
       ))}
     </ol>
   </section>
 
-  <section class="frame band format" aria-labelledby="format-title">
+  <section class="container-sbg grid items-start gap-6 pb-12 lg:grid-cols-2 lg:gap-12 lg:pb-16" aria-labelledby="format-title">
     <div>
-      <h2 id="format-title">Cómo funciona</h2>
-      <p class="intro">Compiten en <strong>equipos de 3 personas</strong>. Un jurado de 3 personas evalúa las entregas.</p>
+      <h2 id="format-title" class="text-2xl sm:text-3xl">Cómo funciona</h2>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Compiten en <strong>equipos de 3 personas</strong>. Un jurado de 3 personas evalúa las entregas.</p>
     </div>
-    <div class="card deliverables">
-      <h3>Qué entrega cada equipo</h3>
-      <ul>
+    <div class="recap-card">
+      <h3 class="recap-card__title">Qué entrega cada equipo</h3>
+      <ul class="recap-feature__list mt-3">
         <li>Un repositorio con la carpeta <code>.kiro/</code> y al menos un spec.</li>
         <li>Una demo funcionando.</li>
         <li>Un pitch de 3 minutos, con 2 minutos de preguntas.</li>
@@ -74,37 +77,43 @@ const rubric = [
     </div>
   </section>
 
-  <section class="dark" aria-labelledby="rubric-title">
-    <div class="frame band scoring">
+  <SectionDivider />
+
+  <section class="container-sbg py-12 lg:py-16" aria-labelledby="rubric-title">
+    <div class="grid items-start gap-6 lg:grid-cols-[1fr_2fr] lg:gap-12">
       <div>
-        <h2 id="rubric-title">Rúbrica</h2>
-        <p class="rubric-total"><strong class="accent">100</strong> puntos</p>
+        <h2 id="rubric-title" class="text-2xl sm:text-3xl">Rúbrica</h2>
+        <p class="mt-4"><strong class="text-3xl text-[var(--sbg-accent-light)]">100</strong> puntos</p>
       </div>
-      <table aria-labelledby="rubric-title">
-        <thead>
-          <tr><th scope="col" class="label">Criterio</th><th scope="col" class="label">Puntos</th></tr>
-        </thead>
-        <tbody>
-          {rubric.map(([name, description, points]) => (
-            <tr>
-              <th scope="row"><strong>{name}</strong><span>{description}</span></th>
-              <td>{points}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div class="recap-card">
+        <table aria-labelledby="rubric-title">
+          <thead>
+            <tr><th scope="col" class="code-label">Criterio</th><th scope="col" class="code-label">Puntos</th></tr>
+          </thead>
+          <tbody>
+            {rubric.map(([name, description, points]) => (
+              <tr>
+                <th scope="row"><strong>{name}</strong><span>{description}</span></th>
+                <td>{points}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
-  <div class="frame band awards">
-    <section aria-labelledby="awards-title">
-      <h2 id="awards-title">Premios</h2>
-      <p class="podium">1.º <span>·</span> 2.º <span>·</span> 3.º</p>
+  <SectionDivider />
+
+  <div class="container-sbg grid gap-4 py-12 md:grid-cols-2 lg:py-16">
+    <section class="recap-card" aria-labelledby="awards-title">
+      <h2 id="awards-title" class="text-2xl sm:text-3xl">Premios</h2>
+      <p class="my-3 text-2xl font-extrabold text-[var(--sbg-accent-light)]">1.º <span>·</span> 2.º <span>·</span> 3.º</p>
       <p>Habrá menciones a <strong>Mejor uso de Kiro</strong> y <strong>Mejor pitch</strong>. El voto del público es opcional y se considera aparte.</p>
     </section>
-    <section class="card" aria-labelledby="pending-title">
-      <h2 id="pending-title">Por confirmar</h2>
-      <ul>
+    <section class="recap-card" aria-labelledby="pending-title">
+      <h2 id="pending-title" class="text-2xl sm:text-3xl">Por confirmar</h2>
+      <ul class="recap-feature__list mt-3">
         <li>Fecha y duración de la hackathon.</li>
         <li>Integrantes del jurado.</li>
         <li>Créditos por equipo.</li>
@@ -112,86 +121,76 @@ const rubric = [
     </section>
   </div>
 
-  <section class="dark" aria-labelledby="launch-title">
-    <div class="frame band">
-      <h2 id="launch-title">Nos vemos en el lanzamiento</h2>
-      <p class="intro">Te contamos cómo va a ser la hackathon, armamos equipos de 3 y probamos Kiro en vivo. El cupo aproximado es de 60 a 80 personas.</p>
-      <dl class="launch-facts">
-        <div><dt class="label accent">Cuándo</dt><dd><time datetime={KIROTHON.date}>{KIROTHON.dateLabel}</time><br />{KIROTHON.hours}</dd></div>
-        <div><dt class="label accent">Dónde</dt><dd>Universidad del Valle, Sede Tuluá<br />Villa Campestre · Presencial</dd></div>
-        <div><dt class="label accent">Qué traer</dt><dd>Tu laptop.</dd></div>
+  <section class="container-sbg pb-16 lg:pb-24" aria-labelledby="launch-title">
+    <div class="recap-card">
+      <h2 id="launch-title" class="text-2xl sm:text-3xl">Nos vemos en el lanzamiento</h2>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Te contamos cómo va a ser la hackathon, armamos equipos de 3 y probamos Kiro en vivo. El cupo aproximado es de 60 a 80 personas.</p>
+      <dl class="my-6 grid gap-4 border-y border-[var(--sbg-border)] py-5 sm:grid-cols-3">
+        <div><dt class="code-label mb-1">Cuándo</dt><dd><time datetime={KIROTHON.date}>{KIROTHON.dateLabel}</time><br />{KIROTHON.hours}</dd></div>
+        <div><dt class="code-label mb-1">Dónde</dt><dd>Universidad del Valle, Sede Tuluá<br />Villa Campestre · Presencial</dd></div>
+        <div><dt class="code-label mb-1">Qué traer</dt><dd>Tu laptop.</dd></div>
       </dl>
-      <MeetupLink />
+      <div><MeetupLink /></div>
+      <details class="mt-6">
+        <summary class="w-fit cursor-pointer text-sm text-[var(--sbg-accent-light)]">Ver afiche del lanzamiento</summary>
+        <picture class="mt-4 block max-w-2xl overflow-hidden rounded-xl border border-[var(--sbg-border)]">
+          <source media="(max-width: 639px)" srcset="/kirothon/post-meetup-1080x1350.png" width="1080" height="1350" />
+          <img loading="lazy" class="h-auto w-full" src={KIROTHON.cover} width="1200" height="675" alt="Afiche del meetup de lanzamiento de la Kirothon, con los datos del encuentro y los logos de AWS y del grupo estudiantil." />
+        </picture>
+      </details>
     </div>
   </section>
 </div>
 
 <style>
-  .kirothon {
-    --purple: #9046ff;
-    position: relative;
-    z-index: 2;
-    background: #fff;
-    color: #000;
-    overflow-wrap: break-word;
+  .hero-glow {
+    background: radial-gradient(ellipse 60% 50% at 15% 0%, rgba(139, 92, 246, 0.16) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 45% at 95% 30%, rgba(255, 153, 0, 0.1) 0%, transparent 60%);
   }
 
-  .dark { background: #000; color: #fff; }
-  .accent { color: var(--purple); }
-  .frame { width: min(100% - 3rem, 74rem); margin-inline: auto; }
-  .band { padding-block: clamp(2.75rem, 6vw, 5rem); }
-  .label {
-    font: 700 .875rem/1.5 'Space Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: .14em;
+  .launch-label {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid color-mix(in srgb, #9046ff 45%, transparent);
+    border-radius: 999px;
+    background: var(--sbg-accent-subtle);
+    color: var(--sbg-accent-light);
   }
 
-  h1, h2, h3 { color: inherit; }
-  h1 { font-size: clamp(2.75rem, 7vw, 7rem); letter-spacing: -.08em; }
-  h2 { font-size: clamp(1.65rem, 3.5vw, 2.7rem); }
-  h3 { font-size: 1.15rem; }
-  .tagline { margin-top: .75rem; font-size: clamp(1.25rem, 2.5vw, 1.8rem); }
-  .organizer { margin-top: .4rem; color: #ccc; }
+  table {
+    width: 100%;
+    text-align: left;
+  }
 
-  .hero, .steps, .format, .scoring, .awards, .launch-facts { display: grid; gap: 1.5rem; }
-  .hero { align-items: center; padding-block: clamp(2.75rem, 7vw, 6rem); gap: 2.5rem; }
-  .hero-facts { margin-block: 1.5rem; padding-block: 1rem; border-block: 1px solid #525252; }
-  .hero-facts > div + div { margin-top: .8rem; }
-  dd { margin-top: .3rem; }
+  th, td {
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--sbg-border);
+  }
 
-  .cover { display: block; min-width: 0; box-shadow: 8px 8px 0 var(--purple); border: 1px solid #525252; }
-  .cover img { display: block; width: 100%; height: auto; }
+  thead th { padding-top: 0; }
 
-  .intro { max-width: 60ch; margin-top: .9rem; font-size: 1.125rem; }
-  .steps { margin-top: 1.5rem; padding: 0; list-style: none; }
-  .card { background: #fff; border: 2px solid #000; padding: 1.25rem; box-shadow: 8px 8px 0 var(--purple); }
-  .card p { margin-top: .5rem; }
-  .step-number { display: block; margin-bottom: .5rem; font: 700 1.1rem 'Space Mono', monospace; }
-  .format { padding-top: 0; }
-  .deliverables { background: #f5f5f5; box-shadow: 8px 8px 0 #000; }
-  .card ul { margin-top: .9rem; padding-left: 1.2rem; list-style: square; }
-  .card li + li { margin-top: .4rem; }
-  code { font-family: 'Space Mono', monospace; background: #e5e5e5; padding-inline: .25rem; }
+  tbody tr:last-child > * {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
 
-  .rubric-total { font-family: 'Space Mono', monospace; }
-  .rubric-total strong { font-size: clamp(2rem, 5vw, 4rem); }
-  table { width: 100%; text-align: left; border-collapse: collapse; }
-  th, td { padding: .75rem 0; border-bottom: 1px solid #525252; }
   tbody th { font-weight: 400; }
-  tbody th span { display: block; color: #ccc; }
-  thead th:last-child, td { padding-left: .75rem; text-align: right; }
-  td { color: var(--purple); font: 700 1.3rem 'Space Mono', monospace; }
+  tbody th span { display: block; color: var(--sbg-text-muted); }
 
-  .podium { margin-block: .6rem; font: 700 clamp(1.5rem, 4vw, 2.5rem) 'Space Mono', monospace; }
-  .podium span { color: var(--purple); }
-  .launch-facts { margin-block: 1.5rem; border-block: 1px solid #525252; padding-block: 1.25rem; }
-
-  @media (min-width: 640px) {
-    .steps, .launch-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .format, .awards, .scoring { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); }
+  thead th:last-child, td {
+    padding-left: 0.75rem;
+    text-align: right;
   }
 
-  @media (min-width: 1024px) {
-    .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+  td {
+    color: var(--sbg-accent-light);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  code {
+    padding-inline: 0.25rem;
+    border-radius: 0.25rem;
+    background: var(--sbg-bg-elevated);
   }
 </style>
