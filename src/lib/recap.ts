@@ -31,6 +31,8 @@ export interface IRecapEvento {
 export const EVENTOS = eventosData.eventos as IRecapEvento[];
 
 export const FECHA_CORTE = metricas.fecha_corte;
+export const FECHA_CORTE_MEETUP = metricas.fecha_corte_meetup;
+export const CIFRAS_RECAP = metricas.cifras_confirmadas_por_lider;
 
 const nf = new Intl.NumberFormat('es-CO');
 export const fmt = (n: number, dec = 0) =>
@@ -86,7 +88,12 @@ const cmp = metricas.comparacion_sbg_colombia;
 const reto = metricas.reto_cloud_practitioner;
 const enTulua = (ev.por_sede['Tuluá · Univalle Villa Campestre']?.eventos ?? 0) + (ev.por_sede['Tuluá · Escuela de Policía']?.eventos ?? 0);
 
-export const EVENTOS_TULUA = enTulua;
+const fuenteLider = { label: CIFRAS_RECAP.fuente };
+const hitosLider = metricas.hitos_confirmados_por_lider;
+const expansionRegional = 'Ayudamos a abrir SBG en Icesi, Uceva, USB, UAO, EMAVI y Camacho. También dimos charlas en Icesi, USB y Uceva.';
+const ponentesInternacionales = `${hitosLider.community_day_peru.texto}. Juan Manuel Hoyos fue ponente en la AWS Student Community de Cochabamba, Bolivia.`;
+const thinkBig = 'Pablo Nicolás Marín ganó el reto Think Big de AWS con ideas para llevar a escala global.';
+const aiTour = 'Univalle fue seleccionada para alojar, por separado del equipo de AWS, un evento del AWS AI Tour Colombia el 10 de noviembre en la Icesi.';
 
 export interface ILogro {
   titulo: string;
@@ -95,22 +102,62 @@ export interface ILogro {
   fuente: { label: string; url?: string };
 }
 
-export const LOGROS: ILogro[] = [
+export const HITOS_SIN_FECHA: ILogro[] = [
   {
-    titulo: `${ev.total} eventos en 8 meses`,
-    detalle: `Desde el lanzamiento del 28 de febrero, ${fmt(ev.eventos_por_semana_desde_lanzamiento, 2)} eventos por semana en promedio: ${ev.presenciales} presenciales y ${ev.virtuales} virtuales.`,
-    nivel: 'oficial',
-    fuente: FUENTES.meetup,
+    titulo: `Más de ${fmtInt(CIFRAS_RECAP.web.peticiones_superan)} peticiones en la web`,
+    detalle: `${CIFRAS_RECAP.web.dominio} ha recibido ${fmtInt(CIFRAS_RECAP.web.usuarios)} usuarios desde su lanzamiento.`,
+    nivel: 'lider',
+    fuente: fuenteLider,
   },
   {
-    titulo: `${fmtInt(com.miembros_meetup.valor)} miembros en Meetup`,
-    detalle: `${cmp.puesto_univalle_miembros}.º entre los ${cmp.grupos.length} SBG de Colombia revisados, y el único de los cinco primeros fuera de Bogotá y Medellín (corte: ${fechaCorta(FECHA_CORTE)}).`,
+    titulo: 'El Valle se llenó de SBG',
+    detalle: expansionRegional,
+    nivel: 'lider',
+    fuente: fuenteLider,
+  },
+  {
+    titulo: 'Ponentes internacionales',
+    detalle: ponentesInternacionales,
+    nivel: 'lider',
+    fuente: fuenteLider,
+  },
+];
+
+export const LOGROS: ILogro[] = [
+  {
+    titulo: `${CIFRAS_RECAP.eventos} eventos y ${fmtInt(CIFRAS_RECAP.estudiantes_alcanzados)} estudiantes alcanzados`,
+    detalle: `Desde la fundación en noviembre de 2025, la comunidad creció hasta ${fmtInt(CIFRAS_RECAP.miembros)} miembros.`,
+    nivel: 'lider',
+    fuente: fuenteLider,
+  },
+  {
+    titulo: 'AWS Community Leadership Summit Bogotá',
+    detalle: `${hitosLider.cumbre_andina.texto}. ${thinkBig}`,
+    nivel: 'lider',
+    fuente: fuenteLider,
+  },
+  {
+    titulo: 'AWS AI Tour Colombia',
+    detalle: aiTour,
+    nivel: 'lider',
+    fuente: fuenteLider,
+  },
+  ...HITOS_SIN_FECHA,
+  {
+    titulo: 'Primera AI League global',
+    detalle: 'Un estudiante de Univalle ganó la primera edición global.',
+    nivel: 'lider',
+    fuente: fuenteLider,
+  },
+  {
+    titulo: `${fmtInt(com.miembros_meetup.valor)} miembros en el corte público de Meetup`,
+    detalle: `${cmp.puesto_univalle_miembros}.º entre los ${cmp.grupos.length} SBG de Colombia revisados al ${fechaCorta(FECHA_CORTE_MEETUP)}.`,
     nivel: 'oficial',
     fuente: FUENTES.directorio,
   },
   {
     titulo: `${fmt(com.calificacion_meetup.valor, 2)}/5 con ${com.calificacion_meetup.valoraciones} valoraciones`,
-    detalle: `Es el mayor número de valoraciones entre los ${cmp.grupos.length} grupos comparados.`,
+    detalle: `Es el mayor número de valoraciones entre los ${cmp.grupos.length} grupos comparados al ${fechaCorta(FECHA_CORTE_MEETUP)}.`,
     nivel: 'oficial',
     fuente: FUENTES.meetup,
   },
@@ -122,9 +169,9 @@ export const LOGROS: ILogro[] = [
   },
   {
     titulo: `Reto Cloud Practitioner de ${reto.sesiones} sesiones`,
-    detalle: `Organizado con el SBG de la UCEVA en Tuluá, con cupos llenos y ${fmt(reto.confirmaciones_promedio, 1)} confirmaciones de media por sesión.`,
-    nivel: 'oficial',
-    fuente: FUENTES.reto,
+    detalle: `El primer curso reunió a 50 estudiantes en Tuluá, con certificación gratis. También se ofreció el curso a estudiantes de Yumbo.`,
+    nivel: 'lider',
+    fuente: fuenteLider,
   },
   {
     titulo: 'Más de 20 vouchers de certificación',
@@ -134,21 +181,21 @@ export const LOGROS: ILogro[] = [
   },
   {
     titulo: `Tuluá, el centro de lo presencial`,
-    detalle: `${enTulua} de los ${ev.presenciales} eventos presenciales se hicieron en Tuluá: en la sede Villa Campestre y en la Escuela de Policía Simón Bolívar.`,
+    detalle: `${enTulua} de los ${ev.presenciales} eventos presenciales publicados en Meetup al ${fechaCorta(FECHA_CORTE_MEETUP)} se hicieron en Tuluá: en la sede Villa Campestre y en la Escuela de Policía Simón Bolívar.`,
     nivel: 'oficial',
     fuente: FUENTES.meetup,
   },
   {
-    titulo: 'Ponentes en el AWS Summit Bogotá 2026',
-    detalle: 'Invitados por AWS. Según su perfil de ponente, Juan Manuel Hoyos fue seleccionado para el AWS Builder Spotlight.',
+    titulo: 'Juan Manuel Hoyos, ponente en el AWS Summit Bogotá 2026',
+    detalle: 'Estudiante de Univalle, invitado por AWS. Según su perfil de ponente, fue seleccionado para el AWS Builder Spotlight.',
     nivel: 'lider',
     fuente: FUENTES.sessionize,
   },
   {
     titulo: 'AWS Cloud Quest en el Valle del Cauca',
-    detalle: 'Kick-off con Univalle, Icesi, UCEVA y San Buenaventura: 156 confirmaciones, el récord del grupo. Hubo muchos ganadores de Univalle, según el líder.',
-    nivel: 'oficial',
-    fuente: FUENTES.cloudQuest,
+    detalle: hitosLider.cloud_quest.texto + '.',
+    nivel: 'lider',
+    fuente: fuenteLider,
   },
   {
     titulo: 'Primer SBG del Valle del Cauca',
@@ -169,21 +216,30 @@ export interface IHito {
 }
 
 export const HITOS: IHito[] = [
-  { mes: '2025-11', fecha: '2025-11', titulo: 'AWS da el aval', detalle: 'Nace el primer AWS Student Builder Group del Valle del Cauca. El grupo se crea en Meetup el 17 de noviembre.', nivel: 'lider' },
-  { mes: '2026-02', fecha: '2026-02-01', titulo: 'Organización en GitHub', detalle: 'Primer repositorio de la comunidad. Hoy hay 12 repos públicos con retos de práctica.', nivel: 'oficial', url: 'https://github.com/AWS-Cloud-Club-at-Universidad-del-Valle' },
-  { mes: '2026-02', fecha: '2026-02-28', titulo: 'Lanzamiento: Tu Primer Paso en la Nube', detalle: 'Evento virtual con taller de EC2 y 96 confirmaciones.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/313397936/' },
+  { mes: '2025-11', fecha: '2025-11', titulo: 'AWS da el aval', detalle: 'Estudiantes de Univalle Tuluá fundan el primer AWS Student Builder Group del Valle del Cauca, pionero en comunidades AWS en la región. El grupo se crea en Meetup el 17 de noviembre.', nivel: 'lider' },
+  { mes: '2025-12', fecha: '2025-12', titulo: 'Equipo listo', detalle: 'El equipo queda conformado y hace una pausa por vacaciones entre diciembre y enero.', nivel: 'lider' },
+  { mes: '2026-01', fecha: '2026-01', titulo: 'Pausa de vacaciones', detalle: 'El equipo retoma actividades en febrero.', nivel: 'lider' },
+  { mes: '2026-02', fecha: '2026-02-01', titulo: 'Organización en GitHub', detalle: 'La comunidad arranca en redes sociales y publica su primer repositorio en GitHub.', nivel: 'oficial', url: 'https://github.com/AWS-Cloud-Club-at-Universidad-del-Valle' },
+  { mes: '2026-02', fecha: '2026-02-28', titulo: 'Lanzamiento: Tu Primer Paso en la Nube', detalle: 'Primer evento virtual, con un taller de EC2 y cerca de 100 estudiantes. Meetup registró 96 confirmaciones.', nivel: 'lider', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/313397936/' },
   { mes: '2026-03', fecha: '2026-03-16', titulo: 'Un AWS Hero en la comunidad', detalle: 'Carlos Zambrano habla de cómo construir una carrera en la nube (93 confirmaciones).', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/313727453/' },
-  { mes: '2026-05', fecha: '2026-05-11', titulo: 'Primer evento presencial en Tuluá', detalle: 'Certificaciones y GitOps en la sede Villa Campestre. Es el inicio del polo regional.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/314572381/' },
-  { mes: '2026-06', fecha: '2026-06-12', titulo: 'Primer evento en Meléndez', detalle: 'AWS Cloud Essentials con demo de Lambda en Cali.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315114097/' },
-  { mes: '2026-06', fecha: '2026-06-26', titulo: 'Student Community Day Colombia', detalle: 'En Bogotá, con más de 800 cupos. Univalle participa como SBG y su líder figura entre los organizadores.', nivel: 'oficial', url: 'https://awsstudentcommunity.day/en' },
-  { mes: '2026-07', fecha: '2026-07-25', titulo: 'Construye Rápido... Despliega seguro!', detalle: 'Con AWS User Group Valle del Cauca, CENESIS e IEEE Computer Society: 89 confirmaciones, el presencial con más confirmaciones.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315578404/' },
-  { mes: '2026-07', fecha: '2026-07-30', titulo: 'AWS Summit Bogotá 2026', detalle: 'Ponentes invitados por AWS; AWS Builder Spotlight según Sessionize.', nivel: 'lider', url: 'https://sessionize.com/juan-manuel-hoyos/' },
-  { mes: '2026-09', fecha: '2026-09-03', titulo: 'La nube llega a la Escuela de Policía', detalle: 'Dos charlas de serverless y fundamentos en Tuluá.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316292610/' },
-  { mes: '2026-09', fecha: '2026-09-19', titulo: 'Arranca el reto Cloud Practitioner', detalle: 'Ocho sesiones presenciales con el SBG de la UCEVA, con cupos llenos desde la primera.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316372017/' },
+  { mes: '2026-03', fecha: '2026-03', titulo: 'Taller de perfil de LinkedIn', detalle: 'Un profesional sénior orientó a los estudiantes en la preparación de su perfil.', nivel: 'lider' },
+  { mes: '2026-04', fecha: '2026-04', titulo: 'Charlas virtuales', detalle: 'La comunidad continúa con charlas en línea.', nivel: 'lider' },
+  { mes: '2026-05', fecha: '2026-05-11', titulo: 'Primer evento presencial en la Semana de la Expresión', detalle: 'Más de 1.200 asistentes en Tuluá. La agenda incluyó certificaciones y GitOps en la sede Villa Campestre.', nivel: 'lider', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/314572381/' },
+  { mes: '2026-06', fecha: '2026-06-12', titulo: 'Primer evento en Meléndez', detalle: 'AWS Cloud Essentials con una demostración de Lambda y cerca de 50 personas en Cali.', nivel: 'lider', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315114097/' },
+  { mes: '2026-06', fecha: '2026-06-26', titulo: 'AWS Student Community Day Colombia', detalle: 'Univalle llevó cerca de 100 estudiantes de Cali y Tuluá a Bogotá y se destacó por los premios obtenidos. Un estudiante de Univalle ganó la primera AI League global.', nivel: 'lider', url: 'https://awsstudentcommunity.day/en' },
+  { mes: '2026-07', fecha: '2026-07-25', titulo: 'Construye Rápido... Despliega seguro!', detalle: 'Con AWS User Group Valle del Cauca, CENESIS e IEEE Computer Society: 89 confirmaciones, el presencial con más confirmaciones en el corte público de Meetup.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315578404/' },
+  { mes: '2026-07', fecha: '2026-07-30', titulo: 'AWS Summit Bogotá 2026', detalle: 'Juan Manuel Hoyos, estudiante de Univalle, fue ponente. Su perfil de Sessionize registra la selección para AWS Builder Spotlight.', nivel: 'lider', url: 'https://sessionize.com/juan-manuel-hoyos/' },
+  { mes: '2026-09', fecha: '2026-09', titulo: 'Evento ESBOL', detalle: 'Cerca de 150 personas asistieron al evento en la Escuela de Policía Simón Bolívar, en Tuluá. Meetup registra dos charlas de serverless y fundamentos.', nivel: 'lider', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316292610/' },
+  { mes: '2026-09', fecha: '2026-09-19', titulo: 'Arranca el reto Cloud Practitioner', detalle: 'Primer curso con el SBG de la UCEVA: 50 estudiantes, ocho sesiones y certificación gratis. También se ofreció el curso a estudiantes de Yumbo.', nivel: 'lider', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316372017/' },
   { mes: '2026-09', fecha: '2026-09-28', titulo: 'TryCatch.tv llega a Univalle', detalle: 'Del estudio al primer trabajo en tech: 152 confirmaciones.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316601837/' },
-  { mes: '2026-10', fecha: '2026-10-14', titulo: 'AWS Cloud Quest Valle del Cauca', detalle: 'Cuatro universidades y 156 confirmaciones, el récord del grupo.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316898074/' },
+  { mes: '2026-10', fecha: '2026-10-14', titulo: 'AWS Cloud Quest Valle del Cauca', detalle: 'Univalle ganó el torneo regional. El lanzamiento con cuatro universidades registró 156 confirmaciones en Meetup.', nivel: 'lider', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316898074/' },
   { mes: '2026-10', fecha: '2026-10-15', titulo: 'Beca para AWS re:Invent', detalle: 'La Universidad del Valle publica la beca All Builders Welcome del líder del grupo.', nivel: 'oficial', url: FUENTES.univalle.url },
   { mes: '2026-10', fecha: '2026-10-29', titulo: 'Cierre del reto', detalle: 'Sesión 8: Well-Architected y simulacro final de examen.', nivel: 'oficial', url: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316375885/' },
+  { mes: '2026-11', fecha: '2026-11-10', titulo: 'AWS AI Tour Colombia', detalle: aiTour, nivel: 'lider' },
+  { mes: '2026-11', fecha: '2026-11-11', titulo: 'AWS Community Leadership Summit Bogotá', detalle: `Del 11 al 15 de noviembre. ${hitosLider.cumbre_andina.texto}. ${thinkBig}`, nivel: 'lider' },
+  { mes: '2026-11', fecha: '2026-11', titulo: 'Taller de Ingeniería de arnés', detalle: 'El grupo realizó el taller en noviembre.', nivel: 'lider' },
+  { mes: '2026-11', fecha: '2026-11', titulo: 'Kiro for Students', detalle: 'Univalle está a la espera de ser seleccionada.', nivel: 'lider' },
+  { mes: '2026-11', fecha: '2026-11-21', titulo: 'AWS Tech Day Cali', detalle: 'Próximo evento. El SBG participa como organizador del lado de AWS.', nivel: 'lider', futuro: true },
   { mes: '2026-12', fecha: '2026-12-04', titulo: 'Watch & Build Party en Tuluá', detalle: 'AWS re:Invent en vivo y a construir, aprobada y avalada por AWS.', nivel: 'lider', futuro: true },
   { mes: '2026-12', fecha: '2026-12', titulo: 'Hackathon de AWS', detalle: 'En diciembre, con fecha por confirmar. Será el primer hackathon del grupo.', nivel: 'lider', futuro: true },
 ];

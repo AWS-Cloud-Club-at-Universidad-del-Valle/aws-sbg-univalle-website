@@ -5,7 +5,7 @@
  * Sin JS se ven todos los meses en lista. Con JS se convierte en pestañas
  * (patrón WAI-ARIA Tabs: flechas, Inicio y Fin) con una barra de actividad por mes.
  */
-import { HITOS, metricas, mesCorto, mesLargo, fechaCorta } from '@/lib/recap';
+import { HITOS, HITOS_SIN_FECHA, metricas, mesCorto, mesLargo, fechaCorta, FECHA_CORTE, FECHA_CORTE_MEETUP } from '@/lib/recap';
 
 const porMes = new Map(metricas.eventos.por_mes.map((m) => [m.mes, m]));
 const meses: string[] = [];
@@ -13,7 +13,8 @@ for (let d = new Date(2025, 10, 1); d <= new Date(2026, 11, 1); d.setMonth(d.get
   meses.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
 }
 const maxEventos = Math.max(...metricas.eventos.por_mes.map((m) => m.eventos));
-const inicial = '2026-10';
+const inicial = FECHA_CORTE.slice(0, 7);
+const primerMesParcialMeetup = FECHA_CORTE_MEETUP.slice(0, 7);
 const nivelTexto = { oficial: 'Fuente oficial', publica: 'Fuente pública', lider: 'Confirmado por el líder' } as const;
 
 function etiquetaFecha(f: string) {
@@ -25,7 +26,7 @@ function etiquetaFecha(f: string) {
   <span class="code-label"># linea_de_tiempo</span>
   <h2 id="timeline-heading" class="mt-3 text-3xl sm:text-4xl">Un año, mes a mes</h2>
   <p class="mt-3 max-w-2xl">
-    Desde el aval de AWS en noviembre de 2025 hasta lo que viene en diciembre de 2026. La altura de cada barra muestra cuántos eventos se hicieron ese mes.
+    Desde el aval de AWS en noviembre de 2025 hasta lo que viene en diciembre de 2026. Las barras y los conteos usan datos públicos de Meetup al {fechaCorta(FECHA_CORTE_MEETUP)}.
   </p>
 
   <div class="recap-timeline mt-8" data-timeline>
@@ -34,7 +35,7 @@ function etiquetaFecha(f: string) {
         const datos = porMes.get(m);
         const n = datos?.eventos ?? 0;
         const tieneHitos = HITOS.some((h) => h.mes === m);
-        const futuro = m > metricas.fecha_corte.slice(0, 7);
+        const futuro = m > inicial;
         return (
           <button
             type="button"
@@ -49,7 +50,7 @@ function etiquetaFecha(f: string) {
               <span style={`height:${n ? Math.max(10, (n / maxEventos) * 100) : 4}%`}></span>
             </span>
             <span class="recap-timeline__month">{mesCorto(m)}</span>
-            <span class="sr-only">, {n} eventos{tieneHitos ? ', con hitos' : ''}</span>
+            <span class="sr-only">{m < primerMesParcialMeetup ? `, ${n} eventos en Meetup` : ''}{tieneHitos ? ', con hitos' : ''}</span>
           </button>
         );
       })}
@@ -59,7 +60,7 @@ function etiquetaFecha(f: string) {
       {meses.map((m) => {
         const hitos = HITOS.filter((h) => h.mes === m);
         const datos = porMes.get(m);
-        const futuro = m > metricas.fecha_corte.slice(0, 7);
+        const futuro = m > inicial;
         return (
           <div role="tabpanel" id={`panel-${m}`} aria-labelledby={`tab-${m}`} class="recap-timeline__panel" data-panel={m} tabindex="0">
             <div class="flex flex-wrap items-baseline justify-between gap-2">
@@ -67,7 +68,9 @@ function etiquetaFecha(f: string) {
               <p class="text-sm text-[var(--sbg-text-subtle)]">
                 {futuro
                   ? 'Próximamente'
-                  : `${datos?.eventos ?? 0} eventos · ${datos?.virtuales ?? 0} virtuales · ${datos?.presenciales ?? 0} presenciales · ${datos?.confirmaciones ?? 0} confirmaciones`}
+                  : m >= primerMesParcialMeetup
+                    ? 'Hitos confirmados por el líder'
+                    : `${datos?.eventos ?? 0} eventos en Meetup · ${datos?.virtuales ?? 0} virtuales · ${datos?.presenciales ?? 0} presenciales · ${datos?.confirmaciones ?? 0} confirmaciones`}
               </p>
             </div>
             {hitos.length ? (
@@ -92,11 +95,7 @@ function etiquetaFecha(f: string) {
               <p class="mt-4 text-sm">
                 {m === '2026-08'
                   ? 'No hubo eventos publicados este mes.'
-                  : m === '2026-11'
-                    ? 'Mes en curso: preparación de la Watch Party y la hackathon.'
-                    : (datos?.eventos ?? 0) > 0
-                      ? 'Mes de charlas y talleres. Están todos en el explorador de eventos.'
-                      : 'Sin eventos publicados. El grupo ya existía en Meetup y preparaba su lanzamiento.'}
+                  : 'Consulta las publicaciones de este mes en el explorador de eventos.'}
               </p>
             )}
           </div>
@@ -104,6 +103,18 @@ function etiquetaFecha(f: string) {
       })}
     </div>
   </div>
+  <h3 class="mt-8 text-xl">Otros hitos del año</h3>
+  <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+    {HITOS_SIN_FECHA.map((h) => (
+      <li class="recap-hito">
+        <span class="recap-hito__titulo">{h.titulo}</span>
+        <span class="recap-hito__detalle">{h.detalle}</span>
+        <span class="recap-hito__meta">
+          <span class={`recap-nivel recap-nivel--${h.nivel}`}>{nivelTexto[h.nivel]}</span>
+        </span>
+      </li>
+    ))}
+  </ul>
 </section>
 
 <script>

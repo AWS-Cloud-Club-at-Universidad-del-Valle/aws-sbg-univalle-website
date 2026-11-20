@@ -24,3 +24,16 @@ Regla general: para cifras de comunidad manda la fuente más reciente y estructu
 | 18 | Título y descripción de "Cada decisión es una toma" | Título: "25 años construyendo entre el arte y la tecnología" | Descripción: carrera en AWS con Germán Ruiz | No es un conflicto de cifras. Se usa el título publicado y la descripción para el tema. |
 | 19 | AWS Builder Spotlight | Sessionize (autodeclarado) | Página oficial del Summit Bogotá no lo menciona | Se presenta como "según su perfil de ponente en Sessionize". El hecho de ser ponentes invitados por AWS lo confirma el líder. |
 | 20 | Confirmaciones de eventos presenciales | Meetup: 2 a 8 confirmaciones en eventos de Tuluá de mayo y junio | Esos eventos usaron formulario externo para inscribirse | Meetup los subestima. No se usan para decir que hubo poca asistencia. En todos los entregables se aclara que son confirmaciones y no asistencia real. |
+
+## Actualización del 19 de noviembre de 2026
+
+Para el cierre del recap se usan las cifras y los hitos confirmados por el líder el 18 de noviembre. Las gráficas, los rankings y el catálogo conservan el corte público de Meetup del 3 de noviembre.
+
+| Dato | Registro anterior | Resolución para el recap |
+|---|---|---|
+| Miembros y eventos | Meetup registraba 1.408 miembros y 36 eventos publicados al 3 de noviembre. | El balance usa 1.462 miembros y 45 eventos. Se conserva el desglose público de los 36 eventos en Meetup. |
+| Estudiantes alcanzados | La Agencia de Noticias Univalle publicó más de 900 el 15 de octubre. | Se usan 2.000 estudiantes alcanzados al nuevo corte. |
+| Primer presencial | Meetup documenta la agenda del 11 de mayo en Villa Campestre y registra confirmaciones. | La cronología identifica la Semana de la Expresión y más de 1.200 asistentes según el líder. Las confirmaciones de Meetup siguen en el catálogo. |
+| Curso Cloud Practitioner | Meetup registra cupos y confirmaciones por sesión. | El balance del primer curso usa los 50 estudiantes confirmados por el líder. |
+| Cloud Quest | La página de Meetup documenta el lanzamiento. El registro anterior hablaba de varios ganadores de Univalle. | El líder confirma que Univalle ganó el torneo regional. |
+| Cumbre de liderazgo | La investigación registraba la invitación a la Cumbre de Liderazgo Andina AWS. | El recap usa el nombre AWS Community Leadership Summit Bogotá y el resultado de la participación, confirmados por el líder. |

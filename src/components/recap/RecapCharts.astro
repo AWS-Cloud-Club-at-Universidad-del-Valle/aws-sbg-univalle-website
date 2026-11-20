@@ -5,7 +5,7 @@
  *
  * Paleta validada sobre #21252e: virtual #8b5cf6, presencial #cf7700.
  */
-import { metricas, mesCorto, fmtInt, fmt, fechaCorta, FECHA_CORTE } from '@/lib/recap';
+import { metricas, mesCorto, fmtInt, fmt, fechaCorta, CIFRAS_RECAP, FECHA_CORTE, FECHA_CORTE_MEETUP } from '@/lib/recap';
 
 const ev = metricas.eventos;
 const meses = ev.por_mes.filter((m) => m.mes >= '2026-02' && m.mes <= '2026-10');
@@ -39,7 +39,8 @@ const corto = (n: string) =>
   <span class="code-label"># datos</span>
   <h2 id="charts-heading" class="mt-3 text-3xl sm:text-4xl">Lo que dicen los números</h2>
   <p class="mt-3 max-w-2xl">
-    Datos de las páginas públicas de Meetup, con corte al {fechaCorta(FECHA_CORTE)}. Las confirmaciones son respuestas «Asistiré» y no equivalen a asistencia real:
+    El balance del grupo es de {CIFRAS_RECAP.eventos} eventos al {fechaCorta(FECHA_CORTE)}.
+    Las gráficas usan datos públicos de Meetup al {fechaCorta(FECHA_CORTE_MEETUP)}. Las confirmaciones son respuestas «Asistiré» y no equivalen a asistencia real:
     varios eventos presenciales se inscribieron por formulario externo, así que Meetup los subestima.
   </p>
 

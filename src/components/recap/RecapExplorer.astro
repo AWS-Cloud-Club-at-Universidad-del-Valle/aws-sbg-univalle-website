@@ -5,7 +5,7 @@
  * La lista completa se renderiza en el servidor (sirve sin JS). El script solo
  * oculta tarjetas y anuncia el conteo en una región aria-live.
  */
-import { EVENTOS, limpiarTitulo, fechaCorta } from '@/lib/recap';
+import { EVENTOS, limpiarTitulo, fechaCorta, FECHA_CORTE_MEETUP } from '@/lib/recap';
 
 const eventos = [...EVENTOS].reverse();
 const temas = [...new Set(EVENTOS.map((e) => e.tema))].sort();
@@ -14,8 +14,8 @@ const sedes = [...new Set(EVENTOS.map((e) => e.sede))].sort();
 
 <section id="eventos" aria-labelledby="explorer-heading" class="container-sbg py-14 lg:py-20">
   <span class="code-label"># explorador_de_eventos</span>
-  <h2 id="explorer-heading" class="mt-3 text-3xl sm:text-4xl">Los {EVENTOS.length} eventos</h2>
-  <p class="mt-3 max-w-2xl">Todos los eventos publicados en Meetup, del más reciente al primero. Cada tarjeta enlaza a su página original.</p>
+  <h2 id="explorer-heading" class="mt-3 text-3xl sm:text-4xl">{EVENTOS.length} eventos en Meetup</h2>
+  <p class="mt-3 max-w-2xl">Eventos publicados en Meetup al {fechaCorta(FECHA_CORTE_MEETUP)}, del más reciente al primero. Cada tarjeta enlaza a su página original.</p>
 
   <form class="recap-filters mt-8" data-filters role="search" aria-label="Filtrar eventos" onsubmit="return false">
     <fieldset class="recap-seg">

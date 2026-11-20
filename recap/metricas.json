@@ -1,6 +1,24 @@
 {
-  "_descripcion": "Única fuente de cifras del recap AWS SBG Univalle. Generado por recap/scripts/construir_datos.py; no editar a mano los bloques calculados.",
-  "fecha_corte": "2026-11-03",
+  "_descripcion": "Única fuente de cifras del recap AWS SBG Univalle. Los bloques calculados se generaron con recap/scripts/construir_datos.py. Las cifras confirmadas por el líder se registran aparte.",
+  "fecha_corte": "2026-11-19",
+  "fecha_corte_meetup": "2026-11-03",
+  "cifras_confirmadas_por_lider": {
+    "fuente": "Líder del grupo, 18 nov 2026",
+    "inicio": {
+      "mes": "2025-11",
+      "miembros": 0,
+      "eventos": 0,
+      "estudiantes_alcanzados": 0
+    },
+    "miembros": 1462,
+    "eventos": 45,
+    "estudiantes_alcanzados": 2000,
+    "web": {
+      "dominio": "awsunivalle.dev",
+      "peticiones_superan": 52000,
+      "usuarios": 10000
+    }
+  },
   "periodo": {
     "inicio_aval": "2025-11-17",
     "lanzamiento_oficial": "2026-02-28",
@@ -492,18 +510,18 @@
       "detalle": "Vouchers de certificación entregados a estudiantes de Tuluá, Yumbo y otras sedes"
     },
     "summit_bogota_2026": {
-      "texto": "Ponentes invitados por AWS en el AWS Summit Bogotá 2026 (29 y 30 de julio de 2026)",
+      "texto": "Juan Manuel Hoyos, estudiante de Univalle, fue ponente en el AWS Summit Bogotá 2026",
       "fuente_publica": "https://sessionize.com/juan-manuel-hoyos/ (AWS Builder Spotlight, autodeclarado)"
     },
     "community_day_peru": {
-      "texto": "Participación virtual en el AWS Community Day Perú"
+      "texto": "Pablo Nicolás Marín fue ponente en el AWS Community Day Perú"
     },
     "ieee": {
       "texto": "Sesiones para la comunidad de IEEE",
       "fuente_publica": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315578404/ (coorganizado con IEEE Computer Society)"
     },
     "cloud_quest": {
-      "texto": "AWS Cloud Quest realizado en el Valle del Cauca, con muchos ganadores de Univalle",
+      "texto": "Univalle ganó el torneo regional AWS Cloud Quest en el Valle del Cauca",
       "fuente_publica": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316898074/ (kick-off, 156 confirmaciones)"
     },
     "reto_sesiones_1_2": {
@@ -520,10 +538,9 @@
       "estado": "En preparación"
     },
     "cumbre_andina": {
-      "texto": "Invitados a la Cumbre de Liderazgo Andina AWS 2026 en Bogotá",
+      "texto": "En el AWS Community Leadership Summit Bogotá, Univalle fue la única comunidad colombiana de fuera de Bogotá y recibió felicitaciones",
       "fecha": "2026-11-11 a 2026-11-15",
-      "participantes": 3,
-      "respaldo": "Solicitud de apoyo económico a Bienestar Universitario (archivo del equipo, no público)"
+      "respaldo": "Líder del grupo, 18 nov 2026"
     }
   },
   "reconocimientos": {
