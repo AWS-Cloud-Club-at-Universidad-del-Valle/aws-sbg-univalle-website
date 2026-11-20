@@ -80,6 +80,16 @@ export const SITE_CONFIG: ISiteConfig = {
 // Links de navegación
 // ============================================
 
+export const KIROTHON = {
+  path: '/kirothon',
+  name: 'Kirothon',
+  date: '2026-12-19',
+  dateLabel: 'Sábado 19 de diciembre de 2026',
+  hours: '2:00–7:00 p.m.',
+  meetup: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/317506559/',
+  cover: '/kirothon/portada-meetup-1200x675.png',
+} as const;
+
 export const NAV_LINKS: INavLink[] = [
   { href: '/', label: 'Inicio' },
   { href: '/about', label: 'Nosotros' },

@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import KirothonPage from '@/components/kirothon/KirothonPage.astro';
+import { KIROTHON } from '@/lib/constants';
+---
+
+<BaseLayout
+  title="Kirothon · La hackathon de Kiro en Tuluá"
+  description="Aparta tu cupo para el lanzamiento de la Kirothon el 19 de diciembre de 2026 en Univalle Sede Tuluá. Conoce el formato, los requisitos y la rúbrica."
+  ogImage={KIROTHON.cover}
+  ogType="event"
+>
+  <KirothonPage />
+</BaseLayout>

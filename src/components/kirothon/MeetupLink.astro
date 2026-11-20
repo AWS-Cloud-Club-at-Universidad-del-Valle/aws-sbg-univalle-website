@@ -1,0 +1,25 @@
+---
+import { KIROTHON } from '@/lib/constants';
+---
+
+<a href={KIROTHON.meetup} target="_blank" rel="noopener noreferrer">
+  Aparta tu cupo en Meetup<span class="sr-only"> (abre en nueva pestaña)</span>
+</a>
+
+<style>
+  a {
+    display: inline-block;
+    padding: .8rem 1rem;
+    background: #9046ff;
+    color: #000;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  a:hover { text-decoration: underline; }
+  a:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -5px;
+  }
+</style>
