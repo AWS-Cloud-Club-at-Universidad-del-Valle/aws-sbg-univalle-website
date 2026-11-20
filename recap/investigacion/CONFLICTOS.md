@@ -1,0 +1,39 @@
+# Conflictos entre fuentes
+
+Regla general: para cifras de comunidad manda la fuente más reciente y estructurada (Meetup al 3-nov-2026). Para fechas de eventos manda la fecha estructurada de la página de Meetup, que es la que ven los inscritos y la que sincroniza el sitio.
+
+| # | Conflicto | Fuente A | Fuente B | Resolución |
+|---|---|---|---|---|
+| 1 | Miembros | awsunivalle.dev: **922+** | Meetup: **1.408** | Se usa 1.408 (Meetup, 3-nov-2026). El 922 está fijo en `src/lib/constants.ts` (`STATS`) y nunca se actualizó. Se deja anotado en PENDIENTES.md para actualizar el sitio en otro PR. |
+| 2 | Eventos | awsunivalle.dev y nota de Univalle: **27** | Meetup y API: **36** | Se usa 36 eventos publicados en Meetup. El 27 coincide con la nota del 15-oct-2026 y probablemente refleja un corte anterior o solo actividades propias. Hay 5 eventos con fecha posterior al 15-oct, así que al día de la nota Meetup sumaba 31; la diferencia restante no se puede explicar con datos públicos. Además, uno de los 36 (Student Community Day Colombia) es un evento nacional. Por eso los entregables dicen "36 eventos publicados en Meetup, 35 propios o coorganizados". |
+| 3 | Estudiantes impactados | Nota de Univalle: **más de 900** (15-oct-2026) | Meetup: 1.408 miembros | No son la misma métrica. Se presentan por separado: "más de 900 estudiantes impactados, según la Agencia de Noticias Univalle" y "1.408 miembros en Meetup". No se suman. |
+| 4 | Calificación | Datos de partida: **4,9** | Meetup: **4,86** con 183 valoraciones | Ambas son correctas: 4,9 es el redondeo que muestra Meetup. En los entregables va "4,9/5" con la nota "(4,86 exacto)" donde hay espacio. |
+| 5 | Fecha de la sesión 8 del reto | Página de Meetup: **29-oct-2026** | Descripción: "22 de octubre de 2026" | Se usa el **29 de octubre**. La sesión 7 está en Meetup el 22-oct, el reto sigue un ritmo semanal de jueves y dos sesiones el mismo día no tienen sentido. La descripción parece copiada de la sesión anterior. Pendiente de confirmar con el líder. |
+| 6 | Fecha de la sesión 7 del reto | Página: **22-oct-2026** | Descripción: "15 de octubre de 2026" | Se usa el **22 de octubre**, por el mismo motivo. El 15-oct es la sesión 6. |
+| 7 | Fecha de la sesión 5 del reto | Página: **8-oct-2026, 6:20 p. m.** | Descripción: "3 de octubre, 2:00 p. m." | Se usa el **8 de octubre**. El 3-oct a las 2:00 p. m. ya estaba ocupado por el Workshop 1 de IAM en la misma sede. |
+| 8 | Hora de "Descubriendo AWS" (3-sep-2026) | Meetup: **9:30 a. m.** | API del sitio: **11:30 a. m.** | Se usa Meetup (9:30). La API guardó una versión anterior. |
+| 9 | Estado de los eventos | API del sitio: eventos de septiembre y octubre como `UPCOMING` | Meetup: todos `PAST` | Se usa Meetup. La API no actualiza el estado de eventos ya pasados. Anotado en PENDIENTES.md. |
+| 10 | Dirección de la Escuela de Policía de Tuluá | Evento 316292610: "Carrera 44 # 37-164" | Evento 316292639: "Kilómetro 1, vía a La Rivera" | No afecta las cifras. Se usa el nombre "Escuela de Policía Simón Bolívar, Tuluá" sin dirección. |
+| 11 | Nombre del grupo | "AWS Cloud Club at Universidad del Valle" (lanzamiento, GitHub, TikTok, YouTube) | "AWS Student Builder Group Universidad del Valle" (sitio, LinkedIn, Meetup) | AWS renombró los Cloud Clubs como Student Builder Groups ([builder.aws.com](https://builder.aws.com/community/student-builder-groups)). Se usa el nombre actual y se explica el anterior una sola vez en el informe completo. |
+| 12 | URL de Meetup | Antigua: `meetup.com/aws-sbg-at-universidad-del-valle-colombia/` (aparece en buscadores) | Actual: `meetup.com/aws-sbg-at-university-of-the-valle/` | Se usa la actual, que es la que tiene los datos. |
+| 13 | URL de LinkedIn | Antigua: `linkedin.com/company/aws-cloud-club-universidad-del-valle` (descripción de Meetup) | Actual: `linkedin.com/company/aws-studentbuildergroupunivalle/` (sitio) | Se usa la actual. Anotado en PENDIENTES.md: actualizar la descripción de Meetup. |
+| 14 | Instagram | Antiguo: `@awscloudclub.univalle` (buscadores) | Actual: `@awsbuildergroup.univalle` (sitio y Meetup) | Se usa el actual. TikTok sigue siendo `@awscloudclub.univalle`. |
+| 15 | Año del lanzamiento | Datos de partida: "28 de febrero", año sin indicar | Meetup: 28-feb-**2026** | Verificado: 2026. |
+| 16 | Inicio del periodo | Aval de AWS: noviembre de 2025 (sin día) | Meetup: grupo creado el 17-nov-2025 | Se usa el 17-nov-2025 para calcular promedios. Usar el 1-nov cambia los promedios en menos de 0,2 eventos por mes. |
+| 17 | Sesiones 1 y 2 del reto | Líder: "Sesiones 1 y 2: Cómputo" | Meetup: sesión 1 "Introduction to the Cloud", sesión 2 "Compute in AWS" | Ambas incluyen cómputo (la sesión 1 tiene laboratorio en AWS y la 2 trata EC2). Se usa el texto de Meetup para los títulos y se deja anotado. |
+| 18 | Título y descripción de "Cada decisión es una toma" | Título: "25 años construyendo entre el arte y la tecnología" | Descripción: carrera en AWS con Germán Ruiz | No es un conflicto de cifras. Se usa el título publicado y la descripción para el tema. |
+| 19 | AWS Builder Spotlight | Sessionize (autodeclarado) | Página oficial del Summit Bogotá no lo menciona | Se presenta como "según su perfil de ponente en Sessionize". El hecho de ser ponentes invitados por AWS lo confirma el líder. |
+| 20 | Confirmaciones de eventos presenciales | Meetup: 2 a 8 confirmaciones en eventos de Tuluá de mayo y junio | Esos eventos usaron formulario externo para inscribirse | Meetup los subestima. No se usan para decir que hubo poca asistencia. En todos los entregables se aclara que son confirmaciones y no asistencia real. |
+
+## Actualización del 19 de noviembre de 2026
+
+Para el cierre del recap se usan las cifras y los hitos confirmados por el líder el 18 de noviembre. Las gráficas, los rankings y el catálogo conservan el corte público de Meetup del 3 de noviembre.
+
+| Dato | Registro anterior | Resolución para el recap |
+|---|---|---|
+| Miembros y eventos | Meetup registraba 1.408 miembros y 36 eventos publicados al 3 de noviembre. | El balance usa 1.462 miembros y 45 eventos. Se conserva el desglose público de los 36 eventos en Meetup. |
+| Estudiantes alcanzados | La Agencia de Noticias Univalle publicó más de 900 el 15 de octubre. | Se usan 2.000 estudiantes alcanzados al nuevo corte. |
+| Primer presencial | Meetup documenta la agenda del 11 de mayo en Villa Campestre y registra confirmaciones. | La cronología identifica la Semana de la Expresión y más de 1.200 asistentes según el líder. Las confirmaciones de Meetup siguen en el catálogo. |
+| Curso Cloud Practitioner | Meetup registra cupos y confirmaciones por sesión. | El balance del primer curso usa los 50 estudiantes confirmados por el líder. |
+| Cloud Quest | La página de Meetup documenta el lanzamiento. El registro anterior hablaba de varios ganadores de Univalle. | El líder confirma que Univalle ganó el torneo regional. |
+| Cumbre de liderazgo | La investigación registraba la invitación a la Cumbre de Liderazgo Andina AWS. | El recap usa el nombre AWS Community Leadership Summit Bogotá y el resultado de la participación, confirmados por el líder. |

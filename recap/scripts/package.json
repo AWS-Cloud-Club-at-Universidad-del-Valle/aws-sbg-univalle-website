@@ -1,0 +1,18 @@
+{
+  "name": "recap-generadores",
+  "private": true,
+  "type": "module",
+  "description": "Generadores de los entregables del recap (no forman parte del sitio).",
+  "scripts": {
+    "datos": "python3 construir_datos.py",
+    "visuales": "node generar_visuales.mjs",
+    "presentacion": "node generar_presentacion.mjs",
+    "informes": "node generar_informes.mjs",
+    "pdf": "node convertir_pdf.mjs",
+    "todo": "npm run datos && npm run visuales && npm run presentacion && npm run informes && npm run pdf"
+  },
+  "dependencies": {
+    "docx": "9.5.1",
+    "pptxgenjs": "3.12.0"
+  }
+}

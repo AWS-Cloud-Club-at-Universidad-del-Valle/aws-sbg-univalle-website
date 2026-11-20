@@ -82,12 +82,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       if (['script', 'iframe', 'object', 'embed', 'style'].includes(tag)) {
         toRemove.push(node);
       } else {
-        [...node.attributes].forEach((attr) => {
+        const el = node;
+        [...el.attributes].forEach((attr) => {
           const name = attr.name.toLowerCase();
           const val = attr.value.trim().toLowerCase();
-          if (name.startsWith('on')) node.removeAttribute(attr.name);
+          if (name.startsWith('on')) el.removeAttribute(attr.name);
           if ((name === 'href' || name === 'src') && val.startsWith('javascript:')) {
-            node.removeAttribute(attr.name);
+            el.removeAttribute(attr.name);
           }
         });
         if (tag === 'a') {

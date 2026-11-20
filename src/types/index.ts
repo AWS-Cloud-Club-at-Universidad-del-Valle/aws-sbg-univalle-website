@@ -181,6 +181,8 @@ export interface ICoreTeamMember {
   image?: string;
   /** Username público en AWS Builder Center (sin @). La URL se construye con BUILDER_CENTER_PROFILE_BASE. */
   builderCenter?: string;
+  /** Si true, la tarjeta se muestra como "próximamente" (sin datos personales). */
+  comingSoon?: boolean;
 }
 
 // ============================================
@@ -194,7 +196,7 @@ export type ApiEventType = 'CHARLA' | 'WORKSHOP' | 'HACKATHON';
 export type ApiEventModality = 'VIRTUAL' | 'PRESENCIAL' | 'HIBRIDO';
 
 /** Estado del evento según la API. */
-export type ApiEventStatus = 'UPCOMING' | 'COMPLETED';
+export type ApiEventStatus = 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
 
 /** Item de evento en el listado (GET /events). */
 export interface IApiEventListItem {
