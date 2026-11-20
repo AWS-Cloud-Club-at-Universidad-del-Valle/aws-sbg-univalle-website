@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionDivider from '@/components/common/SectionDivider.astro';
+import RecapHero from '@/components/recap/RecapHero.astro';
+import RecapTimeline from '@/components/recap/RecapTimeline.astro';
+import RecapCharts from '@/components/recap/RecapCharts.astro';
+import RecapExplorer from '@/components/recap/RecapExplorer.astro';
+import RecapAchievements from '@/components/recap/RecapAchievements.astro';
+import RecapUpcoming from '@/components/recap/RecapUpcoming.astro';
+import { metricas, fmtInt } from '@/lib/recap';
+import { SITE_CONFIG } from '@/lib/constants';
+import '@/styles/recap.css';
+
+const description = `Recap del AWS Student Builder Group Univalle: ${metricas.eventos.total} eventos, ${fmtInt(metricas.comunidad.miembros_meetup.valor)} miembros, reto Cloud Practitioner en Tuluá y lo que viene en diciembre.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Report',
+  name: 'Recap 2025–2026 · AWS Student Builder Group Universidad del Valle',
+  description,
+  inLanguage: 'es-CO',
+  datePublished: metricas.fecha_corte,
+  url: `${SITE_CONFIG.url}/recap`,
+  author: { '@type': 'Organization', name: SITE_CONFIG.name, url: SITE_CONFIG.url },
+  about: { '@type': 'Organization', name: SITE_CONFIG.name },
+};
+---
+
+<BaseLayout title="Recap 2025–2026" description={description} ogImage="/og/recap.png" ogType="article">
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <RecapHero />
+  <SectionDivider />
+  <RecapTimeline />
+  <SectionDivider />
+  <RecapCharts />
+  <SectionDivider />
+  <RecapAchievements />
+  <SectionDivider />
+  <RecapExplorer />
+  <RecapUpcoming />
+</BaseLayout>

@@ -1,0 +1,202 @@
+---
+/**
+ * RecapCharts — Gráficas SVG estáticas (sin librerías) con tooltip al pasar
+ * el cursor o al enfocar, y tabla de datos accesible para cada una.
+ *
+ * Paleta validada sobre #21252e: virtual #8b5cf6, presencial #cf7700.
+ */
+import { metricas, mesCorto, fmtInt, fmt, fechaCorta, CIFRAS_RECAP, FECHA_CORTE, FECHA_CORTE_MEETUP } from '@/lib/recap';
+
+const ev = metricas.eventos;
+const meses = ev.por_mes.filter((m) => m.mes >= '2026-02' && m.mes <= '2026-10');
+const maxMes = Math.max(...meses.map((m) => m.eventos));
+const W = 640, H = 260, PAD_L = 28, PAD_B = 34, PAD_T = 22;
+const colW = (W - PAD_L) / meses.length;
+const barW = Math.min(36, colW * 0.56);
+const y = (v: number) => H - PAD_B - (v / maxMes) * (H - PAD_B - PAD_T);
+const ticks = [0, 4, 8, 12];
+
+const temas = Object.entries(ev.por_tema)
+  .map(([tema, d]) => ({ tema, ...d }))
+  .sort((a, b) => b.confirmaciones - a.confirmaciones);
+const maxTema = Math.max(...temas.map((t) => t.confirmaciones));
+
+const cmp = metricas.comparacion_sbg_colombia;
+const top = cmp.grupos.slice(0, 6);
+const maxMiembros = top[0].miembros;
+const corto = (n: string) =>
+  n
+    .replace('AWS SBG at ', '')
+    .replace('Francisco Jose de Caldas District Univ. - Bogota', 'U. Distrital (Bogotá)')
+    .replace('University of the Valle', 'Universidad del Valle (Cali)')
+    .replace('EAN University', 'EAN (Bogotá)')
+    .replace(/National University of Colombia\s+- Bogota Campus/, 'U. Nacional (Bogotá)')
+    .replace('University of Antioquia', 'U. de Antioquia (Medellín)')
+    .replace('Digital University Institution of Antioquia', 'IU Digital (Medellín)');
+---
+
+<section id="graficas" aria-labelledby="charts-heading" class="container-sbg py-14 lg:py-20">
+  <span class="code-label"># datos</span>
+  <h2 id="charts-heading" class="mt-3 text-3xl sm:text-4xl">Lo que dicen los números</h2>
+  <p class="mt-3 max-w-2xl">
+    El balance del grupo es de {CIFRAS_RECAP.eventos} eventos al {fechaCorta(FECHA_CORTE)}.
+    Las gráficas usan datos públicos de Meetup al {fechaCorta(FECHA_CORTE_MEETUP)}. Las confirmaciones son respuestas «Asistiré» y no equivalen a asistencia real:
+    varios eventos presenciales se inscribieron por formulario externo, así que Meetup los subestima.
+  </p>
+
+  <div class="mt-10 grid gap-6 lg:grid-cols-5">
+    <!-- 1. Eventos por mes -->
+    <figure class="recap-card lg:col-span-3" data-chart>
+      <figcaption>
+        <span class="recap-card__eyebrow">Ritmo</span>
+        <span class="recap-card__title">Eventos por mes, de febrero a octubre de 2026</span>
+        <span class="recap-card__sub">Septiembre y octubre suman {meses.filter((m) => m.mes >= '2026-09').reduce((a, m) => a + m.eventos, 0)} de los {ev.total} eventos.</span>
+      </figcaption>
+      <ul class="recap-legend" aria-hidden="true">
+        <li><span style="background:#8b5cf6"></span>Virtual</li>
+        <li><span style="background:#cf7700"></span>Presencial</li>
+      </ul>
+      <div class="recap-chart-wrap">
+        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Gráfico de columnas apiladas: eventos virtuales y presenciales por mes. Octubre tiene el máximo, con ${maxMes} eventos.`} class="recap-svg">
+          {ticks.map((t) => (
+            <g>
+              <line x1={PAD_L} x2={W} y1={y(t)} y2={y(t)} class="recap-grid" />
+              <text x={PAD_L - 8} y={y(t) + 4} text-anchor="end" class="recap-axis">{t}</text>
+            </g>
+          ))}
+          {meses.map((m, i) => {
+            const cx = PAD_L + colW * i + colW / 2;
+            const x = cx - barW / 2;
+            const yv = y(m.virtuales);
+            const yp = y(m.virtuales + m.presenciales);
+            const base = y(0);
+            return (
+              <g class="recap-mark" tabindex="0" data-tip={`${mesCorto(m.mes)}: ${m.eventos} eventos (${m.virtuales} virtuales, ${m.presenciales} presenciales) · ${m.confirmaciones} confirmaciones`} aria-label={`${mesCorto(m.mes)}: ${m.eventos} eventos`}>
+                <rect x={cx - colW / 2} y={PAD_T} width={colW} height={base - PAD_T} fill="transparent" />
+                {m.virtuales > 0 && <rect x={x} y={yv} width={barW} height={base - yv} fill="#8b5cf6" />}
+                {m.presenciales > 0 && <rect x={x} y={yp} width={barW} height={yv - yp - 2} fill="#cf7700" />}
+                {m.eventos > 0 && <text x={cx} y={yp - 6} text-anchor="middle" class="recap-value">{m.eventos}</text>}
+                <text x={cx} y={H - 12} text-anchor="middle" class="recap-axis">{mesCorto(m.mes)}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+      <details class="recap-table">
+        <summary>Ver datos en tabla</summary>
+        <table>
+          <thead><tr><th scope="col">Mes</th><th scope="col">Virtuales</th><th scope="col">Presenciales</th><th scope="col">Total</th><th scope="col">Confirmaciones</th></tr></thead>
+          <tbody>
+            {meses.map((m) => (
+              <tr><th scope="row">{mesCorto(m.mes)}</th><td>{m.virtuales}</td><td>{m.presenciales}</td><td>{m.eventos}</td><td>{fmtInt(m.confirmaciones)}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </details>
+    </figure>
+
+    <!-- 2. Promedios por modalidad -->
+    <figure class="recap-card lg:col-span-2">
+      <figcaption>
+        <span class="recap-card__eyebrow">Modalidad</span>
+        <span class="recap-card__title">Confirmaciones promedio por evento</span>
+        <span class="recap-card__sub">Lo virtual convoca más en Meetup; lo presencial se inscribe también por otros canales.</span>
+      </figcaption>
+      <dl class="recap-duo">
+        <div>
+          <dt><span class="recap-dot" style="background:#8b5cf6"></span>Virtual · {ev.virtuales} eventos</dt>
+          <dd>{fmt(ev.confirmaciones_promedio_virtual, 1)}</dd>
+        </div>
+        <div>
+          <dt><span class="recap-dot" style="background:#cf7700"></span>Presencial · {ev.presenciales} eventos</dt>
+          <dd>{fmt(ev.confirmaciones_promedio_presencial, 1)}</dd>
+        </div>
+        <div>
+          <dt>Mediana general</dt>
+          <dd>{fmt(ev.confirmaciones_mediana, 0)}</dd>
+        </div>
+        <div>
+          <dt>Reto · {metricas.reto_cloud_practitioner.sesiones} sesiones</dt>
+          <dd>{fmt(metricas.reto_cloud_practitioner.confirmaciones_promedio, 1)}</dd>
+        </div>
+      </dl>
+      <p class="mt-4 text-xs text-[var(--sbg-text-subtle)]">
+        Ritmo desde el lanzamiento: {fmt(ev.eventos_por_mes_desde_lanzamiento, 2)} eventos al mes. Desde el aval de noviembre de 2025: {fmt(ev.eventos_por_mes_desde_aval, 2)}.
+      </p>
+    </figure>
+
+    <!-- 3. Temas -->
+    <figure class="recap-card lg:col-span-3" data-chart>
+      <figcaption>
+        <span class="recap-card__eyebrow">Temas</span>
+        <span class="recap-card__title">Confirmaciones por tema</span>
+        <span class="recap-card__sub">La carrera profesional es lo que más convoca. La certificación es lo que más se repite: 8 sesiones.</span>
+      </figcaption>
+      <ul class="recap-hbars" role="list">
+        {temas.map((t) => (
+          <li class="recap-mark" tabindex="0" data-tip={`${t.tema}: ${fmtInt(t.confirmaciones)} confirmaciones en ${t.eventos} eventos`}>
+            <span class="recap-hbars__label">{t.tema}</span>
+            <span class="recap-hbars__track" aria-hidden="true"><span style={`width:${(t.confirmaciones / maxTema) * 100}%`}></span></span>
+            <span class="recap-hbars__value">{fmtInt(t.confirmaciones)} <small>· {t.eventos} ev.</small></span>
+          </li>
+        ))}
+      </ul>
+    </figure>
+
+    <!-- 4. Comparación -->
+    <figure class="recap-card lg:col-span-2" data-chart>
+      <figcaption>
+        <span class="recap-card__eyebrow">Contexto</span>
+        <span class="recap-card__title">Miembros en Meetup: los 6 SBG más grandes de Colombia</span>
+        <span class="recap-card__sub">De {cmp.grupos.length} grupos revisados, con corte al {fechaCorta(cmp.fecha_corte)}.</span>
+      </figcaption>
+      <ul class="recap-hbars recap-hbars--compact" role="list">
+        {top.map((g) => {
+          const yo = g.url.includes('university-of-the-valle');
+          return (
+            <li class:list={['recap-mark', { 'is-us': yo }]} tabindex="0" data-tip={`${corto(g.nombre)}: ${fmtInt(g.miembros)} miembros, ${g.eventos_pasados} eventos, creado el ${fechaCorta(g.creado)}`}>
+              <span class="recap-hbars__label">{corto(g.nombre)}</span>
+              <span class="recap-hbars__track" aria-hidden="true"><span style={`width:${(g.miembros / maxMiembros) * 100}%`}></span></span>
+              <span class="recap-hbars__value">{fmtInt(g.miembros)}</span>
+            </li>
+          );
+        })}
+      </ul>
+      <p class="mt-4 text-xs leading-relaxed text-[var(--sbg-text-subtle)]">
+        Los grupos se crearon en fechas distintas (de mayo de 2025 a septiembre de 2026), así que las cifras acumuladas no son del todo comparables. En eventos pasados, Univalle es{' '}
+        {cmp.puesto_univalle_eventos}.º de {cmp.grupos.length}; en valoraciones, {cmp.puesto_univalle_valoraciones}.º. Universo:{' '}
+        <a class="recap-link" href={cmp.fuente.split(' ')[0]} target="_blank" rel="noopener noreferrer">directorio de dondeaprendoaws.com</a>.
+      </p>
+    </figure>
+  </div>
+
+  <div class="recap-tooltip" aria-hidden="true" data-tooltip hidden></div>
+</section>
+
+<script>
+  function initTooltips() {
+    const tip = document.querySelector<HTMLElement>('[data-tooltip]');
+    if (!tip) return;
+    const marks = document.querySelectorAll<HTMLElement | SVGElement>('[data-tip]');
+    const show = (el: Element, x: number, yy: number) => {
+      tip.textContent = (el as HTMLElement).dataset.tip ?? '';
+      tip.hidden = false;
+      const r = tip.getBoundingClientRect();
+      const left = Math.min(window.innerWidth - r.width - 12, Math.max(12, x - r.width / 2));
+      tip.style.left = `${left}px`;
+      tip.style.top = `${Math.max(12, yy - r.height - 14)}px`;
+    };
+    const hide = () => { tip.hidden = true; };
+    marks.forEach((el) => {
+      el.addEventListener('pointermove', (e) => show(el, (e as PointerEvent).clientX, (e as PointerEvent).clientY));
+      el.addEventListener('pointerleave', hide);
+      el.addEventListener('focus', () => {
+        const r = el.getBoundingClientRect();
+        show(el, r.left + r.width / 2, r.top);
+      });
+      el.addEventListener('blur', hide);
+    });
+    window.addEventListener('scroll', hide, { passive: true });
+  }
+  document.addEventListener('astro:page-load', initTooltips);
+</script>

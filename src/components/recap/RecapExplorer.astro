@@ -1,0 +1,130 @@
+---
+/**
+ * RecapExplorer — Los 36 eventos con filtros por modalidad, tema, sede y texto.
+ *
+ * La lista completa se renderiza en el servidor (sirve sin JS). El script solo
+ * oculta tarjetas y anuncia el conteo en una región aria-live.
+ */
+import { EVENTOS, limpiarTitulo, fechaCorta, FECHA_CORTE_MEETUP } from '@/lib/recap';
+
+const eventos = [...EVENTOS].reverse();
+const temas = [...new Set(EVENTOS.map((e) => e.tema))].sort();
+const sedes = [...new Set(EVENTOS.map((e) => e.sede))].sort();
+---
+
+<section id="eventos" aria-labelledby="explorer-heading" class="container-sbg py-14 lg:py-20">
+  <span class="code-label"># explorador_de_eventos</span>
+  <h2 id="explorer-heading" class="mt-3 text-3xl sm:text-4xl">{EVENTOS.length} eventos en Meetup</h2>
+  <p class="mt-3 max-w-2xl">Eventos publicados en Meetup al {fechaCorta(FECHA_CORTE_MEETUP)}, del más reciente al primero. Cada tarjeta enlaza a su página original.</p>
+
+  <form class="recap-filters mt-8" data-filters role="search" aria-label="Filtrar eventos" onsubmit="return false">
+    <fieldset class="recap-seg">
+      <legend class="sr-only">Modalidad</legend>
+      {['Todas', 'Presencial', 'Virtual'].map((m, i) => (
+        <label>
+          <input type="radio" name="modalidad" value={m === 'Todas' ? '' : m} checked={i === 0} />
+          <span>{m}</span>
+        </label>
+      ))}
+    </fieldset>
+    <label class="recap-field">
+      <span>Tema</span>
+      <select name="tema">
+        <option value="">Todos</option>
+        {temas.map((t) => <option value={t}>{t}</option>)}
+      </select>
+    </label>
+    <label class="recap-field">
+      <span>Sede</span>
+      <select name="sede">
+        <option value="">Todas</option>
+        {sedes.map((s) => <option value={s}>{s}</option>)}
+      </select>
+    </label>
+    <label class="recap-field recap-field--grow">
+      <span>Buscar</span>
+      <input type="search" name="q" placeholder="Ej.: serverless, carrera, IAM" autocomplete="off" />
+    </label>
+  </form>
+  <p class="mt-4 text-sm text-[var(--sbg-text-subtle)]" aria-live="polite" data-count-label>Mostrando {EVENTOS.length} de {EVENTOS.length} eventos.</p>
+
+  <ul class="recap-events mt-4" id="recap-events-list" data-events>
+    {eventos.map((e) => {
+      const titulo = limpiarTitulo(e.titulo);
+      return (
+        <li
+          class="recap-event"
+          data-modalidad={e.modalidad}
+          data-tema={e.tema}
+          data-sede={e.sede}
+          data-text={`${titulo} ${e.tema} ${e.sede} ${e.ponentes_publicos.join(' ')}`.toLowerCase()}
+        >
+          <div class="recap-event__top">
+            <time datetime={e.fecha}>{fechaCorta(e.fecha)}</time>
+            <span class:list={['recap-pill', e.modalidad === 'Virtual' ? 'recap-pill--virtual' : 'recap-pill--presencial']}>{e.modalidad}</span>
+          </div>
+          <h3 class="recap-event__title">
+            <a href={e.url} target="_blank" rel="noopener noreferrer">
+              {titulo}
+              <span class="sr-only"> (abre Meetup en nueva pestaña)</span>
+            </a>
+          </h3>
+          <p class="recap-event__meta">{e.tema} · {e.sede}</p>
+          {e.ponentes_publicos.length > 0 && <p class="recap-event__speakers">Con {e.ponentes_publicos.join(', ')}</p>}
+          <p class="recap-event__rsvp"><strong>{e.confirmaciones_meetup}</strong> confirmaciones en Meetup</p>
+        </li>
+      );
+    })}
+  </ul>
+  <p class="mt-6 hidden text-center" data-empty>No hay eventos con esos filtros.</p>
+  <div class="mt-6 flex justify-center">
+    <button type="button" class="recap-btn recap-btn--ghost" data-more hidden aria-controls="recap-events-list">Ver los {EVENTOS.length} eventos</button>
+  </div>
+</section>
+
+<script>
+  function initExplorer() {
+    const form = document.querySelector<HTMLFormElement>('[data-filters]');
+    const items = Array.from(document.querySelectorAll<HTMLElement>('[data-events] > li'));
+    const label = document.querySelector<HTMLElement>('[data-count-label]');
+    const empty = document.querySelector<HTMLElement>('[data-empty]');
+    const more = document.querySelector<HTMLButtonElement>('[data-more]');
+    const LIMITE = 9;
+    let expandido = false;
+    if (!form || !label) return;
+    const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const apply = () => {
+      const fd = new FormData(form);
+      const mod = String(fd.get('modalidad') ?? '');
+      const tema = String(fd.get('tema') ?? '');
+      const sede = String(fd.get('sede') ?? '');
+      const q = norm(String(fd.get('q') ?? '').trim());
+      let n = 0;
+      const filtrando = Boolean(mod || tema || sede || q);
+      let visibles = 0;
+      items.forEach((li) => {
+        const coincide =
+          (!mod || li.dataset.modalidad === mod) &&
+          (!tema || li.dataset.tema === tema) &&
+          (!sede || li.dataset.sede === sede) &&
+          (!q || norm(li.dataset.text ?? '').includes(q));
+        if (coincide) n++;
+        const ok = coincide && (filtrando || expandido || visibles < LIMITE);
+        if (ok) visibles++;
+        li.hidden = !ok;
+      });
+      if (more) more.hidden = filtrando || expandido;
+      label.textContent = `Mostrando ${visibles} de ${filtrando ? n : items.length} eventos${filtrando ? ' que coinciden' : ''}.`;
+      empty?.classList.toggle('hidden', n > 0);
+    };
+    more?.addEventListener('click', () => {
+      expandido = true;
+      apply();
+      items[LIMITE]?.querySelector('a')?.focus();
+    });
+    apply();
+    form.addEventListener('input', apply);
+    form.addEventListener('change', apply);
+  }
+  document.addEventListener('astro:page-load', initExplorer);
+</script>

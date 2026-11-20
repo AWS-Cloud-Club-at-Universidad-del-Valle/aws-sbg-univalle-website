@@ -1,0 +1,1044 @@
+{
+ "fuente": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/{id}/ (datos estructurados __NEXT_DATA__ de cada página pública)",
+ "consultado": "2026-11-03",
+ "eventos": [
+  {
+   "id": "313397936",
+   "title": "Lanzamiento Oficial: Tu Primer Paso en la Nube ☁️🚀",
+   "dateTime": "2026-02-28T17:00:00-05:00",
+   "endTime": "2026-02-28T18:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 96,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/313397936/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 Lanzamiento Oficial – AWS Cloud Club at Universidad del Valle Colombia\n¡Arrancamos oficialmente nuestro AWS Cloud Club en Univalle! 🎉\nSi quieres aprender sobre computación en la nube, certificaciones AWS, arquitectura, inteligencia artificial y construir proyectos reales, este evento es para ti.\n\n☁️ ¿Qué veremos?\n🎯 Bienvenida y presentación del club\n☁️ ¿Qué es la nube? (Explicado fácil y sin términos técnicos complicados)\n🚀 ¿Qué es Amazon Web Services y por qué es tan importante hoy?\n👨‍💻 Taller práctico: Mi primera máquina virtual en AWS (EC2)\n\n📸 Importante: Cámara encendida\nNos encantaría q"
+  },
+  {
+   "id": "313727453",
+   "title": "🎯 Charla: “Del primer deploy al éxito: cómo construir tu carrera en la nube” ☁️",
+   "dateTime": "2026-03-16T18:10:00-05:00",
+   "endTime": "2026-03-16T19:40:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 93,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "Carlos Zambrano",
+    "description": "Technology Leader \\| AWS Data Hero \\| Cloud Computing Expert \\| 13x AWS \\| 2x Azure \n\nCarlos Zambrano es AWS Hero, líder de la comunidad AWS en Bogotá y Director de CloudOps Studio en Globant. Cuenta con amplia experiencia en Cloud Computing y ha ayudado a múltiples organizaciones a escalar sus soluciones en la nube. \n\nA lo largo de su carrera ha impulsado estrategias de transformación tecnológica, arquitectura cloud moderna y desarrollo de comunidades tecnológicas. En esta charla compartirá su experiencia construyendo una carrera en el ecosistema cloud y recomendaciones para quienes desean iniciar su camino en esta industria.",
+    "photo": null,
+    "socialNetworks": [
+     {
+      "__typename": "SocialNetwork",
+      "service": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/carlos-zambrano-aws/"
+     }
+    ]
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/313727453/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**🎯 Charla: “Del primer deploy al éxito: cómo construir tu carrera en la nube” ☁️**\n\n¿Te gustaría trabajar en tecnología pero no sabes por dónde empezar? 🚀\n\nTe invitamos a una charla inspiradora con Carlos Zambrano, AWS Hero, líder de la comunidad AWS en Bogotá y Director de CloudOps Studio en Globant.\n\nDurante este evento compartirá su experiencia construyendo una carrera en Cloud Computing, los desafíos que enfrentó al comenzar y los pasos que recomienda para crecer profesionalmente en el mundo de la nube.\n💬 En esta charla descubrirás:\n• Cómo empezar tu camino en Cloud Computing\n• Qué habili"
+  },
+  {
+   "id": "313879391",
+   "title": "De AWS a LinkedIn: cómo convertir habilidades en oportunidades laborales",
+   "dateTime": "2026-03-30T19:00:00-05:00",
+   "endTime": "2026-03-30T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 99,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "William Antonio Guzmán Bernal",
+    "description": "Ingeniero de Software con más de 22 años de experiencia y licenciado en Ciencias de la Computación. Desde 2016, me he especializado en AWS Cloud, destacando como Desarrollador Cloud, Ingeniero DevOps y Arquitecto de Soluciones.\n\nSoy Arquitecto de Soluciones Profesional certificado en AWS y tengo un profundo conocimiento de las tecnologías de la nube y las mejores prácticas. Mi amplia experiencia me permite diseñar, implementar y gestionar soluciones en la nube escalables y seguras, aprovechando lo último en arquitectura de la nube y metodologías DevOps.\n\nMe apasiona conectar con el desarrollo y las operaciones, colaborando estrechamente con los equipos para facilitar la integración y la entrega fluidas de servicios en la nube que apoyan directamente los objetivos del negocio. Mi pasión reside en empoderar a otros e impulsar juntos resultados exitosos.",
+    "photo": {
+     "__ref": "PhotoInfo:533358889"
+    },
+    "socialNetworks": [
+     {
+      "__typename": "SocialNetwork",
+      "service": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/wiangube/"
+     }
+    ]
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/313879391/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "¿Sientes que tienes conocimientos en la nube, pero tu perfil no está atrayendo a los reclutadores adecuados? ¿O tal vez ya dominas AWS y quieres aprender a convertir ese conocimiento en oportunidades reales en el mercado global?\n\nEn este evento, **William Antonio Guzmán Bernal** compartirá cómo combinar tu conocimiento técnico en Amazon Web Services con una estrategia efectiva en LinkedIn. Porque no se trata solo de saber crear un bucket en S3 o desplegar en EC2, sino de saber comunicar ese valor y diferenciarte en la red profesional más grande del mundo.\n\n**🚀 Lo que aprenderás:**\n🔹 **Visibili"
+  },
+  {
+   "id": "314370028",
+   "title": "Aprender cloud no es suficiente: cómo crecer más rápido con la comunidad.",
+   "dateTime": "2026-04-27T20:00:00-05:00",
+   "endTime": "2026-04-27T21:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 80,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/314370028/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "Muchos empiezan a aprender cloud.\nPocos logran realmente avanzar.\n\nDespués de dar tus primeros pasos, hacer deploys y aprender nuevas herramientas, aparece una pregunta clave:\n¿por qué algunos crecen más rápido que otros?\n\nEn esta charla exploraremos qué hace la diferencia en el mundo real.\nMás allá de cursos y certificaciones, hablaremos de cómo el contexto, las decisiones y el entorno en el que aprendes influyen directamente en tu crecimiento.\n\nTambién veremos el impacto de aprender en comunidad frente a hacerlo de forma aislada, y por qué espacios como los **AWS Cloud Clubs** pueden acelera"
+  },
+  {
+   "id": "314572381",
+   "title": "Tu ruta en AWS: entiende las certificaciones y da tu primer paso con GitOps",
+   "dateTime": "2026-05-11T14:00:00-05:00",
+   "endTime": "2026-05-11T15:30:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 2,
+   "waitlist": 4,
+   "maxTickets": 2,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/314572381/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**¿Te interesa empezar en el mundo del cloud pero no sabes por dónde comenzar?**\nEste espacio es para ti.\nEn esta sesión vamos a aterrizar lo realmente importante para dar tus primeros pasos en AWS sin enredos:\n\n¿Qué vas a ver?\n\n* Una explicación clara de cómo funciona DevOps en la práctica\n* Qué es GitOps y por qué hoy es una de las formas más modernas de desplegar aplicaciones\n* Cómo empezar con las certificaciones de AWS (sin perder tiempo ni dinero)\n\n¿Por qué deberías ir?\nPorque no es teoría pesada. Vamos a hablar de:\n\n* Cómo se usa esto en la vida real\n* Qué están pidiendo las empresas\n* "
+  },
+  {
+   "id": "314572643",
+   "title": "AWS para Ciencia de Datos: Herramientas y Casos de Uso",
+   "dateTime": "2026-05-12T14:00:00-05:00",
+   "endTime": "2026-05-12T15:30:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 3,
+   "waitlist": 1,
+   "maxTickets": 3,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras",
+    "Pablo Nicolas Marin Gonzalez"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/314572643/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "La inteligencia artificial ya no es el futuro, es una realidad. En esta sesión conocerás cómo se conecta con el mundo cloud a través de AWS y cómo empezar a aplicarla en proyectos reales.\n\nVerás cómo funcionan los servicios de **Inteligencia Artificial y Machine Learning en AWS**, casos de uso reales en empresas y una introducción a Data Analytics para convertir datos en decisiones.\n\nEl enfoque es práctico: entender qué puedes hacer con estas herramientas, cómo se aplican y cómo empezar sin necesidad de experiencia previa. La sesión incluirá ejemplos, interacción con los asistentes y dinámicas"
+  },
+  {
+   "id": "314742420",
+   "title": "Fundamentos de la Nube con AWS: De Cero a Cloud",
+   "dateTime": "2026-05-18T19:00:00-05:00",
+   "endTime": "2026-05-18T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 78,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "Willie Reyes",
+    "description": "Cloud Security Engineer especializado en seguridad en la nube y arquitecturas AWS. AWS Community Builder y líder de comunidades enfocadas en cloud y seguridad. Cuenta con certificaciones como CISSP, CCSK v5, KCNA y múltiples certificaciones AWS.",
+    "photo": {
+     "__ref": "PhotoInfo:534189424"
+    },
+    "socialNetworks": []
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/314742420/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "☁️ ¿Quieres empezar en el mundo Cloud pero no sabes por dónde comenzar?\n\nEn esta sesión introductoria aprenderás los fundamentos del cloud computing usando AWS (Amazon Web Services), la plataforma cloud más utilizada del mundo.\n\n🚀 ¿Qué veremos?\n• ¿Qué es cloud computing?\n• Ventajas de la nube frente a infraestructura tradicional\n• Introducción a los servicios core de AWS\n• Modelo de responsabilidad compartida\n• Conceptos básicos de seguridad y arquitectura cloud\n• Ruta recomendada para iniciar como AWS Cloud Practitioner\n\n🎯 Esta charla está dirigida a:\n• Estudiantes\n• Personas interesadas en t"
+  },
+  {
+   "id": "314748297",
+   "title": "Bases de Datos para IA: Embeddings, Búsqueda Semántica y Agentes Inteligentes",
+   "dateTime": "2026-05-25T19:00:00-05:00",
+   "endTime": "2026-05-25T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 87,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras",
+    "Pablo Nicolas Marin Gonzalez"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "Hassel Muñoz",
+    "description": "Cloud Solutions Architect AWS especializado en automatización, CI/CD, Infrastructure as Code y entornos multicloud. Community Builder apasionado por la colaboración y la innovación tecnológica. ☁️🚀",
+    "photo": {
+     "__ref": "PhotoInfo:534214902"
+    },
+    "socialNetworks": [
+     {
+      "__typename": "SocialNetwork",
+      "service": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/munozhassel/"
+     }
+    ]
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/314748297/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🤖 La inteligencia artificial moderna necesita nuevas formas de almacenar y consultar información.\n\nEn esta charla exploraremos cómo las bases de datos vectoriales y los embeddings están transformando aplicaciones de IA como chatbots inteligentes, búsqueda semántica, RAG y agentes autónomos.\n\n🚀 ¿Qué aprenderás?\n• ¿Qué son los embeddings?\n• ¿Cómo funciona la búsqueda semántica?\n• Diferencias entre búsqueda tradicional y vectorial\n• Introducción a bases de datos para IA\n• Cómo funcionan los agentes inteligentes\n• Casos de uso reales con IA generativa\n\n🎯 Esta sesión está dirigida a:\n• Estudiantes\n"
+  },
+  {
+   "id": "315075645",
+   "title": "Introducción a IaC con CDK",
+   "dateTime": "2026-06-22T19:00:00-05:00",
+   "endTime": "2026-06-22T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 43,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "Lucas Vera Toro",
+    "description": "Arquitecto de Software y Staff Engineer en Serverless Guru. AWS Community Builder (Serverless) con más de 10 años de experiencia en arquitectura cloud-native, liderazgo técnico y desarrollo de soluciones en AWS.",
+    "photo": {
+     "__ref": "PhotoInfo:534543336"
+    },
+    "socialNetworks": [
+     {
+      "__typename": "SocialNetwork",
+      "service": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/juanhcontreras/?skipRedirect=true"
+     }
+    ]
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315075645/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "☁️ **La Infraestructura como Código (IaC) está transformando la forma en que se construyen y gestionan los entornos en la nube.**\nEn esta charla exploraremos cómo AWS Cloud Development Kit (CDK) permite definir infraestructura utilizando código, facilitando la automatización, escalabilidad y buenas prácticas en AWS.\n\n🚀 ¿Qué aprenderás?\n• ¿Qué es IaC y por qué es importante?\n• Introducción a AWS CDK\n• Cómo definir infraestructura usando código\n• Beneficios frente a la gestión manual de recursos\n• Casos de uso reales en AWS\n\n🎯 Esta sesión está dirigida a:\n• Estudiantes\n• Developers\n• Personas in"
+  },
+  {
+   "id": "315079375",
+   "title": "¿Qué tan seguro es tu entorno AWS? Identificando amenazas en la nube",
+   "dateTime": "2026-06-08T19:00:00-05:00",
+   "endTime": "2026-06-08T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 46,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "Sheyla Leacock",
+    "description": "Es Associate Manager de Application Security en Liberty Latin America, con más de 10 años de experiencia en ciberseguridad, desarrollo y seguridad en la nube.\nEs AWS Security Hero y reconocida como Top Woman in Cybersecurity LATAM 2021. Cuenta con una Maestría en Cybersecurity Management, Ethical Hacking and Offensive Security, además de certificaciones en AWS y seguridad.\nEs cofundadora de WoSEC Panamá y líder de comunidad AWS, impulsando la educación y la inclusión en ciberseguridad en Latinoamérica.\nComo conferencista internacional, ha participado en más de 20 eventos en la región y el mundo, compartiendo temas de cloud security, DevSecOps y liderazgo técnico.",
+    "photo": {
+     "__ref": "PhotoInfo:534548182"
+    },
+    "socialNetworks": [
+     {
+      "__typename": "SocialNetwork",
+      "service": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/sheyla-leacock/"
+     }
+    ]
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315079375/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**¿Tu entorno AWS es realmente seguro?** Descubre cómo identificar vulnerabilidades, riesgos y amenazas utilizando servicios nativos de AWS. A través de un escenario práctico, exploraremos herramientas que ayudan a detectar y analizar problemas de seguridad antes de que se conviertan en incidentes.\n\nEn esta sesión profundizaremos en cómo la seguridad en la nube se puede fortalecer utilizando capacidades nativas de AWS, entendiendo cómo se comportan las amenazas en entornos reales y cómo anticiparse a ellas antes de que generen impacto.\n\n🚀 ¿Qué aprenderás?\n• Cómo identificar vulnerabilidades en"
+  },
+  {
+   "id": "315086726",
+   "title": "Serverless: crea aplicaciones sin pensar en servidores",
+   "dateTime": "2026-06-10T14:00:00-05:00",
+   "endTime": "2026-06-10T15:30:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 8,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315086726/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**🚀 ¿Te imaginas crear aplicaciones sin tener que administrar servidores?**\nServerless ha revolucionado la forma en que desarrollamos software en la nube, permitiendo crear aplicaciones escalables, seguras y altamente disponibles sin preocuparse por la infraestructura subyacente.\n\nEn esta sesión descubrirás cómo AWS está impulsando este modelo y por qué cada vez más empresas lo están adoptando para acelerar el desarrollo de sus soluciones.\n\n🎯 Algunas de las cosas que aprenderás:\n• Qué significa realmente Serverless.\n• Cómo reducir la complejidad operativa de tus aplicaciones.\n• Qué servicios d"
+  },
+  {
+   "id": "315092436",
+   "title": "Escalabilidad en AWS: caso práctico de ventas serverless",
+   "dateTime": "2026-06-10T15:20:00-05:00",
+   "endTime": "2026-06-10T16:50:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 5,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras",
+    "Jann Carlo"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315092436/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**¿Te has preguntado cómo aplicaciones modernas pueden procesar miles de solicitudes sin administrar servidores?**\nEn esta sesión exploraremos cómo diseñar una arquitectura serverless en AWS capaz de escalar automáticamente para soportar el crecimiento de usuarios, pedidos y transacciones en una plataforma de ventas.\n\nA través de un caso práctico, analizaremos los principales componentes de una solución basada en servicios administrados de AWS, comprendiendo cómo reducir costos operativos, mejorar la disponibilidad y responder eficientemente a picos de demanda.\n\nAdemás, realizaremos una demost"
+  },
+  {
+   "id": "315114097",
+   "title": "AWS Cloud Essentials: conoce AWS y crea algo real en minutos",
+   "dateTime": "2026-06-12T18:00:00-05:00",
+   "endTime": "2026-06-12T20:00:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 20,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle Sede Melendez",
+    "address": "Avenida Paso Ancho # 98-2",
+    "city": "Cali",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras",
+    "Gerardo González",
+    "Pablo Nicolas Marin Gonzalez"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315114097/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "☁️ **AWS es una de las plataformas de computación en la nube más utilizadas del mundo**, permitiendo a empresas y desarrolladores crear aplicaciones escalables, seguras y altamente disponibles.\nEn esta sesión realizaremos una introducción práctica al ecosistema de AWS, explorando los conceptos fundamentales de la nube y cómo comenzar a construir soluciones modernas utilizando sus servicios.\n🚀 ¿Qué aprenderás?\n• ¿Qué es AWS y por qué es una de las plataformas cloud líderes del mercado?\n• Conceptos básicos de computación en la nube.\n• Principales servicios de AWS y sus casos de uso.\n• Introducci"
+  },
+  {
+   "id": "315179163",
+   "title": "Utilizando los servicios de IA de AWS con Python y Boto3",
+   "dateTime": "2026-06-15T19:00:00-05:00",
+   "endTime": "2026-06-15T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 19,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "David Sol",
+    "description": "Cloud Architect en Caylent y miembro de AWS Community Builders. Cuenta con experiencia en arquitectura de soluciones en la nube, desarrollo con Python y servicios de AWS. Posee las certificaciones AWS Certified Solutions Architect Professional y AWS Certified Database Specialty, y participa activamente compartiendo conocimiento con la comunidad tecnológica.",
+    "photo": {
+     "__ref": "PhotoInfo:534659027"
+    },
+    "socialNetworks": [
+     {
+      "__typename": "SocialNetwork",
+      "service": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/soldavidcloud/"
+     }
+    ]
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315179163/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🤖 La Inteligencia Artificial está revolucionando la forma en que desarrollamos aplicaciones y automatizamos procesos en la nube.\nEn esta charla exploraremos cómo utilizar los servicios de IA de AWS con Python y Boto3 para integrar capacidades inteligentes en nuestras aplicaciones de manera sencilla y escalable.\n🚀 ¿Qué aprenderás?\n• Introducción a los servicios de IA de AWS\n• Cómo interactuar con AWS utilizando Boto3\n• Casos de uso prácticos con Python\n• Integración de IA en aplicaciones cloud\n• Buenas prácticas y recomendaciones\n🎯 Esta sesión está dirigida a:\n• Estudiantes\n• Developers\n• Perso"
+  },
+  {
+   "id": "315184184",
+   "title": "AWS Student Community Day Colombia 2026 🇨🇴☁️",
+   "dateTime": "2026-06-26T07:30:00-05:00",
+   "endTime": "2026-06-26T18:00:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 20,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Cámara de Comercio de Bogotá Sede Salitre",
+    "address": "Av. El Dorado #68d-35",
+    "city": "Bogotá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315184184/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 AWS Student Community Day Colombia 2026\nPrepárate para una experiencia única de aprendizaje, innovación y conexión con la comunidad cloud más grande del mundo. AWS Student Community Day Colombia reúne a estudiantes, builders, profesionales y entusiastas de la tecnología para explorar las últimas tendencias en computación en la nube, inteligencia artificial, arquitectura, desarrollo y mucho más.\n☁️ Durante el evento disfrutarás de:\n• Charlas técnicas impartidas por expertos de la industria.\n• Workshops prácticos con tecnologías AWS.\n• Networking con estudiantes, líderes de comunidad y profesi"
+  },
+  {
+   "id": "315578404",
+   "title": "Construye Rápido... Despliega seguro!",
+   "dateTime": "2026-07-25T10:00:00-05:00",
+   "endTime": "2026-07-25T12:00:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 89,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle Sede Melendez",
+    "address": "Avenida Paso Ancho # 98-2",
+    "city": "Cali",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/315578404/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "Las comunidades **AWS User Group Valle del Cauca**, **AWS Student Builder Group Universidad del Valle, CENESIS e IEEE Computer Society** te invitamos a compartir una excepcional mañana que no te puedes perder!.\n🔷 **Amazon Bedrock AgentCore en Producción, Lo Que Nadie Te Cuenta:** En esta charla, compartiremos lecciones aprendidas al desplegar Amazon Bedrock AgentCore a escala, incluyendo patrones de optimización de tokens, selección de modelos por capas y caché semántico; factores clave que marcan la diferencia entre un prototipo y un sistema listo para producción.\n🎤 Jhon Robert Quintero: AWS "
+  },
+  {
+   "id": "316292610",
+   "title": "Construye sin servidores, escala sin límites",
+   "dateTime": "2026-09-03T10:30:00-05:00",
+   "endTime": "2026-09-03T11:30:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 5,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Escuela de Policía Simon Bolivar",
+    "address": "Carrera 44 # 37-164, Barrio Villa Campestre, Tuluá",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316292610/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**🚀 ¿Qué pasaría si pudieras crear aplicaciones capaces de crecer sin preocuparte por administrar servidores?**\n\nEn esta charla descubrirás cómo AWS Serverless está cambiando la manera en que construimos y desplegamos aplicaciones en la nube. Aprenderás cómo aprovechar servicios administrados para crear soluciones escalables, disponibles y eficientes, dejando que AWS se encargue de gran parte de la infraestructura.\nDurante la sesión exploraremos:\n\n☁️ Qué es Serverless y qué hay realmente detrás de este concepto.\n⚡ Cómo crear aplicaciones que pueden escalar automáticamente según la demanda.\n🧩 L"
+  },
+  {
+   "id": "316292639",
+   "title": "Descubriendo AWS: Un Primer Viaje por la Nube",
+   "dateTime": "2026-09-03T09:30:00-05:00",
+   "endTime": "2026-09-03T10:30:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 6,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Escuela de Policía Simon Bolivar",
+    "address": "Kilómetro 1, vía a La Rivera, Barrio Villa Campestre, Tuluá",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316292639/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**¿Alguna vez te has preguntado qué hay detrás de las aplicaciones y páginas web que utilizamos todos los días?**\n\nEn esta charla haremos un primer recorrido por AWS y descubriremos, de una manera sencilla y cercana, cómo funciona el mundo de la nube. Conoceremos los principales servicios que AWS ofrece para crear aplicaciones, almacenar información, trabajar con bases de datos, conectar sistemas y mantener nuestras soluciones funcionando.\n\nNo necesitas tener experiencia previa en AWS. La idea es entender qué podemos hacer con la nube, conocer las herramientas más importantes y llevarnos una v"
+  },
+  {
+   "id": "316372017",
+   "title": "AWS Cloud Practitioner Challenge #1: Introduction to the Cloud",
+   "dateTime": "2026-09-19T14:00:00-05:00",
+   "endTime": "2026-09-19T16:00:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 40,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316372017/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **AWS Cloud Practitioner Challenge #1: Introduction to the Cloud**\n🔒 **CUPOS LLENOS**\n¡Gracias a todos los estudiantes que se registraron al **Reto AWS Certified Cloud Practitioner**!\nEsta es la **primera de las 8 sesiones presenciales** del programa, organizada por los AWS Student Builder Groups de la **Universidad del Valle** y la **UCEVA**.\nEn esta sesión iniciaremos nuestro recorrido hacia la certificación **AWS Certified Cloud Practitioner**, explorando los fundamentos de la computación en la nube y los conceptos esenciales de AWS.\n📚 **¿Qué veremos?**\n• Introducción a la computación en "
+  },
+  {
+   "id": "316375692",
+   "title": "AWS Cloud Practitioner Challenge #2: Compute in AWS",
+   "dateTime": "2026-09-24T18:20:00-05:00",
+   "endTime": "2026-09-24T20:20:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 29,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316375692/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **AWS Cloud Practitioner Challenge #2: Compute in AWS**\n🔒 **CUPOS LLENOS**\n¡Continuamos con nuestro **Reto AWS Certified Cloud Practitioner**!\nEsta es la **segunda de las 8 sesiones presenciales** del programa, organizada por los AWS Student Builder Groups de la **Universidad del Valle** y la **UCEVA**.\nEn esta sesión profundizaremos en los servicios de **computación de AWS**, comprendiendo cómo funcionan y cuándo utilizar las principales opciones de cómputo disponibles en la nube.\n📚 **¿Qué veremos?**\n• Conceptos de computación en la nube\n• Amazon EC2 y sus principales características\n• Dife"
+  },
+  {
+   "id": "316375729",
+   "title": "AWS Cloud Practitioner Challenge #3: Networking & Going Global",
+   "dateTime": "2026-09-26T14:00:00-05:00",
+   "endTime": "2026-09-26T16:00:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 24,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316375729/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **AWS Cloud Practitioner Challenge #3: Networking & Going Global**\n🔒 **CUPOS LLENOS**\n¡Continuamos con nuestro **Reto AWS Certified Cloud Practitioner**!\nEsta es la **tercera de las 8 sesiones presenciales** del programa, organizada por los AWS Student Builder Groups de la **Universidad del Valle** y la **UCEVA**.\nEn esta sesión conoceremos cómo está construida la **infraestructura global de AWS** y aprenderemos los fundamentos de networking necesarios para trabajar con recursos y servicios en la nube.\n📚 **¿Qué veremos?**\n• Infraestructura global de AWS\n• Regiones y Availability Zones\n• AWS "
+  },
+  {
+   "id": "316375755",
+   "title": "AWS Cloud Practitioner Challenge #4: Storage & Databases",
+   "dateTime": "2026-10-01T18:20:00-05:00",
+   "endTime": "2026-10-01T21:20:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 22,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316375755/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **AWS Cloud Practitioner Challenge #4: Storage & Databases**\n🔒 **CUPOS LLENOS**\n¡Continuamos con nuestro **Reto AWS Certified Cloud Practitioner**!\nEsta es la **cuarta de las 8 sesiones presenciales** del programa, organizada por los AWS Student Builder Groups de la **Universidad del Valle** y la **UCEVA**.\nEn esta sesión aprenderemos sobre los principales servicios de **almacenamiento y bases de datos de AWS**, comprendiendo sus características, diferencias y casos de uso.\n📚 **¿Qué veremos?**\n• Conceptos fundamentales de almacenamiento en la nube\n• Amazon S3 y almacenamiento de objetos\n• Di"
+  },
+  {
+   "id": "316375782",
+   "title": "AWS Cloud Practitioner Challenge #5: AI, ML & Data Analytics",
+   "dateTime": "2026-10-08T18:20:00-05:00",
+   "endTime": "2026-10-08T20:20:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 34,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316375782/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **AWS Cloud Practitioner Challenge #5: AI, ML & Data Analytics**\n🔒 **CUPOS LLENOS**\n¡Continuamos con nuestro **Reto AWS Certified Cloud Practitioner**!\nEsta es la **quinta de las 8 sesiones presenciales** del programa, organizada por los AWS Student Builder Groups de la **Universidad del Valle** y la **UCEVA**.\nEn esta sesión exploraremos los conceptos fundamentales de **inteligencia artificial, machine learning y analítica de datos en AWS**, conociendo algunos de los principales servicios y sus casos de uso.\n📚 **¿Qué veremos?**\n• Conceptos fundamentales de Inteligencia Artificial\n• Introduc"
+  },
+  {
+   "id": "316375800",
+   "title": "AWS Cloud Practitioner Challenge #6: Security, Monitoring & Governance",
+   "dateTime": "2026-10-15T18:20:00-05:00",
+   "endTime": "2026-10-15T20:20:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 40,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316375800/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **AWS Cloud Practitioner Challenge #6: Security, Monitoring & Governance**\n🔒 **CUPOS LLENOS**\n¡Continuamos con nuestro **Reto AWS Certified Cloud Practitioner**!\nEsta es la **sexta de las 8 sesiones presenciales** del programa, organizada por los AWS Student Builder Groups de la **Universidad del Valle** y la **UCEVA**.\nEn esta sesión aprenderemos cómo AWS permite **proteger recursos, monitorear aplicaciones y gestionar entornos cloud** de manera segura y eficiente.\n📚 **¿Qué veremos?**\n• Fundamentos de seguridad en AWS\n• AWS Identity and Access Management (IAM)\n• Protección de recursos y dat"
+  },
+  {
+   "id": "316375847",
+   "title": "AWS Cloud Practitioner Challenge #7: Pricing, Support & Cloud Migration",
+   "dateTime": "2026-10-22T18:20:00-05:00",
+   "endTime": "2026-10-22T20:20:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 34,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316375847/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **AWS Cloud Practitioner Challenge #7: Pricing, Support & Cloud Migration**\n🔒 **CUPOS LLENOS**\n¡Continuamos con nuestro **Reto AWS Certified Cloud Practitioner**!\nEsta es la **séptima de las 8 sesiones presenciales** del programa, organizada por los AWS Student Builder Groups de la **Universidad del Valle** y la **UCEVA**.\nEn esta sesión conoceremos cómo **gestionar los costos de AWS**, los diferentes planes de soporte y los conceptos fundamentales relacionados con la **migración hacia la nube**.\n📚 **¿Qué veremos?**\n• Conceptos fundamentales de precios de AWS\n• Modelos de facturación y optim"
+  },
+  {
+   "id": "316375885",
+   "title": "AWS Cloud Practitioner Challenge #8: Final Exam",
+   "dateTime": "2026-10-29T18:20:00-05:00",
+   "endTime": "2026-10-29T20:20:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 28,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle, Tuluá",
+    "address": "Villa Campestre, Calle 43 No 43-33",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316375885/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **AWS Cloud Practitioner Challenge #8: Well-Architected & Final Exam**\n🔒 **CUPOS LLENOS**\n¡Llegamos a la **última sesión** de nuestro **Reto AWS Certified Cloud Practitioner**!\nEsta es la **octava y última de las 8 sesiones presenciales** del programa, organizada por los AWS Student Builder Groups de la **Universidad del Valle** y la **UCEVA**.\nEn esta sesión cerraremos nuestro proceso de preparación conociendo el **AWS Well-Architected Framework**, realizando un **simulacro final tipo examen** y resolviendo las últimas dudas antes de presentar la certificación.\n📚 **¿Qué veremos?**\n• AWS Wel"
+  },
+  {
+   "id": "316436196",
+   "title": "DynamoDb 101: Dónde está mi Join?",
+   "dateTime": "2026-09-14T19:00:00-05:00",
+   "endTime": "2026-09-14T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 86,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "Lucas Vera Toro",
+    "description": "Arquitecto de Software y Staff Engineer en Serverless Guru. AWS Community Builder (Serverless) con más de 10 años de experiencia en arquitectura cloud-native, liderazgo técnico y desarrollo de soluciones en AWS.",
+    "photo": {
+     "__ref": "PhotoInfo:536039127"
+    },
+    "socialNetworks": [
+     {
+      "__typename": "SocialNetwork",
+      "service": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/lucas-vera-toro-1355b479/"
+     }
+    ]
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316436196/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "¿Dónde está mi Join? 🤔 Descubre cómo pensar diferente al trabajar con bases de datos NoSQL utilizando Amazon DynamoDB.\n\nEn esta sesión introductoria exploraremos los fundamentos de **DynamoDB**, la base de datos NoSQL serverless de AWS, y entenderemos cómo cambia la forma de diseñar y consultar información frente a las bases de datos relacionales tradicionales.\n\nA través de ejemplos prácticos, veremos cómo estructurar nuestros datos, cómo funcionan las claves y los índices, y por qué en DynamoDB no existe el tradicional `JOIN` de SQL. También aprenderemos a pensar en función de los patrones de"
+  },
+  {
+   "id": "316546840",
+   "title": "Workshop 1 — AWS IAM",
+   "dateTime": "2026-10-03T14:00:00-05:00",
+   "endTime": "2026-10-03T16:30:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 21,
+   "waitlist": 0,
+   "maxTickets": 26,
+   "venue": {
+    "name": "Universidad del Valle - Sede Villa Campestre",
+    "address": "Cl. 43 #48-77, Tuluá, Valle del Cauca, Colombia",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras",
+    "Aura Maria Pelaez Luna"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316546840/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**Workshop 1 — AWS IAM**\nAprende a gestionar identidades, roles, políticas y permisos en AWS IAM y descubre cómo controlar de forma segura el acceso a tus recursos en AWS.\nDurante el workshop combinaremos conceptos fundamentales con laboratorios prácticos, trabajando directamente con IAM.\n🚀 ¿Qué aprenderás?\n• Fundamentos de AWS IAM\n• Usuarios, grupos y roles\n• Políticas y permisos\n• Acceso programático\n• IAM Access Analyzer\n• Buenas prácticas de seguridad\n🎟️ 26 cupos disponibles\n📝 Para reservar tu cupo, confirma tu asistencia en Meetup y completa el siguiente formulario:\n[https://forms.gle/41J"
+  },
+  {
+   "id": "316572977",
+   "title": "AWS en un data pipeline: lecciones aprendidas para una solución",
+   "dateTime": "2026-09-21T19:00:00-05:00",
+   "endTime": "2026-09-21T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 55,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316572977/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "¿Y si quisieras crear un **Data Pipeline** con **AWS Lambda**?\n🤔 Descubre las claves para construir soluciones rápidas, económicas y fáciles de mantener para procesar datos.\n\nEn esta sesión exploraremos cómo utilizar **AWS Lambda** como parte de un **Data Pipeline** y conoceremos algunas de las decisiones y lecciones aprendidas al construir este tipo de soluciones en AWS.\nA través de ejemplos y experiencias prácticas, veremos qué aspectos debemos tener en cuenta al diseñar pipelines para bajos volúmenes de datos, cómo mantener los costos controlados y cómo construir soluciones sencillas, rápid"
+  },
+  {
+   "id": "316601837",
+   "title": "De estudiante a mi primer trabajo en Tech",
+   "dateTime": "2026-09-28T19:00:00-05:00",
+   "endTime": "2026-09-28T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 152,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316601837/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **¡TryCatch.tv llega a Univalle!**\n\nPor primera vez tendremos a TryCatch.tv llegando a la comunidad de la Universidad del Valle para conversar sobre uno de los momentos más importantes de cualquier carrera en tecnología:\n\n🎙️ **De estudiante al primer trabajo en tech**\nNos acompaña **Julián Darío Luna Patiño**, Solutions Architect, AWS Community Builder y creador de TryCatch.tv, una comunidad que busca impulsar el aprendizaje, compartir experiencias y ayudar a más personas a crecer profesionalmente en tecnología.\nDurante esta sesión hablaremos de ese camino entre aprender tecnología y consegu"
+  },
+  {
+   "id": "316764639",
+   "title": "Desde las Trincheras: construyendo con Kiro",
+   "dateTime": "2026-10-05T19:00:00-05:00",
+   "endTime": "2026-10-05T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 78,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "Jose Verbel Tous",
+    "description": "José Verbel Tous es Ingeniero de Sistemas y especialista en Ingeniería de Software, con experiencia en desarrollo de software, arquitecturas Cloud Native y soluciones orientadas a servicios. Actualmente se desempeña como Director de Desarrollo en Solati y es AWS User Group Leader y AWS Community Builder en DevTools.\nCuenta con experiencia en arquitectura de software, cultura DevOps, metodologías ágiles y tecnologías cloud, además de desempeñarse como instructor y compartir conocimiento con comunidades tecnológicas.",
+    "photo": {
+     "__ref": "PhotoInfo:536372457"
+    },
+    "socialNetworks": [
+     {
+      "__typename": "SocialNetwork",
+      "service": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/jverbel/"
+     }
+    ]
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316764639/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 **El desarrollo de software está cambiando. ¿Estamos preparados para trabajar de una nueva manera?**\nLos equipos de desarrollo están incorporando nuevas herramientas y formas de trabajo que están transformando la manera en que construimos software.\nEn esta sesión nos acompaña **José Verbel Tous** para explorar cómo están evolucionando los equipos de desarrollo y cómo **Kiro 👻** puede integrarse en este nuevo escenario.\n💡 **Durante la sesión hablaremos de:**\n• Cómo está cambiando el desarrollo de software en los equipos.\n• Qué es **Kiro 👻** y cómo puede apoyar el proceso de desarrollo.\n• Nuev"
+  },
+  {
+   "id": "316796377",
+   "title": "Contenedores 101: construye, ejecuta y despliega en AWS",
+   "dateTime": "2026-10-06T10:00:00-05:00",
+   "endTime": "2026-10-06T11:00:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 2,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad ICESI",
+    "address": "Cl. 18 #122-135, Barrio Pance, Cali, Valle del Cauca, Colombia",
+    "city": "Cali",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras",
+    "Pablo Nicolas Marin Gonzalez"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316796377/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "¿Has escuchado hablar de **Docker** y los contenedores, pero no sabes por dónde empezar? En esta sesión aprenderemos los conceptos básicos de los contenedores y veremos cómo podemos utilizarlos para desplegar aplicaciones en **AWS**.\n\nDurante la sesión veremos:\n🐳 ¿Qué son los contenedores?\n🔧 Conceptos básicos de Docker\n📦 Cómo construir y ejecutar un contenedor\n☁️ Introducción al despliegue de contenedores en AWS\n💻 Una demostración práctica paso a paso\nLa sesión está dirigida a estudiantes y personas que están comenzando con Docker, contenedores y AWS.\n\nNo necesitas experiencia previa. Solo tra"
+  },
+  {
+   "id": "316852576",
+   "title": "Cada decisión es una toma: 25 años construyendo entre el arte y la tecnología",
+   "dateTime": "2026-10-19T19:00:00-05:00",
+   "endTime": "2026-10-19T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 60,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": {
+    "__typename": "SpeakerDetails",
+    "name": "Germán Ruiz",
+    "description": "Germán Ruiz es Senior Solutions Architect en Amazon Web Services (AWS), con más de 25 años de experiencia en la industria de TI liderando iniciativas tecnológicas y de transformación digital en América Latina.\nSu experiencia abarca arquitectura de soluciones, ciberseguridad, estrategia tecnológica y adopción de tecnologías cloud, trabajando con organizaciones de sectores como gobierno, banca, educación, energía y tecnología.\nA lo largo de su trayectoria ha liderado equipos de ingeniería, diseñado soluciones de alto impacto y acompañado a organizaciones en la adopción de nuevas tecnologías. También se ha desempeñado como speaker y mentor en diferentes espacios de tecnología y comunidades.\nActualmente, desde AWS, trabaja en la creación de soluciones cloud orientadas a resolver desafíos complejos de negocio y acelerar la innovación tecnológica.",
+    "photo": {
+     "__ref": "PhotoInfo:536464941"
+    },
+    "socialNetworks": []
+   },
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316852576/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "**.🚀 ¿Te gustaría construir una carrera en Cloud y trabajar con tecnologías de AWS?**\n\n¿Qué necesitas aprender, qué certificaciones puedes obtener y cómo puedes llegar a ser Solutions Architect? En esta sesión conocerás, desde la experiencia de un profesional de AWS, cómo prepararte para desarrollar una carrera en la nube y descubrir nuevas oportunidades laborales.\n\n☁️ **Durante la charla hablaremos sobre:**\n\n* Cómo comenzar una carrera profesional en AWS.\n* Certificaciones AWS y recursos para prepararte.\n* Habilidades necesarias para trabajar en Cloud.\n* El camino hacia Solutions Architect y "
+  },
+  {
+   "id": "316898074",
+   "title": "🚀 AWS Cloud Quest llega al Valle del Cauca: ¡Comienza tu aventura en la nube!",
+   "dateTime": "2026-10-14T19:00:00-05:00",
+   "endTime": "2026-10-14T20:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 156,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras",
+    "Pablo Nicolas Marin Gonzalez",
+    "Santiago Martinez Serna",
+    "Sofia Moreno",
+    "Juan Balanta"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/316898074/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "☁️🎮 **¡AWS Cloud Quest llega al Valle del Cauca!** 🚀\n\n¿Te imaginas aprender computación en la nube mientras exploras una ciudad virtual, resuelves desafíos reales y construyes soluciones utilizando AWS? 👀\n\nCon **AWS Cloud Quest** puedes convertir el aprendizaje de cloud en una experiencia interactiva y práctica. 🎮☁️\nDurante esta aventura podrás:\n🧑‍💻 **Crear y personalizar tu propio avatar**\n🌎 **Explorar una ciudad virtual** y descubrir diferentes áreas de la nube\n🤖 **Resolver desafíos de negocio** con apoyo de tecnologías de IA\n☁️ **Diseñar y desplegar soluciones** utilizando servicios reales "
+  },
+  {
+   "id": "317021873",
+   "title": "Workshop 2 — Amazon Quick",
+   "dateTime": "2026-10-17T14:00:00-05:00",
+   "endTime": "2026-10-17T16:30:00-05:00",
+   "status": "PAST",
+   "eventType": "PHYSICAL",
+   "rsvpYes": 20,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Universidad del Valle - Sede Villa Campestre",
+    "address": "Cl. 43 #48-77, Tuluá, Valle del Cauca, Colombia",
+    "city": "Tuluá",
+    "state": "",
+    "country": "co"
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras",
+    "miguel.sanclemente"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/317021873/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "Aprende haciendo con AWS mediante un laboratorio práctico de Amazon Quick Workshops y descubre cómo aplicar tus conocimientos de computación en la nube trabajando directamente con el entorno de AWS.\nDurante el workshop desarrollaremos una experiencia práctica guiada para explorar tecnologías de AWS, experimentar con sus servicios y fortalecer tus habilidades técnicas.\n🚀 ¿Qué encontrarás?\n• Laboratorio práctico guiado con AWS\n• Exploración de servicios y tecnologías cloud\n• Ejercicios prácticos en un entorno de AWS\n• Aprendizaje basado en la experimentación\n• Buenas prácticas para continuar des"
+  },
+  {
+   "id": "317022147",
+   "title": "Tu próximo paso en Tech: CV, entrevistas y oportunidades internacionales",
+   "dateTime": "2026-10-26T18:00:00-05:00",
+   "endTime": "2026-10-26T19:30:00-05:00",
+   "status": "PAST",
+   "eventType": "ONLINE",
+   "rsvpYes": 77,
+   "waitlist": 0,
+   "maxTickets": 0,
+   "venue": {
+    "name": "Online event",
+    "address": "",
+    "city": "",
+    "state": "",
+    "country": ""
+   },
+   "hosts": [
+    "Juan Manuel Hoyos Contreras"
+   ],
+   "speakerDetails": null,
+   "url": "https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/317022147/",
+   "isNetworkEvent": false,
+   "descripcion_extracto": "🚀 ¿Quieres conseguir tu primera **oportunidad en tecnología**, prepararte para entrevistas laborales o explorar opciones de **trabajo en el extranjero**?\n\nConstruir una carrera en tecnología no se trata únicamente de desarrollar habilidades técnicas. También es importante saber presentar tu perfil, comunicar tu experiencia y reconocer las oportunidades que pueden impulsar tu crecimiento profesional.\nEn esta sesión nos acompañará **Diana David, HR Manager LATAM y Mentora Tech**, quien compartirá su experiencia y recomendaciones prácticas para ayudarte a prepararte mejor para el mercado laboral "
+  }
+ ]
+}

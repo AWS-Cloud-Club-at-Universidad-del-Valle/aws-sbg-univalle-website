@@ -1,0 +1,108 @@
+---
+import { metricas, FUENTES } from '@/lib/recap';
+import { KIROTHON } from '@/lib/constants';
+
+const h = metricas.hitos_confirmados_por_lider;
+const corte = new Date(`${metricas.fecha_corte}T00:00:00-05:00`);
+const watch = new Date(`${h.watch_party.fecha}T00:00:00-05:00`);
+const diasSSR = Math.round((watch.getTime() - corte.getTime()) / 86_400_000);
+---
+
+<section id="lo-que-viene" aria-labelledby="upcoming-heading" class="recap-upcoming relative overflow-hidden py-16 lg:py-24">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="background:radial-gradient(ellipse 55% 60% at 85% 20%,rgba(255,153,0,0.14) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 10% 90%,rgba(139,92,246,0.16) 0%,transparent 60%);"></div>
+  <div class="container-sbg relative z-10">
+    <span class="code-label"># lo_que_viene</span>
+    <h2 id="upcoming-heading" class="mt-3 max-w-3xl text-3xl sm:text-5xl">Mientras re:Invent cierra en Las Vegas, Tuluá construye</h2>
+    <p class="mt-4 max-w-2xl sm:text-lg">
+      El 4 de diciembre es el último día de AWS re:Invent. Nuestro líder estará allá con beca, y la comunidad lo vivirá desde Tuluá. Después viene nuestra primera hackathon.
+    </p>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-2">
+      <article class="recap-feature recap-feature--orange" aria-labelledby="watch-title">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <span class="recap-feature__date">Viernes 4 de diciembre de 2026 · Tuluá</span>
+          <span class="recap-feature__badge">Aprobada y avalada por AWS</span>
+        </div>
+        <h3 id="watch-title" class="recap-feature__title">AWS re:Invent Watch &amp; Build Party</h3>
+        <p>Una Watch &amp; Build Party: seguimos los anuncios de re:Invent en comunidad y construimos con ellos el mismo día. Lugar, horario e inscripción se publicarán en Meetup.</p>
+        <p class="recap-countdown" data-countdown={h.watch_party.fecha}>
+          <span data-days>{diasSSR}</span> <span data-days-label>días</span> para la Watch Party
+        </p>
+        <a href={FUENTES.meetup.url} target="_blank" rel="noopener noreferrer" class="recap-btn recap-btn--primary mt-2">
+          Únete en Meetup para enterarte de la inscripción<span class="sr-only"> (abre en nueva pestaña)</span>
+        </a>
+      </article>
+
+      <article class="kirothon-feature flex min-w-0 flex-col gap-4 p-5 sm:p-7" aria-labelledby="hack-title">
+        <p class="kirothon-label">{h.hackathon.estado}</p>
+        <h3 id="hack-title" class="text-2xl">{h.hackathon.texto}</h3>
+        <p><strong>Meetup de lanzamiento</strong><br /><time datetime={h.hackathon.fecha}>{KIROTHON.dateLabel}</time> · {KIROTHON.hours}</p>
+        <p>Universidad del Valle, Sede Tuluá · Villa Campestre · Presencial</p>
+        <p>Conoce cómo será la hackathon, arma tu equipo de 3 y prueba Kiro en vivo. Trae tu laptop.</p>
+        <div class="mt-auto flex flex-wrap gap-3 pt-2">
+          <a href={KIROTHON.path}>Conoce la Kirothon</a>
+          <a href={KIROTHON.meetup} target="_blank" rel="noopener noreferrer">
+            Registro en Meetup<span class="sr-only"> (abre en nueva pestaña)</span>
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <div class="recap-cta mt-14">
+      <div>
+        <h3 class="text-2xl sm:text-3xl">¿Te sumas al segundo año?</h3>
+        <p class="mt-2 max-w-xl">Unirse es gratis y no exige experiencia previa. También puedes proponer una charla, un taller o ser voluntario.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href={FUENTES.meetup.url} target="_blank" rel="noopener noreferrer" class="recap-btn recap-btn--primary">Únete en Meetup<span class="sr-only"> (abre en nueva pestaña)</span></a>
+        <a href="/participate" class="recap-btn recap-btn--ghost">Proponer una charla</a>
+        <a href="/student-rewards" class="recap-btn recap-btn--ghost">Ver Student Rewards</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kirothon-feature {
+    background: #000;
+    color: #fff;
+    border: 1px solid #525252;
+    box-shadow: 8px 8px 0 #9046ff;
+  }
+
+  .kirothon-feature h3 { color: inherit; }
+  .kirothon-label {
+    color: #9046ff;
+    font: 700 .875rem/1.5 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+  }
+
+  .kirothon-feature a {
+    padding: .65rem .85rem;
+    border: 1px solid #9046ff;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .kirothon-feature a[target="_blank"] { background: #9046ff; color: #000; }
+  .kirothon-feature a:hover { text-decoration: underline; }
+  .kirothon-feature a:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; }
+</style>
+
+<script>
+  function initCountdown() {
+    document.querySelectorAll<HTMLElement>('[data-countdown]').forEach((el) => {
+      const target = new Date(`${el.dataset.countdown}T00:00:00-05:00`).getTime();
+      const days = Math.ceil((target - Date.now()) / 86_400_000);
+      const d = el.querySelector('[data-days]');
+      const l = el.querySelector('[data-days-label]');
+      if (!d || !l) return;
+      if (days > 1) { d.textContent = String(days); l.textContent = 'días'; }
+      else if (days === 1) { d.textContent = '1'; l.textContent = 'día'; }
+      else { el.textContent = days === 0 ? '¡Es hoy!' : 'Gracias por construir con nosotros en Tuluá.'; }
+    });
+  }
+  document.addEventListener('astro:page-load', initCountdown);
+</script>

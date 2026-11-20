@@ -194,7 +194,7 @@ export type ApiEventType = 'CHARLA' | 'WORKSHOP' | 'HACKATHON';
 export type ApiEventModality = 'VIRTUAL' | 'PRESENCIAL' | 'HIBRIDO';
 
 /** Estado del evento según la API. */
-export type ApiEventStatus = 'UPCOMING' | 'COMPLETED';
+export type ApiEventStatus = 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
 
 /** Item de evento en el listado (GET /events). */
 export interface IApiEventListItem {
