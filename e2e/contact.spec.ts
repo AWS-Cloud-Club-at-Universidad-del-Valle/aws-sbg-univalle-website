@@ -14,7 +14,7 @@ test.describe('Contacto', () => {
     }
 
     const leader = page.locator('article').filter({
-      has: page.getByRole('heading', { name: 'Juan Manuel Hoyos Contreras' }),
+      has: page.getByRole('heading', { name: 'Pablo Nicolás Marín González' }),
     });
     await expect(leader.getByRole('link', { name: /LinkedIn/i })).toBeVisible();
     await expect(leader.getByRole('link', { name: /GitHub/i })).toBeVisible();

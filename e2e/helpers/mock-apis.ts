@@ -178,10 +178,5 @@ export const RESOURCE_TITLES = [
 ] as const;
 
 export const CORE_TEAM_NAMES = [
-  'Juan Manuel Hoyos Contreras',
-  'Sebastián Cifuentes Flórez',
   'Pablo Nicolás Marín González',
-  'Aura María Peláez',
-  'Miguel Ángel Sanclemente Mejía',
-  'Jann Carlo Martinez',
 ] as const;
