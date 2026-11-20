@@ -1,0 +1,86 @@
+---
+import { KIROTHON } from '@/lib/constants';
+
+const startsAt = `${KIROTHON.date}T14:00:00-05:00`;
+const remaining = Math.max(0, Math.ceil((Date.parse(startsAt) - Date.now()) / 1000));
+const units = [
+  { label: 'Días', seconds: 86_400, cycle: Infinity },
+  { label: 'Horas', seconds: 3_600, cycle: 24 },
+  { label: 'Min', seconds: 60, cycle: 60 },
+  { label: 'Seg', seconds: 1, cycle: 60 },
+];
+---
+
+<div class="countdown" data-countdown={startsAt}>
+  <p class="code-label countdown-label">Cuenta regresiva al meetup</p>
+  <div class="countdown-grid" role="timer">
+    {units.map(({ label, seconds, cycle }) => (
+      <div class="countdown-unit">
+        <span class="countdown-number" data-unit={seconds} data-cycle={cycle}>
+          {String(Math.floor(remaining / seconds) % cycle).padStart(2, '0')}
+        </span>
+        <span class="code-label">{label}</span>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const countdown = document.querySelector<HTMLElement>('[data-countdown]');
+    if (!countdown) return;
+
+    const startsAt = Date.parse(countdown.dataset.countdown ?? '');
+    const units = Array.from(countdown.querySelectorAll<HTMLElement>('[data-unit]'), (element) => ({
+      element,
+      seconds: Number(element.dataset.unit),
+      cycle: Number(element.dataset.cycle),
+    }));
+
+    const tick = () => {
+      const milliseconds = startsAt - Date.now();
+      const remaining = Math.max(0, Math.ceil(milliseconds / 1000));
+
+      for (const { element, seconds, cycle } of units) {
+        const value = String(Math.floor(remaining / seconds) % cycle).padStart(2, '0');
+        if (element.textContent !== value) element.textContent = value;
+      }
+
+      if (remaining > 0 && countdown.isConnected) {
+        window.setTimeout(tick, milliseconds % 1000 || 1000);
+      }
+    };
+
+    tick();
+  });
+</script>
+
+<style>
+  .countdown { margin-top: 1.35rem; }
+  .countdown-label { margin-bottom: 0.55rem; }
+
+  .countdown-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.35rem, 1.2vw, 0.75rem);
+  }
+
+  .countdown-unit {
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.2rem 0.6rem;
+    background: var(--sbg-bg-elevated);
+    border: 1px solid var(--sbg-border);
+    border-top: 2px solid var(--kiro-purple);
+    border-radius: 0.5rem;
+  }
+
+  .countdown-number {
+    color: #fff;
+    font: 700 clamp(1.25rem, 3vw, 2rem)/1.2 var(--kiro-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown-unit .code-label { font-size: 0.65rem; }
+</style>
