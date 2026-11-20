@@ -1,13 +1,6 @@
 ---
-/**
- * RecapUpcoming — Lo que viene: Watch & Build Party en Tuluá y hackathon de
- * diciembre, más el llamado a la acción final.
- *
- * Sin enlaces de inscripción inventados: los botones llevan a Meetup, donde
- * se publicarán los eventos.
- */
 import { metricas, FUENTES } from '@/lib/recap';
-import { SITE_CONFIG } from '@/lib/constants';
+import { KIROTHON } from '@/lib/constants';
 
 const h = metricas.hitos_confirmados_por_lider;
 const corte = new Date(`${metricas.fecha_corte}T00:00:00-05:00`);
@@ -40,20 +33,18 @@ const diasSSR = Math.round((watch.getTime() - corte.getTime()) / 86_400_000);
         </a>
       </article>
 
-      <article class="recap-feature recap-feature--violet" aria-labelledby="hack-title">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <span class="recap-feature__date">Diciembre de 2026 · fecha por confirmar</span>
-          <span class="recap-feature__badge recap-feature__badge--muted">En preparación</span>
+      <article class="kirothon-feature flex min-w-0 flex-col gap-4 p-5 sm:p-7" aria-labelledby="hack-title">
+        <p class="kirothon-label">{h.hackathon.estado}</p>
+        <h3 id="hack-title" class="text-2xl">{h.hackathon.texto}</h3>
+        <p><strong>Meetup de lanzamiento</strong><br /><time datetime={h.hackathon.fecha}>{KIROTHON.dateLabel}</time> · {KIROTHON.hours}</p>
+        <p>Universidad del Valle, Sede Tuluá · Villa Campestre · Presencial</p>
+        <p>Conoce cómo será la hackathon, arma tu equipo de 3 y prueba Kiro en vivo. Trae tu laptop.</p>
+        <div class="mt-auto flex flex-wrap gap-3 pt-2">
+          <a href={KIROTHON.path}>Conoce la Kirothon</a>
+          <a href={KIROTHON.meetup} target="_blank" rel="noopener noreferrer">
+            Registro en Meetup<span class="sr-only"> (abre en nueva pestaña)</span>
+          </a>
         </div>
-        <h3 id="hack-title" class="recap-feature__title">Hackathon de AWS</h3>
-        <p>
-          La primera hackathon del grupo, para construir sobre AWS en equipo. La fecha, el formato y las bases se publicarán en Meetup.
-        </p>
-        <ul class="recap-feature__list">
-          <li>Si eres estudiante, ve armando equipo y practica con los <a class="recap-link" href="/certificate">retos del grupo</a>.</li>
-          <li>Si eres empresa o comunidad, queremos conversar contigo sobre mentoría, jurados y apoyo.</li>
-        </ul>
-        <a href={SITE_CONFIG.social.email} class="recap-btn recap-btn--ghost mt-2">Escríbenos para ser aliado</a>
       </article>
     </div>
 
@@ -70,6 +61,35 @@ const diasSSR = Math.round((watch.getTime() - corte.getTime()) / 86_400_000);
     </div>
   </div>
 </section>
+
+<style>
+  .kirothon-feature {
+    background: #000;
+    color: #fff;
+    border: 1px solid #525252;
+    box-shadow: 8px 8px 0 #9046ff;
+  }
+
+  .kirothon-feature h3 { color: inherit; }
+  .kirothon-label {
+    color: #9046ff;
+    font: 700 .875rem/1.5 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+  }
+
+  .kirothon-feature a {
+    padding: .65rem .85rem;
+    border: 1px solid #9046ff;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .kirothon-feature a[target="_blank"] { background: #9046ff; color: #000; }
+  .kirothon-feature a:hover { text-decoration: underline; }
+  .kirothon-feature a:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; }
+</style>
 
 <script>
   function initCountdown() {
