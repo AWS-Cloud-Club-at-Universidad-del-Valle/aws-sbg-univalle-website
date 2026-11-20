@@ -181,6 +181,8 @@ export interface ICoreTeamMember {
   image?: string;
   /** Username público en AWS Builder Center (sin @). La URL se construye con BUILDER_CENTER_PROFILE_BASE. */
   builderCenter?: string;
+  /** Si true, la tarjeta se muestra como "próximamente" (sin datos personales). */
+  comingSoon?: boolean;
 }
 
 // ============================================
