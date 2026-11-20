@@ -62,7 +62,7 @@ test.describe('Layout, navegación y SEO básico', () => {
 
   test('títulos de página siguen el patrón del sitio', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/Inicio \| AWS SBG Univalle/);
+    await expect(page).toHaveTitle(/AWS Student Builder Group \| Universidad del Valle/);
 
     await page.goto('/about');
     await expect(page).toHaveTitle(/Nosotros \| AWS SBG Univalle/);
