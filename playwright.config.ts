@@ -31,8 +31,13 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run build && npx astro preview --host 127.0.0.1 --port ${PORT}`,
+    command: `npm run build && npx astro preview --ignore-lock --host 127.0.0.1 --port ${PORT}`,
     url: BASE_URL,
+    env: {
+      // Keep Astro 7 attached to Playwright when Astro detects an agent environment.
+      ASTRO_PREVIEW_BACKGROUND: '0',
+      PUBLIC_KIROTHON_FORM_URL: 'https://kirothon-form.example.test/exec',
+    },
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
     stdout: 'pipe',
