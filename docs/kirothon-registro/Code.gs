@@ -47,8 +47,10 @@ function doPost(e) {
   const lock = LockService.getScriptLock();
   try {
     if (!lock.tryLock(10000)) return failure('El registro está ocupado en este momento.');
+    // Si el script está ligado a la hoja (Extensiones → Apps Script) usa esa hoja;
+    // si no, la propiedad SPREADSHEET_ID.
     const id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
-    const spreadsheet = SpreadsheetApp.openById(id);
+    const spreadsheet = id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
     const sheet = spreadsheet.getSheetByName('Equipos') || spreadsheet.insertSheet('Equipos');
     const rows = sheet.getLastRow();
     if (rows === 0) sheet.appendRow(HEADERS);
@@ -94,4 +96,15 @@ function failure(error) {
 function json(result) {
   return ContentService.createTextOutput(JSON.stringify(result))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// Ejecútala una vez desde el editor: autoriza el script y prepara la pestaña Equipos.
+function setup() {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName('Equipos') || spreadsheet.insertSheet('Equipos', 0);
+  if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
+  sheet.setFrozenRows(1);
+  sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold').setBackground('#9046FF').setFontColor('#FFFFFF');
+  const blank = spreadsheet.getSheetByName('Hoja 1');
+  if (blank && blank.getLastRow() === 0 && spreadsheet.getSheets().length > 1) spreadsheet.deleteSheet(blank);
 }
