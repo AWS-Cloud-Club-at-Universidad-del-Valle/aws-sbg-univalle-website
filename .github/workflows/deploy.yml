@@ -84,6 +84,7 @@ jobs:
       # --------------------------------------------------------
       - name: Build site
         env:
+          PUBLIC_KIROTHON_FORM_URL: ${{ vars.PUBLIC_KIROTHON_FORM_URL }}
           PUBLIC_EVENTS_API_URL: ${{ github.ref_name == 'main' && 'https://4fi9ot44ml.execute-api.us-east-1.amazonaws.com/prod' || 'https://orj83oh0pc.execute-api.us-east-1.amazonaws.com/dev' }}
         run: |
           echo "Iniciando build..."

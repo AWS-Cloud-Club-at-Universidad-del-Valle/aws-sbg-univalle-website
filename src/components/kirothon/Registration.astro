@@ -1,0 +1,252 @@
+---
+import MeetupLink from './MeetupLink.astro';
+
+const endpoint = import.meta.env.PUBLIC_KIROTHON_FORM_URL?.trim();
+const members = [1, 2, 3];
+---
+
+<section class="container-sbg registration" data-kiro-registration data-endpoint={endpoint} aria-label="Registro para Kirothon">
+  <section class="step meetup" aria-labelledby="kiro-step-1">
+    <p class="step-number">Paso 1</p>
+    <h2 id="kiro-step-1">Únete en Meetup</h2>
+    <p>Únete al evento antes de inscribir a tu equipo.</p>
+    <div class="meetup-action"><MeetupLink /></div>
+    <label class="check"><input id="kiro-meetup-check" type="checkbox" /> Ya me uní al evento en Meetup</label>
+  </section>
+
+  <section class="step" aria-labelledby="kiro-step-2">
+    <p class="step-number">Paso 2</p>
+    <h2 id="kiro-step-2">Inscribe a tu equipo</h2>
+    <p id="kiro-locked" role="status">Primero únete en Meetup</p>
+    {!endpoint && <p class="closed">Inscripciones aún no abiertas</p>}
+    <form id="kiro-form" aria-labelledby="kiro-step-2" novalidate>
+      <fieldset id="kiro-fields" disabled aria-labelledby="kiro-step-2">
+        <label for="kiro-team">Nombre del equipo</label>
+        <input id="kiro-team" name="team" required minlength="2" maxlength="60" aria-describedby="kiro-team-error" />
+        <p class="field-error" id="kiro-team-error"></p>
+
+        {members.map((number) => (
+          <fieldset class="member">
+            <legend>Integrante {number}{number === 1 && <span> · Líder / contacto</span>}</legend>
+            <div class="member-fields">
+              <div>
+                <label for={`kiro-name-${number}`}>Nombre completo</label>
+                <input id={`kiro-name-${number}`} name={`name-${number}`} required
+                  autocomplete={`section-kiro-${number} name`} aria-describedby={`kiro-name-${number}-error`} />
+                <p class="field-error" id={`kiro-name-${number}-error`}></p>
+              </div>
+              <div>
+                <label for={`kiro-email-${number}`}>Correo</label>
+                <input id={`kiro-email-${number}`} name={`email-${number}`} type="email" required
+                  autocomplete={`section-kiro-${number} email`} aria-describedby={`kiro-email-${number}-error`} />
+                <p class="field-error" id={`kiro-email-${number}-error`}></p>
+              </div>
+            </div>
+          </fieldset>
+        ))}
+
+        <div hidden>
+          <label for="kiro-website">Sitio web</label>
+          <input id="kiro-website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <label class="check">
+          <input id="kiro-consent" name="consent" type="checkbox" required aria-describedby="kiro-consent-error" />
+          Autorizo a AWS SBG Univalle a tratar los datos personales de este registro para organizar el Kirothon, conforme a la Ley 1581 de 2012.
+        </label>
+        <p class="field-error" id="kiro-consent-error"></p>
+
+        <button class="action" type="submit">Inscribir equipo</button>
+      </fieldset>
+    </form>
+    <p id="kiro-status" role="status"></p>
+    <p id="kiro-submit-error" role="alert"></p>
+  </section>
+</section>
+
+<script>
+  const storageKey = 'kirothon-2026-meetup';
+  const emailPattern = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/i;
+
+  document.addEventListener('astro:page-load', () => {
+    const registration = document.querySelector<HTMLElement>('[data-kiro-registration]');
+    if (!registration || registration.dataset.ready) return;
+    registration.dataset.ready = 'true';
+
+    const endpoint = registration.dataset.endpoint;
+    const input = (id: string) => registration.querySelector<HTMLInputElement>(`#kiro-${id}`)!;
+    const form = registration.querySelector<HTMLFormElement>('form')!;
+    const fields = registration.querySelector<HTMLFieldSetElement>('#kiro-fields')!;
+    const button = form.querySelector<HTMLButtonElement>('button')!;
+    const checkbox = input('meetup-check');
+    const status = registration.querySelector<HTMLElement>('#kiro-status')!;
+    const submitError = registration.querySelector<HTMLElement>('#kiro-submit-error')!;
+    const locked = registration.querySelector<HTMLElement>('#kiro-locked')!;
+    const team = input('team');
+    const consent = input('consent');
+    const memberFields = [1, 2, 3].map((number) => ({
+      name: input(`name-${number}`),
+      email: input(`email-${number}`),
+    }));
+    let sending = false;
+
+    function updateStep() {
+      fields.disabled = sending || !checkbox.checked || !endpoint;
+      checkbox.disabled = sending;
+      locked.hidden = checkbox.checked;
+    }
+
+    function confirmMeetup(confirmed: boolean) {
+      checkbox.checked = confirmed;
+      try {
+        if (confirmed) localStorage.setItem(storageKey, 'true');
+        else localStorage.removeItem(storageKey);
+      } catch {
+        // El registro sigue disponible si el navegador bloquea el almacenamiento.
+      }
+      updateStep();
+    }
+
+    try {
+      checkbox.checked = localStorage.getItem(storageKey) === 'true';
+    } catch {
+      checkbox.checked = false;
+    }
+    updateStep();
+    checkbox.addEventListener('change', () => confirmMeetup(checkbox.checked));
+    registration.querySelector('#kiro-meetup-link')!.addEventListener('click', () => confirmMeetup(true));
+
+    function fieldError(field: HTMLInputElement, message: string) {
+      field.setAttribute('aria-invalid', String(Boolean(message)));
+      registration.querySelector(`#${field.id}-error`)!.textContent = message;
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (fields.disabled || !endpoint) return;
+      status.textContent = '';
+      submitError.textContent = '';
+      const teamName = team.value.trim();
+      fieldError(team, teamName.length >= 2 && teamName.length <= 60 ? '' : 'Escribe un nombre de equipo de 2 a 60 caracteres.');
+
+      const emails = new Set<string>();
+      const members = memberFields.map(({ name, email }) => {
+        const fullName = name.value.trim();
+        const address = email.value.trim().toLowerCase();
+        fieldError(name, /^\S+\s+\S/.test(fullName) ? '' : 'Escribe al menos dos palabras.');
+        let emailError = '';
+        if (!emailPattern.test(address)) emailError = 'Escribe un correo válido.';
+        else if (emails.has(address)) emailError = 'Este correo ya se indicó para otro integrante.';
+        fieldError(email, emailError);
+        emails.add(address);
+        return { name: fullName, email: address };
+      });
+      fieldError(consent, consent.checked ? '' : 'Autoriza el tratamiento de datos para continuar.');
+      const firstError = form.querySelector<HTMLInputElement>('[aria-invalid="true"]');
+      if (firstError) {
+        firstError.focus();
+        return;
+      }
+
+      const website = input('website').value;
+      sending = true;
+      updateStep();
+      button.textContent = 'Enviando…';
+      status.textContent = 'Enviando inscripción…';
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            team: teamName, members, meetup: true, consent: true,
+            submittedAt: new Date().toISOString(), userAgent: navigator.userAgent,
+            ...(website ? { website } : {}),
+          }),
+          signal: AbortSignal.timeout(30_000),
+        });
+        const result = await response.json();
+        if (result?.ok === false && typeof result.error === 'string' && result.error) {
+          submitError.textContent = `${result.error} Puedes volver a intentarlo.`;
+          status.textContent = '';
+        } else if (response.ok && result?.ok === true) {
+          form.reset();
+          status.textContent = `¡El equipo «${teamName}» quedó inscrito!`;
+        } else {
+          throw new Error('Respuesta inesperada');
+        }
+      } catch {
+        status.textContent = '';
+        submitError.textContent = 'No pudimos confirmar la inscripción. Vuelve a intentarlo.';
+      } finally {
+        sending = false;
+        updateStep();
+        button.textContent = 'Inscribir equipo';
+      }
+    });
+  });
+</script>
+
+<style>
+  .registration { display: grid; align-items: start; gap: 1.25rem; padding-block: 3rem; }
+  .step {
+    min-width: 0;
+    padding: clamp(1.15rem, 3vw, 2rem);
+    border: 1px solid var(--sbg-border);
+    border-top: 2px solid var(--kiro-purple);
+    border-radius: 1rem;
+    background: var(--sbg-bg-surface);
+  }
+  .meetup { background: linear-gradient(145deg, #9046ff24, transparent 85%), var(--sbg-bg-surface); }
+  .step-number { color: var(--kiro-light); font: 0.875rem var(--kiro-mono); }
+  h2 { font-size: clamp(1.45rem, 3vw, 2rem); margin-block: 0.25rem 0.75rem; }
+  .action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    padding: 0.7rem 1rem;
+    min-height: 48px;
+    border-radius: 0.55rem;
+    background: #6f2bd0;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .action:hover:not(:disabled) { background: #7833dd; color: white; }
+  .meetup-action { margin-block: 1.15rem; }
+  #kiro-step-1 { scroll-margin-top: 5rem; }
+  .check { display: flex; gap: 0.65rem; align-items: flex-start; }
+  .check input { flex: none; width: 1.15rem; height: 1.15rem; margin-top: 0.2rem; accent-color: var(--kiro-purple); }
+  #kiro-locked, .closed { color: var(--kiro-light); margin-bottom: 0.65rem; }
+  fieldset, .member-fields > div { min-width: 0; }
+  #kiro-fields:disabled { opacity: 0.62; }
+  button:disabled { cursor: not-allowed; }
+  .member { margin-block: 1rem; border-top: 1px solid var(--sbg-border); padding-top: 0.65rem; }
+  legend { padding-right: 0.6rem; font-weight: 700; }
+  legend span { color: var(--kiro-light); }
+  .member-fields { display: grid; gap: 0.65rem 1rem; }
+  input:not([type="checkbox"]) {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 0.25rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--sbg-border);
+    border-radius: 0.45rem;
+    background: var(--sbg-bg-elevated);
+  }
+  :is(input, button, a):focus-visible { outline: 2px solid var(--kiro-light); outline-offset: 3px; }
+  input[aria-invalid="true"] { border-color: #ff9aab; }
+  .field-error, #kiro-submit-error { color: #ffabb8; }
+  .field-error { font-size: 0.875rem; }
+  .field-error:not(:empty) { margin-top: 0.35rem; }
+  button { margin-top: 1rem; }
+  #kiro-status:not(:empty), #kiro-submit-error:not(:empty) { margin-top: 1rem; }
+  #kiro-status { color: var(--kiro-light); }
+  @media (min-width: 900px) {
+    .registration { grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); }
+  }
+  @media (min-width: 600px) {
+    .member-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

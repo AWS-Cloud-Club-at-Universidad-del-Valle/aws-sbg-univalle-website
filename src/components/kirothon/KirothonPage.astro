@@ -1,6 +1,6 @@
 ---
 import Countdown from './Countdown.astro';
-import MeetupLink from './MeetupLink.astro';
+import Registration from './Registration.astro';
 import SectionDivider from '@/components/common/SectionDivider.astro';
 import { KIROTHON } from '@/lib/constants';
 
@@ -11,12 +11,12 @@ const steps = [
 ];
 
 const rubric = [
-  ['Solución y demo', 'Qué problema resuelve y si la demo funciona.', 25],
-  ['Uso de Kiro', 'Specs, hooks, steering y modo agente.', 20],
-  ['Proceso', 'Cómo lo resolvieron y qué decisiones tomaron.', 15],
-  ['Creatividad', 'Originalidad de la idea y de su enfoque.', 15],
-  ['Pitch', 'Claridad al presentar la solución.', 15],
-  ['Eficiencia de créditos', 'Cuánto lograron por cada crédito usado.', 10],
+  ['Solución y demo', '¿Resuelve un problema real? ¿La demo funciona en vivo, de punta a punta?', 25],
+  ['Proceso', 'Decisiones técnicas, cómo se repartieron el trabajo y qué cambiaron cuando algo falló.', 20],
+  ['Calidad técnica', 'Claridad del código, decisiones de diseño y facilidad para ejecutar la solución.', 15],
+  ['Creatividad', 'Originalidad de la idea y del enfoque.', 15],
+  ['Pitch', 'Claridad del problema, la solución y su impacto (solo en la final).', 15],
+  ['Validación', 'Comprobaron que la solución cumple lo que promete y reconocen sus límites.', 10],
 ] as const;
 
 const maxPoints = Math.max(...rubric.map(([, , points]) => points));
@@ -26,33 +26,34 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
   <header class="hero relative pt-20 pb-12 lg:pt-24 lg:pb-16">
     <div class="container-sbg relative grid items-center gap-8 lg:grid-cols-[4fr_6fr] lg:gap-12">
       <div>
-        <p class="code-label launch-label mb-4">Meetup de lanzamiento</p>
+        <p class="code-label event-label mb-4">Hackathon presencial</p>
         <h1 class="text-[2.4rem] leading-[1.08] tracking-tight sm:text-5xl lg:text-[4rem]">Kirothon</h1>
-        <p class="mt-5 text-lg leading-relaxed sm:text-xl">La hackathon de <strong class="kiro-underline">Kiro</strong> en Tuluá.</p>
-        <p class="mt-2">Organiza AWS Student Builder Group Univalle.</p>
+        <p class="mt-5 text-lg leading-relaxed sm:text-xl">Construye con <strong class="kiro-underline">Kiro</strong> en equipos de 3.</p>
+        <p class="mt-2">Organiza AWS Student Builder Group Univalle, con el respaldo de Kiro.</p>
 
         <dl class="hero-facts my-6 grid gap-4">
           <div>
             <dt class="code-label mb-1">Cuándo</dt>
-            <dd><time datetime={KIROTHON.date}>{KIROTHON.dateLabel}</time><br />{KIROTHON.hours}</dd>
+            <dd><time datetime={KIROTHON.date}>{KIROTHON.dateLabel}</time><br />{KIROTHON.hours} (hora de Colombia)</dd>
           </div>
           <div>
             <dt class="code-label mb-1">Dónde</dt>
             <dd>Universidad del Valle, Sede Tuluá<br />Villa Campestre · Presencial</dd>
           </div>
         </dl>
-        <MeetupLink />
       </div>
 
       <div class="min-w-0">
         <picture class="cover">
-          <source media="(max-width: 639px)" srcset="/kirothon/post-meetup-1080x1350.png" width="1080" height="1350" />
-          <img class="block h-auto w-full" src={KIROTHON.cover} width="1200" height="675" alt="Afiche del meetup de lanzamiento de la Kirothon." fetchpriority="high" />
+          <source media="(max-width: 639px)" srcset="/kirothon/post-kirothon-1080x1350.png" width="1080" height="1350" />
+          <img class="block h-auto w-full" src={KIROTHON.cover} width="1200" height="675" alt="Afiche de la Kirothon: hackathon de Kiro, sábado 19 de diciembre de 2026, Univalle Sede Tuluá." fetchpriority="high" />
         </picture>
         <Countdown />
       </div>
     </div>
   </header>
+
+  <Registration />
 
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
@@ -62,7 +63,7 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
 
   <section class="container-sbg py-12 lg:py-16" aria-labelledby="specs-title" data-reveal>
     <h2 id="specs-title" class="text-2xl sm:text-3xl">¿Qué es Kiro?</h2>
-    <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Kiro es un IDE agéntico que trabaja con <strong>specs</strong>. Antes de generar código, convierte tu idea en un plan de tres pasos.</p>
+    <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Kiro es el IDE agéntico de AWS y trabaja con <strong>specs</strong>. Antes de generar código, convierte tu idea en un plan de tres pasos.</p>
     <div class="terminal mt-6">
       <p class="code-label terminal-label" aria-hidden="true">$ kiro / spec</p>
       <ol class="grid sm:grid-cols-3">
@@ -80,14 +81,15 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
   <section class="container-sbg grid items-start gap-6 pb-12 lg:grid-cols-2 lg:gap-12 lg:pb-16" aria-labelledby="format-title" data-reveal>
     <div>
       <h2 id="format-title" class="text-2xl sm:text-3xl">Cómo funciona</h2>
-      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Compiten en <strong>equipos de 3 personas</strong>. Un jurado de 3 personas evalúa las entregas.</p>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Compiten en <strong>equipos de 3 personas</strong>. Un jurado de 3 personas evalúa los proyectos por sus méritos, con la misma rúbrica para todos.</p>
+      <p class="mt-3 max-w-2xl text-base leading-relaxed sm:text-lg">Los equipos presentan sus proyectos en formato feria. Cinco finalistas presentan en el escenario.</p>
     </div>
     <div class="recap-card lifted deliverables">
       <h3 class="recap-card__title">Qué entrega cada equipo</h3>
       <ul class="recap-feature__list mt-3">
-        <li>Un repositorio con la carpeta <code>.kiro/</code> y al menos un spec.</li>
-        <li>Una demo funcionando.</li>
-        <li>Un pitch de 3 minutos, con 2 minutos de preguntas.</li>
+        <li>Un repositorio con instrucciones para ejecutar la solución (a las 5:30 p.m.).</li>
+        <li>Una demo funcionando, de punta a punta, para la feria.</li>
+        <li>Si clasifican: un pitch de 3 minutos, con 2 minutos de preguntas.</li>
       </ul>
     </div>
   </section>
@@ -130,29 +132,28 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
     <section class="recap-card lifted" aria-labelledby="awards-title">
       <h2 id="awards-title" class="text-2xl sm:text-3xl">Premios</h2>
       <p class="my-3 text-2xl font-extrabold kiro-underline">1.º <span>·</span> 2.º <span>·</span> 3.º</p>
-      <p>Habrá menciones a <strong>Mejor uso de Kiro</strong> y <strong>Mejor pitch</strong>. El voto del público es opcional y se considera aparte.</p>
+      <p>Y dos menciones: <strong>Mejor uso de Kiro</strong> y <strong>Mejor pitch</strong>. Puedes construir con las herramientas que quieras: el puesto se gana por el proyecto. Decide el jurado.</p>
     </section>
     <section class="recap-card lifted" aria-labelledby="pending-title">
       <h2 id="pending-title" class="text-2xl sm:text-3xl">Próximamente</h2>
       <p class="mt-3">Lo anunciamos muy pronto. Mantente atento en Meetup:</p>
       <ul class="recap-feature__list mt-3">
-        <li>La fecha y duración de la hackathon.</li>
         <li>Quiénes serán los jurados.</li>
         <li>Los créditos para cada equipo.</li>
       </ul>
     </section>
   </div>
 
-  <section class="container-sbg pb-16 lg:pb-24" aria-labelledby="launch-title" data-reveal>
+  <section class="container-sbg pb-16 lg:pb-24" aria-labelledby="event-closing-title" data-reveal>
     <div class="recap-card">
-      <h2 id="launch-title" class="text-2xl sm:text-3xl">Nos vemos en el lanzamiento</h2>
-      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Te contamos cómo va a ser la hackathon, armamos equipos de 3 y probamos Kiro en vivo. El cupo aproximado es de 60 a 80 personas.</p>
+      <h2 id="event-closing-title" class="text-2xl sm:text-3xl">Nos vemos en la Kirothon</h2>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">La Kirothon reúne a 80 constructores para crear con Kiro en equipos de 3.</p>
       <dl class="my-6 grid gap-4 border-y border-[var(--sbg-border)] py-5 sm:grid-cols-3">
-        <div><dt class="code-label mb-1">Cuándo</dt><dd><time datetime={KIROTHON.date}>{KIROTHON.dateLabel}</time><br />{KIROTHON.hours}</dd></div>
+        <div><dt class="code-label mb-1">Cuándo</dt><dd><time datetime={KIROTHON.date}>{KIROTHON.dateLabel}</time><br />{KIROTHON.hours} (hora de Colombia)</dd></div>
         <div><dt class="code-label mb-1">Dónde</dt><dd>Universidad del Valle, Sede Tuluá<br />Villa Campestre · Presencial</dd></div>
         <div><dt class="code-label mb-1">Qué traer</dt><dd>Trae tu laptop. Si ya tienes a tus dos parceros, ¡caigan juntos!</dd></div>
       </dl>
-      <div><MeetupLink /></div>
+      <a class="recap-btn recap-btn--primary" href="#kiro-step-1">Empezar por Meetup</a>
     </div>
   </section>
 </div>
@@ -180,7 +181,8 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
 
 <style>
   .kirothon {
-    --kiro-purple: #9046ff;
+    --kiro-purple: #9046FF;
+    --kiro-light: #d9bdff;
     --kiro-mono: 'Space Mono', monospace;
   }
 
@@ -198,7 +200,7 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
     text-transform: uppercase;
   }
 
-  .launch-label {
+  .event-label {
     display: inline-block;
     padding: 0.3rem 0.65rem;
     border: 1px solid var(--kiro-purple);
