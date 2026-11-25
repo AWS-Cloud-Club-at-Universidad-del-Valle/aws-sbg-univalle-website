@@ -87,7 +87,7 @@ export const KIROTHON = {
   dateLabel: 'Sábado 19 de diciembre de 2026',
   hours: '2:00–7:00 p.m.',
   meetup: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/317506559/',
-  cover: '/kirothon/portada-meetup-1200x675.png',
+  cover: '/kirothon/portada-kirothon-1200x675.png',
 } as const;
 
 export const NAV_LINKS: INavLink[] = [
