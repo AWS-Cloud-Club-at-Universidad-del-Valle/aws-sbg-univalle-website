@@ -21,8 +21,8 @@ function doPost(e) {
   if (team.length < 2 || team.length > 60) {
     return failure('Escribe un nombre de equipo de 2 a 60 caracteres.');
   }
-  if (!Array.isArray(payload.members) || payload.members.length !== 3) {
-    return failure('El equipo debe tener exactamente 3 integrantes.');
+  if (!Array.isArray(payload.members) || payload.members.length < 1 || payload.members.length > 3) {
+    return failure('El equipo debe tener de 1 a 3 integrantes.');
   }
   if (payload.meetup !== true || payload.consent !== true) {
     return failure('Confirma tu asistencia en Meetup y autoriza el tratamiento de datos.');
@@ -68,7 +68,8 @@ function doPost(e) {
 
     sheet.appendRow([
       new Date(), sheetText(team),
-      ...members.flatMap(({ name, email }) => [sheetText(name), sheetText(email)]),
+      // Siempre 3 pares de columnas; los integrantes ausentes quedan vacíos.
+      ...[0, 1, 2].flatMap((i) => members[i] ? [sheetText(members[i].name), sheetText(members[i].email)] : ['', '']),
       true, true,
     ]);
     SpreadsheetApp.flush();
