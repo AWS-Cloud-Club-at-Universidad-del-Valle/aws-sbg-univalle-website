@@ -86,6 +86,11 @@ export const KIROTHON = {
   date: '2026-12-19',
   dateLabel: 'Sábado 19 de diciembre de 2026',
   hours: '2:00–7:00 p.m.',
+  /** Tamaño del equipo: fuente única para formulario, textos y validación. */
+  teamMin: 1,
+  teamMax: 3,
+  /** Cambiar a true para mostrar "Qué entrega cada equipo" y la rúbrica en /kirothon. */
+  showDeliverablesAndRubric: false as boolean,
   meetup: 'https://www.meetup.com/aws-sbg-at-university-of-the-valle/events/317506559/',
   cover: '/kirothon/portada-kirothon-1200x675.png',
 } as const;
