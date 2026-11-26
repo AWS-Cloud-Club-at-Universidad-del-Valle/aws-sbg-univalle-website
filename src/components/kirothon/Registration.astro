@@ -1,11 +1,13 @@
 ---
 import MeetupLink from './MeetupLink.astro';
+import { KIROTHON } from '@/lib/constants';
 
 const endpoint = import.meta.env.PUBLIC_KIROTHON_FORM_URL?.trim();
-const members = [1, 2, 3];
+const { teamMin, teamMax } = KIROTHON;
+const members = Array.from({ length: teamMax }, (_, index) => index + 1);
 ---
 
-<section class="container-sbg registration" data-kiro-registration data-endpoint={endpoint} aria-label="Registro para Kirothon">
+<section class="container-sbg registration" data-kiro-registration data-endpoint={endpoint} data-team-min={teamMin} data-team-max={teamMax} aria-label="Registro para Kirothon">
   <section class="step meetup" aria-labelledby="kiro-step-1">
     <p class="step-number">Paso 1</p>
     <h2 id="kiro-step-1">Únete en Meetup</h2>
@@ -26,8 +28,8 @@ const members = [1, 2, 3];
         <p class="field-error" id="kiro-team-error"></p>
 
         {members.map((number) => (
-          <fieldset class="member">
-            <legend>Integrante {number}{number === 1 && <span> · Líder / contacto</span>}</legend>
+          <fieldset class="member" id={`kiro-member-${number}`} hidden={number > teamMin} disabled={number > teamMin}>
+            <legend>Integrante {number}{number === 1 && <span> · Líder / contacto</span>}{number > teamMin && <span> · Opcional</span>}</legend>
             <div class="member-fields">
               <div>
                 <label for={`kiro-name-${number}`}>Nombre completo</label>
@@ -44,6 +46,12 @@ const members = [1, 2, 3];
             </div>
           </fieldset>
         ))}
+
+        <div class="member-actions">
+          <button class="secondary" type="button" id="kiro-add-member">Agregar integrante</button>
+          <button class="secondary" type="button" id="kiro-remove-member" hidden>Quitar último integrante</button>
+        </div>
+        <p id="kiro-member-status" role="status"></p>
 
         <div hidden>
           <label for="kiro-website">Sitio web</label>
@@ -76,18 +84,35 @@ const members = [1, 2, 3];
     const input = (id: string) => registration.querySelector<HTMLInputElement>(`#kiro-${id}`)!;
     const form = registration.querySelector<HTMLFormElement>('form')!;
     const fields = registration.querySelector<HTMLFieldSetElement>('#kiro-fields')!;
-    const button = form.querySelector<HTMLButtonElement>('button')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
     const checkbox = input('meetup-check');
     const status = registration.querySelector<HTMLElement>('#kiro-status')!;
     const submitError = registration.querySelector<HTMLElement>('#kiro-submit-error')!;
     const locked = registration.querySelector<HTMLElement>('#kiro-locked')!;
     const team = input('team');
     const consent = input('consent');
-    const memberFields = [1, 2, 3].map((number) => ({
+    const teamMin = Number(registration.dataset.teamMin);
+    const teamMax = Number(registration.dataset.teamMax);
+    const memberFields = Array.from({ length: teamMax }, (_, index) => index + 1).map((number) => ({
+      group: registration.querySelector<HTMLFieldSetElement>(`#kiro-member-${number}`)!,
       name: input(`name-${number}`),
       email: input(`email-${number}`),
     }));
+    const addButton = registration.querySelector<HTMLButtonElement>('#kiro-add-member')!;
+    const removeButton = registration.querySelector<HTMLButtonElement>('#kiro-remove-member')!;
+    const memberStatus = registration.querySelector<HTMLElement>('#kiro-member-status')!;
+    let count = teamMin;
     let sending = false;
+
+    function setCount(next: number) {
+      count = next;
+      memberFields.forEach(({ group }, index) => {
+        group.hidden = index >= count;
+        group.disabled = index >= count;
+      });
+      addButton.hidden = count >= teamMax;
+      removeButton.hidden = count <= teamMin;
+    }
 
     function updateStep() {
       fields.disabled = sending || !checkbox.checked || !endpoint;
@@ -115,6 +140,24 @@ const members = [1, 2, 3];
     checkbox.addEventListener('change', () => confirmMeetup(checkbox.checked));
     registration.querySelector('#kiro-meetup-link')!.addEventListener('click', () => confirmMeetup(true));
 
+    addButton.addEventListener('click', () => {
+      if (count >= teamMax) return;
+      setCount(count + 1);
+      memberStatus.textContent = `Integrante ${count} agregado. El equipo tiene ${count} de ${teamMax} integrantes posibles.`;
+      memberFields[count - 1].name.focus();
+    });
+    removeButton.addEventListener('click', () => {
+      if (count <= teamMin) return;
+      const { name, email } = memberFields[count - 1];
+      for (const field of [name, email]) {
+        field.value = '';
+        fieldError(field, '');
+      }
+      setCount(count - 1);
+      memberStatus.textContent = `Integrante ${count + 1} quitado. El equipo tiene ${count} de ${teamMax} integrantes posibles.`;
+      (addButton.hidden ? memberFields[count - 1].name : addButton).focus();
+    });
+
     function fieldError(field: HTMLInputElement, message: string) {
       field.setAttribute('aria-invalid', String(Boolean(message)));
       registration.querySelector(`#${field.id}-error`)!.textContent = message;
@@ -129,7 +172,7 @@ const members = [1, 2, 3];
       fieldError(team, teamName.length >= 2 && teamName.length <= 60 ? '' : 'Escribe un nombre de equipo de 2 a 60 caracteres.');
 
       const emails = new Set<string>();
-      const members = memberFields.map(({ name, email }) => {
+      const members = memberFields.slice(0, count).map(({ name, email }) => {
         const fullName = name.value.trim();
         const address = email.value.trim().toLowerCase();
         fieldError(name, /^\S+\s+\S/.test(fullName) ? '' : 'Escribe al menos dos palabras.');
@@ -169,6 +212,8 @@ const members = [1, 2, 3];
           status.textContent = '';
         } else if (response.ok && result?.ok === true) {
           form.reset();
+          setCount(teamMin);
+          memberStatus.textContent = '';
           status.textContent = `¡El equipo «${teamName}» quedó inscrito!`;
         } else {
           throw new Error('Respuesta inesperada');
@@ -241,6 +286,19 @@ const members = [1, 2, 3];
   .field-error { font-size: 0.875rem; }
   .field-error:not(:empty) { margin-top: 0.35rem; }
   button { margin-top: 1rem; }
+  .member-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .secondary {
+    min-height: 44px;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--kiro-light);
+    border-radius: 0.55rem;
+    color: var(--kiro-light);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .secondary:hover { background: var(--sbg-bg-elevated); }
+  .secondary[hidden] { display: none; }
+  #kiro-member-status:not(:empty) { margin-top: 0.75rem; color: var(--kiro-light); }
   #kiro-status:not(:empty), #kiro-submit-error:not(:empty) { margin-top: 1rem; }
   #kiro-status { color: var(--kiro-light); }
   @media (min-width: 900px) {

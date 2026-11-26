@@ -7,7 +7,7 @@ import '@/styles/recap.css';
 
 <BaseLayout
   title="Kirothon · La hackathon de Kiro en Tuluá"
-  description="Inscríbete a la Kirothon del 19 de diciembre de 2026 en Univalle Sede Tuluá. Construye con Kiro en equipos de 3 y conoce el formato y la rúbrica."
+  description={`Inscríbete a la Kirothon del 19 de diciembre de 2026 en Univalle Sede Tuluá. Construye con Kiro en equipos de hasta ${KIROTHON.teamMax} personas y conoce el formato${KIROTHON.showDeliverablesAndRubric ? ' y la rúbrica' : ''}.`}
   ogImage={KIROTHON.cover}
   ogType="event"
 >

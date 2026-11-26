@@ -8,9 +8,12 @@ const members = [
   { name: 'Sara Ruiz', email: 'sara@example.com' },
 ];
 
-async function fillTeam(page: Page) {
+async function fillTeam(page: Page, count = members.length) {
   await page.getByLabel('Nombre del equipo').fill(team);
-  for (const [index, member] of members.entries()) {
+  for (let index = 1; index < count; index++) {
+    await page.getByRole('button', { name: 'Agregar integrante' }).click();
+  }
+  for (const [index, member] of members.slice(0, count).entries()) {
     const group = page.getByRole('group', { name: new RegExp(`^Integrante ${index + 1}`) });
     await group.getByLabel('Nombre completo').fill(member.name);
     await group.getByLabel('Correo').fill(member.email);
@@ -31,7 +34,8 @@ test.describe('Registro para Kirothon', () => {
     await expect(registration.getByRole('heading', { name: 'Inscribe a tu equipo' })).toBeVisible();
     await expect(page.getByRole('heading', { name: '¿Qué es Kiro?' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Cómo funciona', exact: true })).toHaveCount(1);
-    await expect(page.getByRole('heading', { name: 'Rúbrica' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Rúbrica' })).toHaveCount(0);
+    await expect(page.getByText('Qué entrega cada equipo')).toHaveCount(0);
     await expect(page.getByRole('heading', { name: 'Premios' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Nos vemos en la Kirothon' })).toBeVisible();
   });
@@ -71,15 +75,41 @@ test.describe('Registro para Kirothon', () => {
     await expect(teamField).toBeFocused();
     await expect(teamField).toHaveAttribute('aria-invalid', 'true');
     await expect(teamField).toHaveAccessibleDescription('Escribe un nombre de equipo de 2 a 60 caracteres.');
-    await expect(page.getByText('Escribe al menos dos palabras.')).toHaveCount(3);
-    await expect(page.getByText('Escribe un correo válido.')).toHaveCount(3);
+    await expect(page.getByText('Escribe al menos dos palabras.')).toHaveCount(1);
+    await expect(page.getByText('Escribe un correo válido.')).toHaveCount(1);
     await expect(page.getByText('Autoriza el tratamiento de datos para continuar.')).toBeVisible();
+  });
+
+  test('permite de 1 a 3 integrantes y no deja agregar un cuarto', async ({ page }) => {
+    await page.getByRole('checkbox', { name: 'Ya me uní al evento en Meetup' }).check();
+    const add = page.getByRole('button', { name: 'Agregar integrante' });
+    const remove = page.getByRole('button', { name: 'Quitar último integrante' });
+    await expect(page.getByRole('group', { name: /^Integrante/ })).toHaveCount(1);
+    await expect(remove).toBeHidden();
+    await add.click();
+    await add.click();
+    await expect(page.getByRole('group', { name: /^Integrante/ })).toHaveCount(3);
+    await expect(add).toBeHidden();
+    await remove.click();
+    await expect(page.getByRole('group', { name: /^Integrante/ })).toHaveCount(2);
+    await expect(add).toBeVisible();
+  });
+
+  test('envía un equipo de un solo integrante', async ({ page }) => {
+    await page.route(endpoint, async (route) => {
+      expect(route.request().postDataJSON().members).toEqual([members[0]]);
+      await route.fulfill({ json: { ok: true }, headers: { 'access-control-allow-origin': '*' } });
+    });
+    await page.getByRole('checkbox', { name: 'Ya me uní al evento en Meetup' }).check();
+    await fillTeam(page, 1);
+    await page.getByRole('button', { name: 'Inscribir equipo' }).click();
+    await expect(page.getByText(`¡El equipo «${team}» quedó inscrito!`)).toBeVisible();
   });
 
   test('detecta correos repetidos sin distinguir mayúsculas', async ({ page }) => {
     await page.getByRole('checkbox', { name: 'Ya me uní al evento en Meetup' }).check();
     await fillTeam(page);
-    const email = page.getByRole('group', { name: 'Integrante 2' }).getByLabel('Correo');
+    const email = page.getByRole('group', { name: /^Integrante 2/ }).getByLabel('Correo');
     await email.fill('ANA@example.com');
     await page.getByRole('button', { name: 'Inscribir equipo' }).click();
     await expect(email).toBeFocused();

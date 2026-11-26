@@ -28,7 +28,7 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
       <div>
         <p class="code-label event-label mb-4">Hackathon presencial</p>
         <h1 class="text-[2.4rem] leading-[1.08] tracking-tight sm:text-5xl lg:text-[4rem]">Kirothon</h1>
-        <p class="mt-5 text-lg leading-relaxed sm:text-xl">Construye con <strong class="kiro-underline">Kiro</strong> en equipos de 3.</p>
+        <p class="mt-5 text-lg leading-relaxed sm:text-xl">Construye con <strong class="kiro-underline">Kiro</strong> en equipos de hasta {KIROTHON.teamMax} personas.</p>
         <p class="mt-2">Organiza AWS Student Builder Group Univalle, con el respaldo de Kiro.</p>
 
         <dl class="hero-facts my-6 grid gap-4">
@@ -57,7 +57,7 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
 
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      {Array.from({ length: 8 }, () => <span>KIROTHON · TULUÁ · 19 DIC · EQUIPOS DE 3 ·</span>)}
+      {Array.from({ length: 8 }, () => <span>KIROTHON · TULUÁ · 19 DIC · EQUIPOS DE HASTA {KIROTHON.teamMax} ·</span>)}
     </div>
   </div>
 
@@ -81,21 +81,24 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
   <section class="container-sbg grid items-start gap-6 pb-12 lg:grid-cols-2 lg:gap-12 lg:pb-16" aria-labelledby="format-title" data-reveal>
     <div>
       <h2 id="format-title" class="text-2xl sm:text-3xl">Cómo funciona</h2>
-      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Compiten en <strong>equipos de 3 personas</strong>. Un jurado de 3 personas evalúa los proyectos por sus méritos, con la misma rúbrica para todos.</p>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">Compiten en <strong>equipos de hasta {KIROTHON.teamMax} personas</strong>. Un jurado de 3 personas evalúa los proyectos por sus méritos{KIROTHON.showDeliverablesAndRubric ? ', con la misma rúbrica para todos' : ''}.</p>
       <p class="mt-3 max-w-2xl text-base leading-relaxed sm:text-lg">Los equipos presentan sus proyectos en formato feria. Cinco finalistas presentan en el escenario.</p>
     </div>
-    <div class="recap-card lifted deliverables">
-      <h3 class="recap-card__title">Qué entrega cada equipo</h3>
-      <ul class="recap-feature__list mt-3">
-        <li>Un repositorio con instrucciones para ejecutar la solución (a las 5:30 p.m.).</li>
-        <li>Una demo funcionando, de punta a punta, para la feria.</li>
-        <li>Si clasifican: un pitch de 3 minutos, con 2 minutos de preguntas.</li>
-      </ul>
-    </div>
+    {KIROTHON.showDeliverablesAndRubric && (
+      <div class="recap-card lifted deliverables">
+        <h3 class="recap-card__title">Qué entrega cada equipo</h3>
+        <ul class="recap-feature__list mt-3">
+          <li>Un repositorio con instrucciones para ejecutar la solución (a las 5:30 p.m.).</li>
+          <li>Una demo funcionando, de punta a punta, para la feria.</li>
+          <li>Si clasifican: un pitch de 3 minutos, con 2 minutos de preguntas.</li>
+        </ul>
+      </div>
+    )}
   </section>
 
   <SectionDivider />
 
+  {KIROTHON.showDeliverablesAndRubric && (<>
   <section class="container-sbg py-12 lg:py-16" aria-labelledby="rubric-title" data-reveal>
     <div class="grid items-start gap-6 lg:grid-cols-[1fr_2fr] lg:gap-12">
       <div>
@@ -127,6 +130,7 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
   </section>
 
   <SectionDivider />
+  </>)}
 
   <div class="container-sbg grid gap-4 py-12 md:grid-cols-2 lg:py-16" data-reveal>
     <section class="recap-card lifted" aria-labelledby="awards-title">
@@ -147,7 +151,7 @@ const maxPoints = Math.max(...rubric.map(([, , points]) => points));
   <section class="container-sbg pb-16 lg:pb-24" aria-labelledby="event-closing-title" data-reveal>
     <div class="recap-card">
       <h2 id="event-closing-title" class="text-2xl sm:text-3xl">Nos vemos en la Kirothon</h2>
-      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">La Kirothon reúne a 80 constructores para crear con Kiro en equipos de 3.</p>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">La Kirothon reúne a 80 constructores para crear con Kiro en equipos de hasta {KIROTHON.teamMax} personas.</p>
       <dl class="my-6 grid gap-4 border-y border-[var(--sbg-border)] py-5 sm:grid-cols-3">
         <div><dt class="code-label mb-1">Cuándo</dt><dd><time datetime={KIROTHON.date}>{KIROTHON.dateLabel}</time><br />{KIROTHON.hours} (hora de Colombia)</dd></div>
         <div><dt class="code-label mb-1">Dónde</dt><dd>Universidad del Valle, Sede Tuluá<br />Villa Campestre · Presencial</dd></div>
