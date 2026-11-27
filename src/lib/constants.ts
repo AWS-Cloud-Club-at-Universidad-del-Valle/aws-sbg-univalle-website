@@ -112,8 +112,8 @@ export const NAV_LINKS: INavLink[] = [
 // ============================================
 
 export const STATS: IStat[] = [
-  { value: 1343, suffix: '', label: 'Miembros activos', icon: 'users' },
-  { value: 34, suffix: '+', label: 'Eventos realizados', icon: 'calendar' },
+  { value: 1538, suffix: '+', label: 'Miembros activos', icon: 'users' },
+  { value: 39, suffix: '+', label: 'Eventos realizados', icon: 'calendar' },
   { value: 15, suffix: '+', label: 'Proyectos en la nube', icon: 'cloud' },
   { value: 8, suffix: '', label: 'Semestres de historia', icon: 'award' },
 ];

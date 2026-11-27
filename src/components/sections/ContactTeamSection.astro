@@ -152,7 +152,7 @@ const glowColors = [
       </p>
     </div>
 
-    <div id="team-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div id="team-grid" class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 lg:gap-5">
       {CORE_TEAM_MEMBERS.map((member, i) => (
         <TeamMemberCard member={member} glowColor={glowColors[i] || glowColors[0]} />
       ))}
